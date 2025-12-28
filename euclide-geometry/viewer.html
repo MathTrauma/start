@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Euclidean Geometry Problem Viewer</title>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Common Resources from Worker -->
+    <link rel="stylesheet" href="https://euclide-worker.painfultrauma.workers.dev/lib/styles/common.v1.0.0.css">
+    <script src="https://euclide-worker.painfultrauma.workers.dev/lib/geometry.v1.0.0.js"></script>
+    <script src="https://euclide-worker.painfultrauma.workers.dev/lib/draw-utils.v1.0.0.js"></script>
+</head>
+<body>
+    <main>
+        <div id="problem-container"></div>
+        <div class="canvas-container" id="canvas-wrapper"></div>
+        <div id="controls-container"></div>
+    </main>
+
+    <script>
+        // URL 파라미터에서 문제 ID 추출
+        const urlParams = new URLSearchParams(window.location.search);
+        const problemId = urlParams.get('problem') || '001';
+
+        // 문제 로드
+        loadProblem(problemId);
+
+        async function loadProblem(id) {
+            const paddedId = id.padStart(3, '0');
+            const workerUrl = 'https://euclide-worker.painfultrauma.workers.dev';
+            const configUrl = `${workerUrl}/problems/${paddedId}/config.json`;
+
+            try {
+                const response = await fetch(configUrl);
+                const config = await response.json();
+
+                // 스케치 로드 먼저 (setupControls 정의를 위해)
+                const script = document.createElement('script');
+                script.src = `${workerUrl}/problems/${paddedId}/sketch.js`;
+
+                // 스케치 로드 완료 후 문제 렌더링
+                script.onload = () => {
+                    renderProblem(config, paddedId, workerUrl);
+                };
+
+                document.body.appendChild(script);
+            } catch (error) {
+                console.error('Failed to load problem:', error);
+                document.getElementById('problem-container').innerHTML = `
+                    <div class="error-message">
+                        <h2>문제를 불러올 수 없습니다</h2>
+                        <p>Problem ID: ${id}</p>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function renderProblem(config, paddedId, workerUrl) {
+            // 문제 HTML 생성
+            const problemContainer = document.getElementById('problem-container');
+            problemContainer.className = 'problem-container';
+            problemContainer.innerHTML = `
+                <div class="problem-header">
+                    <span class="problem-tag level">Level ${config.level}</span>
+                    ${config.tags.map(tag => `<span class="problem-tag">${tag}</span>`).join('')}
+                </div>
+                <div class="problem-content" id="problem-text"></div>
+            `;
+
+            // LaTeX 로드
+            try {
+                const response = await fetch(`${workerUrl}/problems/${paddedId}/problem.tex`);
+                const latex = await response.text();
+
+                // LaTeX 텍스트 처리
+                const problemText = document.getElementById('problem-text');
+
+                // 주석 제거하고 내용 표시
+                const cleanLatex = latex
+                    .split('\n')
+                    .filter(line => !line.trim().startsWith('%'))
+                    .join('\n')
+                    .replace(/\\\\/g, '') // Remove LaTeX line breaks
+                    .trim();
+
+                problemText.textContent = cleanLatex;
+
+                // MathJax 렌더링
+                if (window.MathJax) {
+                    await MathJax.typesetPromise([problemText]);
+                } else {
+                    console.warn('MathJax not loaded yet');
+                }
+            } catch (error) {
+                console.error('Failed to load problem text:', error);
+            }
+
+            // 컨트롤 생성
+            renderControls(config);
+        }
+
+        function renderControls(config) {
+            // Initialize phases from config
+            initializePhases(config);
+
+            const hasSolution = config.solutionPhases && config.solutionPhases.length > 0;
+
+            const controlsContainer = document.getElementById('controls-container');
+            controlsContainer.innerHTML = `
+                <div class="controls">
+                    <!-- Mode Toggle -->
+                    <div class="control-section">
+                        <div class="control-label">Mode</div>
+                        <div class="button-group mode-toggle">
+                            <button id="btn-mode-problem" class="active mode-btn">Problem</button>
+                            <button id="btn-mode-solution" class="mode-btn" ${!hasSolution ? 'disabled' : ''}>Solution</button>
+                        </div>
+                    </div>
+
+                    <!-- Play Controls -->
+                    <div class="control-section">
+                        <div class="control-label">제어</div>
+                        <div class="button-group">
+                            <button id="btn-restart">Restart</button>
+                            <button id="btn-play-pause">Pause</button>
+                        </div>
+                    </div>
+
+                    <!-- Phase Buttons -->
+                    <div class="control-section">
+                        <div class="control-label">Phase</div>
+                        <div class="button-group" style="margin-bottom: 6px;">
+                            <button id="btn-all" class="active">전체</button>
+                        </div>
+                        <div class="phase-buttons" id="phase-buttons-container">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Render initial phase buttons (problem mode)
+            renderPhaseButtons('problem', config.problemPhases ? config.problemPhases.length : config.phases.length);
+
+            // Setup event listeners (must be called after controls are rendered)
+            if (typeof setupControls === 'function') {
+                setupControls();
+            }
+        }
+
+        function renderPhaseButtons(mode, count) {
+            const container = document.getElementById('phase-buttons-container');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= count; i++) {
+                const btn = document.createElement('button');
+                btn.id = `btn-phase-${i}`;
+                btn.setAttribute('data-phase', i);
+                btn.textContent = `Phase ${i}`;
+                container.appendChild(btn);
+            }
+        }
+    </script>
+</body>
+</html>

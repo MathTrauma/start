@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Wrangler
+.wrangler/
+wrangler.toml.bak
+
+# Logs
+*.log
+
+# Temporary/Development folders (underscore prefix)
+_*/
+
+# Euclide Geometry - Problem folders (work in problem-XXX, deploy to XXX in R2)
+euclide-geometry/problems/[0-9][0-9][0-9]/

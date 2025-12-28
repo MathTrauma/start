@@ -1,0 +1,24 @@
+# Cloudflare Wrangler 설정
+# R2 Bucket에 파일 업로드를 위한 설정
+
+name = "euclide-geometry"
+compatibility_date = "2024-01-01"
+
+# R2 Bucket 설정
+[[r2_buckets]]
+binding = "EUCLIDE_BUCKET"
+bucket_name = "euclide-geometry"
+preview_bucket_name = "euclide-geometry-preview"
+
+# 환경 변수
+[vars]
+ENVIRONMENT = "production"
+CDN_URL = "https://euclide.example.com"
+
+# 개발 환경
+[env.development]
+vars = { ENVIRONMENT = "development", CDN_URL = "http://localhost:8080" }
+
+# 프로덕션 환경
+[env.production]
+vars = { ENVIRONMENT = "production", CDN_URL = "https://euclide.example.com" }

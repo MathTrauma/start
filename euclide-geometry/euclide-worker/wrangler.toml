@@ -1,0 +1,16 @@
+name = "euclide-worker"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# R2 Bucket Binding
+[[r2_buckets]]
+binding = "EUCLIDE_BUCKET"
+bucket_name = "euclide-geometry"
+preview_bucket_name = "euclide-geometry"
+
+[dev]
+remote = true
+
+# CORS headers
+[vars]
+ALLOWED_ORIGINS = "*"

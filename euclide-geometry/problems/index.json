@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "updated": "2025-12-28T00:00:00Z",
+  "problems": [
+    {
+      "id": "001",
+      "title": "이등변삼각형의 직교성",
+      "level": 2,
+      "tags": ["medium", "right-angles", "concyclic-points"],
+      "category": "euclidean-geometry",
+      "url": "viewer.html?problem=001",
+      "description": "이등변삼각형에서 수선의 발과 중점을 이용한 직교성 증명"
+    }
+  ],
+  "categories": [
+    {
+      "id": "euclidean-geometry",
+      "name": "유클리드 기하",
+      "count": 1
+    }
+  ],
+  "stats": {
+    "total": 1,
+    "byLevel": {
+      "1": 0,
+      "2": 1,
+      "3": 0
+    }
+  }
+}
