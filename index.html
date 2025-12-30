@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Math with p5.js</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            margin-bottom: 3rem;
+        }
+
+        .projects {
+            display: grid;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(102, 126, 234, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+        }
+
+        .project-card h2 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .project-card p {
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📐 Interactive Math</h1>
+        <p class="subtitle">Visualizations and problem sets powered by p5.js</p>
+
+        <div class="projects">
+            <a href="euclide-geometry/" class="project-card">
+                <h2>Euclidean Geometry</h2>
+                <p>Interactive animated geometry problems with step-by-step solutions. Explore classic Euclidean constructions and theorems through dynamic visualizations.</p>
+                <span class="badge">9 Problems Available</span>
+            </a>
+
+            <!-- More projects coming soon -->
+            <div class="project-card" style="opacity: 0.5; cursor: default;">
+                <h2>Coming Soon</h2>
+                <p>More interactive math visualizations in development...</p>
+                <span class="badge">Under Construction</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Made with ❤️ using <a href="https://p5js.org/" target="_blank">p5.js</a></p>
+            <p><a href="https://github.com/MathTrauma/start" target="_blank">View on GitHub</a></p>
+        </div>
+    </div>
+</body>
+</html>
