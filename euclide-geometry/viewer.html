@@ -24,15 +24,24 @@
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-    <!-- Common Resources from Worker -->
+    <!-- Common Resources (Worker) -->
     <link rel="stylesheet" href="https://euclide-worker.painfultrauma.workers.dev/lib/styles/common.v1.0.0.css">
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/geometry.v1.0.0.js"></script>
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/draw-utils.v1.0.0.js"></script>
+    <script src="https://euclide-worker.painfultrauma.workers.dev/lib/animation.v1.0.0.js"></script>
 </head>
 <body>
     <main>
         <div id="problem-container"></div>
         <div class="canvas-container" id="canvas-wrapper"></div>
+        <!-- Solution Panel - Below Canvas -->
+        <div id="solution-panel" class="solution-panel hidden">
+            <div class="solution-panel-header">
+                <span class="solution-panel-title">풀이</span>
+                <button id="solution-panel-close" class="solution-panel-close-btn">×</button>
+            </div>
+            <div class="solution-panel-content" id="solution-text"></div>
+        </div>
         <div id="controls-container"></div>
     </main>
 
@@ -41,13 +50,21 @@
         const urlParams = new URLSearchParams(window.location.search);
         const problemId = urlParams.get('problem') || '001';
 
+        // Global variables for text update
+        let globalPaddedId;
+        let globalBaseUrl;
+
         // 문제 로드
         loadProblem(problemId);
 
         async function loadProblem(id) {
             const paddedId = id.padStart(3, '0');
-            const workerUrl = 'https://euclide-worker.painfultrauma.workers.dev';
-            const configUrl = `${workerUrl}/problems/${paddedId}/config.json`;
+            const baseUrl = 'https://euclide-worker.painfultrauma.workers.dev';
+            const configUrl = `${baseUrl}/problems/${paddedId}/config.json`;
+
+            // Set global variables for updateProblemText
+            globalPaddedId = paddedId;
+            globalBaseUrl = baseUrl;
 
             try {
                 const response = await fetch(configUrl);
@@ -55,11 +72,11 @@
 
                 // 스케치 로드 먼저 (setupControls 정의를 위해)
                 const script = document.createElement('script');
-                script.src = `${workerUrl}/problems/${paddedId}/sketch.js`;
+                script.src = `${baseUrl}/problems/${paddedId}/sketch.js`;
 
                 // 스케치 로드 완료 후 문제 렌더링
                 script.onload = () => {
-                    renderProblem(config, paddedId, workerUrl);
+                    renderProblem(config, paddedId, baseUrl);
                 };
 
                 document.body.appendChild(script);
@@ -75,7 +92,7 @@
             }
         }
 
-        async function renderProblem(config, paddedId, workerUrl) {
+        async function renderProblem(config, paddedId, baseUrl) {
             // 문제 HTML 생성
             const problemContainer = document.getElementById('problem-container');
             problemContainer.className = 'problem-container';
@@ -89,7 +106,7 @@
 
             // LaTeX 로드
             try {
-                const response = await fetch(`${workerUrl}/problems/${paddedId}/problem.tex`);
+                const response = await fetch(`${baseUrl}/problems/${paddedId}/problem.tex`);
                 const latex = await response.text();
 
                 // LaTeX 텍스트 처리
@@ -116,10 +133,94 @@
             }
 
             // 컨트롤 생성
-            renderControls(config);
+            renderControls(config, paddedId, baseUrl);
         }
 
-        function renderControls(config) {
+        // Update problem text based on current mode and phase
+        async function updateProblemText(mode, phase, paddedId, baseUrl) {
+            if (mode === 'problem') {
+                // Hide solution panel in problem mode
+                hideSolutionPanel();
+
+                // Ensure problem text shows problem.tex
+                const problemText = document.getElementById('problem-text');
+                if (!problemText) return;
+
+                try {
+                    const response = await fetch(`${baseUrl}/problems/${paddedId}/problem.tex`);
+                    const latex = await response.text();
+                    const cleanLatex = latex
+                        .split('\n')
+                        .filter(line => !line.trim().startsWith('%'))
+                        .join('\n')
+                        .replace(/\\\\/g, '')
+                        .trim();
+                    problemText.textContent = cleanLatex;
+
+                    if (window.MathJax) {
+                        await MathJax.typesetPromise([problemText]);
+                    }
+                } catch (error) {
+                    console.error('Failed to load problem text:', error);
+                }
+            } else if (mode === 'solution') {
+                // Show solution panel
+                const solutionText = document.getElementById('solution-text');
+                if (!solutionText) return;
+
+                let filename;
+                if (phase === 'all' || !phase) {
+                    filename = 'solution-phase-1.tex';
+                } else {
+                    filename = `solution-phase-${phase}.tex`;
+                }
+
+                try {
+                    const response = await fetch(`${baseUrl}/problems/${paddedId}/${filename}`);
+                    if (!response.ok) {
+                        console.warn(`Failed to load ${filename}`);
+                        hideSolutionPanel();
+                        return;
+                    }
+
+                    const latex = await response.text();
+                    const cleanLatex = latex
+                        .split('\n')
+                        .filter(line => !line.trim().startsWith('%'))
+                        .join('\n')
+                        .replace(/\\\\/g, '')
+                        .trim();
+
+                    solutionText.textContent = cleanLatex;
+
+                    // Show panel and render MathJax
+                    showSolutionPanel();
+
+                    if (window.MathJax) {
+                        await MathJax.typesetPromise([solutionText]);
+                    }
+                } catch (error) {
+                    console.error('Failed to update solution text:', error);
+                    hideSolutionPanel();
+                }
+            }
+        }
+
+        function showSolutionPanel() {
+            const panel = document.getElementById('solution-panel');
+            if (panel) {
+                panel.classList.remove('hidden');
+            }
+        }
+
+        function hideSolutionPanel() {
+            const panel = document.getElementById('solution-panel');
+            if (panel) {
+                panel.classList.add('hidden');
+            }
+        }
+
+        function renderControls(config, paddedId, baseUrl) {
             // Initialize phases from config
             initializePhases(config);
 
@@ -127,37 +228,48 @@
 
             const controlsContainer = document.getElementById('controls-container');
             controlsContainer.innerHTML = `
-                <div class="controls">
-                    <!-- Mode Toggle -->
-                    <div class="control-section">
-                        <div class="control-label">Mode</div>
-                        <div class="button-group mode-toggle">
-                            <button id="btn-mode-problem" class="active mode-btn">Problem</button>
-                            <button id="btn-mode-solution" class="mode-btn" ${!hasSolution ? 'disabled' : ''}>Solution</button>
-                        </div>
+                <div class="controls" id="draggable-controls">
+                    <!-- Header with drag handle and collapse -->
+                    <div class="controls-header" id="controls-drag-handle">
+                        <span class="controls-title">Controls</span>
+                        <button class="controls-collapse-btn" id="btn-collapse">−</button>
                     </div>
 
-                    <!-- Play Controls -->
-                    <div class="control-section">
-                        <div class="control-label">제어</div>
-                        <div class="button-group">
-                            <button id="btn-restart">Restart</button>
-                            <button id="btn-play-pause">Pause</button>
+                    <div class="controls-body">
+                        <!-- Mode Toggle -->
+                        <div class="control-section">
+                            <div class="control-label">Mode</div>
+                            <div class="button-group mode-toggle">
+                                <button id="btn-mode-problem" class="active mode-btn">Problem</button>
+                                <button id="btn-mode-solution" class="mode-btn" ${!hasSolution ? 'disabled' : ''}>Solution</button>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Phase Buttons -->
-                    <div class="control-section">
-                        <div class="control-label">Phase</div>
-                        <div class="button-group" style="margin-bottom: 6px;">
-                            <button id="btn-all" class="active">전체</button>
+                        <!-- Play Controls -->
+                        <div class="control-section">
+                            <div class="control-label">Play</div>
+                            <div class="button-group">
+                                <button id="btn-restart">↺</button>
+                                <button id="btn-play-pause">⏸</button>
+                            </div>
                         </div>
-                        <div class="phase-buttons" id="phase-buttons-container">
-                            <!-- Dynamically populated -->
+
+                        <!-- Phase Buttons -->
+                        <div class="control-section">
+                            <div class="control-label">Phase</div>
+                            <div class="button-group" style="margin-bottom: 4px;">
+                                <button id="btn-all" class="active">All</button>
+                            </div>
+                            <div class="phase-buttons" id="phase-buttons-container">
+                                <!-- Dynamically populated -->
+                            </div>
                         </div>
                     </div>
                 </div>
             `;
+
+            // Setup drag functionality for desktop
+            setupDraggable();
 
             // Render initial phase buttons (problem mode)
             renderPhaseButtons('problem', config.problemPhases ? config.problemPhases.length : config.phases.length);
@@ -165,6 +277,14 @@
             // Setup event listeners (must be called after controls are rendered)
             if (typeof setupControls === 'function') {
                 setupControls();
+            }
+
+            // Setup solution panel close button
+            const closeBtn = document.getElementById('solution-panel-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    hideSolutionPanel();
+                });
             }
         }
 
@@ -176,9 +296,67 @@
                 const btn = document.createElement('button');
                 btn.id = `btn-phase-${i}`;
                 btn.setAttribute('data-phase', i);
-                btn.textContent = `Phase ${i}`;
+                btn.textContent = `${i}`;
                 container.appendChild(btn);
             }
+        }
+
+        // Draggable controls (desktop only)
+        function setupDraggable() {
+            const controls = document.getElementById('draggable-controls');
+            const handle = document.getElementById('controls-drag-handle');
+            const collapseBtn = document.getElementById('btn-collapse');
+
+            if (!controls || !handle) return;
+
+            // Check if mobile (don't enable drag on mobile)
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            if (isMobile) {
+                controls.style.cursor = 'default';
+                handle.style.cursor = 'default';
+                return;
+            }
+
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+
+            // Drag from header
+            handle.addEventListener('mousedown', startDrag);
+
+            function startDrag(e) {
+                // Don't drag when clicking buttons
+                if (e.target.tagName === 'BUTTON') return;
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                const rect = controls.getBoundingClientRect();
+                initialX = rect.left;
+                initialY = rect.top;
+                controls.style.transition = 'none';
+                e.preventDefault();
+            }
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                controls.style.left = (initialX + dx) + 'px';
+                controls.style.top = (initialY + dy) + 'px';
+                controls.style.right = 'auto';
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                controls.style.transition = '';
+            });
+
+            // Collapse/expand functionality
+            collapseBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                controls.classList.toggle('collapsed');
+                collapseBtn.textContent = controls.classList.contains('collapsed') ? '+' : '−';
+            });
         }
     </script>
 </body>

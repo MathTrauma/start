@@ -31,7 +31,7 @@ get_local_hash() {
 # R2 파일 존재 확인 및 ETag 가져오기
 get_r2_etag() {
     local path=$1
-    npx wrangler r2 object get "$BUCKET_NAME/$path" --remote 2>/dev/null | grep -i "etag:" | cut -d':' -f2 | tr -d ' "'
+    npx wrangler r2 object get "$BUCKET_NAME/$path" --remote --pipe 2>/dev/null | grep -i "etag:" | cut -d':' -f2 | tr -d ' "'
 }
 
 # 조건부 업로드 함수
@@ -80,10 +80,24 @@ upload_if_changed \
     "application/javascript" \
     "public, max-age=31536000, immutable"
 
-# Styles
+# Animation classes
+upload_if_changed \
+    "lib/animation.js" \
+    "lib/animation.v$VERSION.js" \
+    "application/javascript" \
+    "public, max-age=31536000, immutable"
+
+# Styles - common.css
 upload_if_changed \
     "lib/styles/common.css" \
     "lib/styles/common.v$VERSION.css" \
+    "text/css" \
+    "public, max-age=31536000, immutable"
+
+# Styles - index.css
+upload_if_changed \
+    "lib/styles/index.css" \
+    "lib/styles/index.v$VERSION.css" \
     "text/css" \
     "public, max-age=31536000, immutable"
 
@@ -93,7 +107,7 @@ echo "✓ 공통 라이브러리 처리 완료"
 echo ""
 echo "Step 2: 문제 $PROBLEM_ID 배포..."
 
-PROBLEM_PATH="problems/problem-$PROBLEM_ID"
+PROBLEM_PATH="problems/$PROBLEM_ID"
 
 # config.json
 upload_if_changed \
@@ -115,6 +129,18 @@ upload_if_changed \
     "problems/$PROBLEM_ID/sketch.js" \
     "application/javascript" \
     "public, max-age=300"
+
+# solution-phase-*.tex (있는 경우)
+for solution_file in "$PROBLEM_PATH"/solution-phase-*.tex; do
+    if [ -f "$solution_file" ]; then
+        filename=$(basename "$solution_file")
+        upload_if_changed \
+            "$solution_file" \
+            "problems/$PROBLEM_ID/$filename" \
+            "text/plain; charset=utf-8" \
+            "public, max-age=300"
+    fi
+done
 
 # thumbnail (있는 경우)
 if [ -f "$PROBLEM_PATH/thumbnail.png" ]; then

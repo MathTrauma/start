@@ -1,6 +1,28 @@
 // Drawing utility functions
 
-const scale = 50;
+let scale = 50;           // 동적 변경 가능
+let offsetX = 0;          // 중심 맞추기용
+let offsetY = 0;
+
+// 표준 색상 정의 (모든 문제에서 일관되게 사용)
+const COLORS = {
+    // 삼각형 채우기 색상 (RGB 값)
+    TRIANGLE_BLUE: [100, 150, 255],      // 파란색 삼각형
+    TRIANGLE_RED: [255, 100, 100],       // 빨간색 삼각형
+    TRIANGLE_GREEN: [100, 200, 100],     // 초록색 삼각형
+    TRIANGLE_YELLOW: [255, 200, 100],    // 노란색 삼각형
+
+    // 테두리 강조 색상 (emission용)
+    EMISSION_BLUE: [50, 100, 255],
+    EMISSION_RED: [255, 50, 50],
+    EMISSION_GREEN: [50, 200, 50],
+    EMISSION_YELLOW: [255, 180, 50],
+
+    // 투명도 (maxAlpha)
+    ALPHA_LIGHT: 50,      // 옅은 투명도
+    ALPHA_MEDIUM: 80,     // 중간 투명도
+    ALPHA_HEAVY: 120      // 진한 투명도
+};
 
 // Animation control state
 let startTime = null;
@@ -104,8 +126,54 @@ function getCurrentPhaseCount() {
     return currentMode === 'problem' ? problemPhaseCount : solutionPhaseCount;
 }
 
-function getPhaseProgress(p, phaseStart, phaseDuration) {
-    if (!startTime) startTime = p.millis();
+// Calculate scale and offset from points array
+function calculateScaleFromPoints(points, canvasWidth, canvasHeight, padding = 50) {
+    if (!points || points.length === 0) return;
+
+    // Bounding box 계산
+    let minX = Infinity, maxX = -Infinity;
+    let minY = Infinity, maxY = -Infinity;
+
+    points.forEach(pt => {
+        if (pt) {
+            minX = Math.min(minX, pt.x);
+            maxX = Math.max(maxX, pt.x);
+            minY = Math.min(minY, pt.y);
+            maxY = Math.max(maxY, pt.y);
+        }
+    });
+
+    const rangeX = maxX - minX;
+    const rangeY = maxY - minY;
+
+    if (rangeX === 0 || rangeY === 0) return;
+
+    // Scale 계산 (패딩 고려)
+    const availableWidth = canvasWidth - padding * 2;
+    const availableHeight = canvasHeight - padding * 2;
+
+    scale = Math.min(availableWidth / rangeX, availableHeight / rangeY);
+
+    // 중심 오프셋 계산
+    offsetX = (minX + maxX) / 2;
+    offsetY = (minY + maxY) / 2;
+}
+
+// Get current animation time in seconds (for use without p5 instance)
+// Note: requires startTime to be initialized by getPhaseProgress first
+function getAnimationTime() {
+    if (startTime === null || !window._p5Instance) return 0;
+
+    let currentTime = window._p5Instance.millis();
+    if (isPaused) {
+        currentTime = pausedTime;
+    }
+
+    return (currentTime - startTime - totalPausedDuration) / 1000;
+}
+
+function getPhaseProgress(p, phaseStart, phaseDuration, isFadeOut = false) {
+    if (startTime === null) startTime = p.millis();
 
     let currentTime = p.millis();
     if (isPaused) {
@@ -114,7 +182,7 @@ function getPhaseProgress(p, phaseStart, phaseDuration) {
 
     let elapsed = (currentTime - startTime - totalPausedDuration) / 1000; // seconds
 
-    // Phase filtering
+    // Phase filtering (only when specific phase selected)
     if (selectedPhase !== 'all') {
         let phase = PHASES[currentMode][selectedPhase];
 
@@ -124,22 +192,36 @@ function getPhaseProgress(p, phaseStart, phaseDuration) {
         }
 
         // Don't draw future phases
-        if (phaseStart >= phase.end) {
-            return -1; // Don't draw
+        // fadeOut: 경계값은 현재 phase에 포함 (> 사용)
+        // 그리기: 경계값은 미래 phase (>= 사용)
+        if (isFadeOut) {
+            if (phaseStart > phase.end) {
+                return -1; // Don't fade out yet
+            }
+        } else {
+            if (phaseStart >= phase.end) {
+                return -1; // Don't draw
+            }
         }
 
         // Animate current phase once
         if (elapsed > phase.duration) {
             return 1; // Animation complete, show final state
         }
+
+        // 상대 시간 계산: 절대→상대 변환
         elapsed = Math.max(0, elapsed);
-        phaseStart = 0; // Reset phase start for single phase view
+        phaseStart = Math.max(0, phaseStart - phase.start);
     }
 
-    if (elapsed < phaseStart) return 0;
+    if (elapsed < phaseStart) return -1;  // Not started yet, don't draw
     if (elapsed >= phaseStart + phaseDuration) return 1;
     return (elapsed - phaseStart) / phaseDuration;
 }
+
+// Helper to transform coordinates
+function tx(v) { return scale * (v.x - offsetX); }
+function ty(v) { return scale * (v.y - offsetY); }
 
 // Draw triangle with animation
 function m_triangle(p, v1, v2, v3, phaseStart, phaseDuration) {
@@ -147,26 +229,26 @@ function m_triangle(p, v1, v2, v3, phaseStart, phaseDuration) {
     if (t < 0) return;
 
     p.beginShape();
-    p.vertex(scale * v1.x, scale * v1.y);
+    p.vertex(tx(v1), ty(v1));
 
     if (t < 0.33) {
         let t2 = t / 0.33;
-        p.vertex(p.lerp(scale * v1.x, scale * v2.x, t2),
-                 p.lerp(scale * v1.y, scale * v2.y, t2));
+        p.vertex(p.lerp(tx(v1), tx(v2), t2),
+                 p.lerp(ty(v1), ty(v2), t2));
     } else if (t < 0.66) {
-        p.vertex(scale * v2.x, scale * v2.y);
+        p.vertex(tx(v2), ty(v2));
         let t2 = (t - 0.33) / 0.33;
-        p.vertex(p.lerp(scale * v2.x, scale * v3.x, t2),
-                 p.lerp(scale * v2.y, scale * v3.y, t2));
+        p.vertex(p.lerp(tx(v2), tx(v3), t2),
+                 p.lerp(ty(v2), ty(v3), t2));
     } else {
-        p.vertex(scale * v2.x, scale * v2.y);
-        p.vertex(scale * v3.x, scale * v3.y);
+        p.vertex(tx(v2), ty(v2));
+        p.vertex(tx(v3), ty(v3));
         if (t >= 1) {
-            p.vertex(scale * v1.x, scale * v1.y);
+            p.vertex(tx(v1), ty(v1));
         } else {
             let t2 = (t - 0.66) / 0.34;
-            p.vertex(p.lerp(scale * v3.x, scale * v1.x, t2),
-                     p.lerp(scale * v3.y, scale * v1.y, t2));
+            p.vertex(p.lerp(tx(v3), tx(v1), t2),
+                     p.lerp(ty(v3), ty(v1), t2));
         }
     }
     p.endShape();
@@ -179,10 +261,8 @@ function m_segment(p, v1, v2, phaseStart, phaseDuration) {
 
     t = p.constrain(t, 0, 1);
 
-    let sx = scale * v1.x,
-        sy = scale * v1.y,
-        ex = scale * v2.x,
-        ey = scale * v2.y;
+    let sx = tx(v1), sy = ty(v1);
+    let ex = tx(v2), ey = ty(v2);
 
     p.line(
         sx, sy,
@@ -199,10 +279,10 @@ function m_drawPoint(p, P, label, dx, dy, phaseStart) {
     let alpha = p.constrain(t * 255, 0, 255);
     p.fill(0, alpha);
     p.noStroke();
-    p.circle(P.x * scale, P.y * scale, 6);
+    p.circle(tx(P), ty(P), 6);
     p.fill(0, alpha);
     p.scale(1, -1);
-    p.text(label, P.x * scale + dx, -P.y * scale + dy);
+    p.text(label, tx(P) + dx, -ty(P) + dy);
     p.scale(1, -1);
     p.noFill();
     p.stroke(0, alpha);
@@ -222,6 +302,6 @@ function m_drawRightAngle(p, P1, V, P2, s, phaseStart) {
     let b = p5.Vector.add(a, p5.Vector.mult(v2, s));
     let c = p5.Vector.add(V, p5.Vector.mult(v2, s));
 
-    p.line(scale * a.x, scale * a.y, scale * b.x, scale * b.y);
-    p.line(scale * b.x, scale * b.y, scale * c.x, scale * c.y);
+    p.line(tx(a), ty(a), tx(b), ty(b));
+    p.line(tx(b), ty(b), tx(c), ty(c));
 }

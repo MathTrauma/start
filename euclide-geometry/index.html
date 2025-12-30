@@ -6,8 +6,8 @@
     <title>Euclidean Geometry Problems</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="lib/styles/common.css?v=2">
-    <link rel="stylesheet" href="lib/styles/index.css?v=2">
+    <link rel="stylesheet" href="https://euclide-worker.painfultrauma.workers.dev/lib/styles/common.v1.0.0.css">
+    <link rel="stylesheet" href="https://euclide-worker.painfultrauma.workers.dev/lib/styles/index.v1.0.0.css">
 </head>
 <body>
     <div class="problem-list-container">
@@ -61,7 +61,8 @@
         setInterval(rotateFont, 3000);
 
         // 문제 목록 로드
-        fetch('problems/index.json')
+        const workerUrl = 'https://euclide-worker.painfultrauma.workers.dev';
+        fetch(`${workerUrl}/metadata/problems-index.json`)
             .then(res => res.json())
             .then(data => {
                 allProblems = data.problems;

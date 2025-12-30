@@ -12,8 +12,8 @@ npx http-server -p 8080
 
 ```bash
 # 1. 템플릿 복사
-mkdir -p problems/problem-002
-cp templates/* problems/problem-002/
+mkdir -p problems/002
+cp templates/* problems/002/
 
 # 2. 파일 수정
 # - config.json: id를 "002"로, title/tags 수정

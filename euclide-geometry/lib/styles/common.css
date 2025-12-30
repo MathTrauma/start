@@ -3,13 +3,14 @@
 
 body {
     margin: 0;
-    padding: 0;
+    padding: 20px 0 0 0;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: 100vh;
     background-color: #f5f3ed;
     font-family: 'Noto Sans KR', sans-serif;
+    box-sizing: border-box;
 }
 
 main {
@@ -65,8 +66,11 @@ main {
 
 /* Canvas Container */
 .canvas-container {
-    position: relative;
-    margin-bottom: 20px;
+    position: sticky;
+    top: 10px;
+    z-index: 100;
+    margin-bottom: 10px;
+    background-color: #f5f3ed;
 }
 
 /* Controls - Desktop */
@@ -75,32 +79,72 @@ main {
     top: 20px;
     right: 20px;
     background-color: rgba(255, 255, 255, 0.95);
-    padding: 15px;
-    border-radius: 8px;
+    padding: 10px;
+    border-radius: 6px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    min-width: 200px;
-    max-width: 250px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    gap: 8px;
+    min-width: 140px;
+    max-width: 160px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(139, 125, 107, 0.2);
     z-index: 1000;
+    cursor: move;
+    user-select: none;
+}
+
+.controls-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e8e3d8;
+    cursor: move;
+}
+
+.controls-title {
+    font-size: 10px;
+    color: #8b7d6b;
+    font-weight: 600;
+}
+
+.controls-collapse-btn {
+    background: none !important;
+    border: none !important;
+    color: #8b7d6b;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0 !important;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    line-height: 16px;
+    flex: none !important;
+}
+
+.controls.collapsed .controls-body {
+    display: none;
+}
+
+.controls.collapsed {
+    min-width: auto;
+    max-width: none;
 }
 
 .button-group {
     display: flex;
-    gap: 6px;
+    gap: 4px;
     flex-wrap: wrap;
 }
 
 button {
-    padding: 6px 12px;
+    padding: 4px 8px;
     border: 1px solid #d4cec3;
-    border-radius: 4px;
+    border-radius: 3px;
     background-color: #f9f7f1;
     color: #3a3530;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 10px;
     transition: all 0.2s;
     flex: 1;
 }
@@ -127,24 +171,24 @@ button.active:hover {
 .phase-buttons {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
+    gap: 3px;
 }
 
 .phase-buttons button {
-    font-size: 11px;
-    padding: 6px 8px;
+    font-size: 9px;
+    padding: 3px 5px;
 }
 
 .control-label {
     color: #5a5247;
-    font-size: 12px;
-    margin-bottom: 3px;
+    font-size: 9px;
+    margin-bottom: 2px;
     font-weight: 500;
 }
 
 .control-section {
     border-bottom: 1px solid #e8e3d8;
-    padding-bottom: 10px;
+    padding-bottom: 6px;
 }
 
 .control-section:last-child {
@@ -156,7 +200,7 @@ button.active:hover {
 .mode-toggle {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px;
+    gap: 3px;
 }
 
 .mode-btn {
@@ -185,15 +229,17 @@ button.active:hover {
     body {
         align-items: flex-start;
         padding-top: 10px;
+        padding-bottom: 220px; /* Space for bottom controls */
     }
 
     main {
         padding: 10px;
+        padding-bottom: 0;
     }
 
     .problem-container {
         padding: 15px 20px;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         max-width: 100%;
     }
 
@@ -223,6 +269,11 @@ button.active:hover {
         border-radius: 12px 12px 0 0;
         padding: 12px 15px;
         gap: 10px;
+        cursor: default;
+    }
+
+    .controls-header {
+        display: none;
     }
 
     .control-section {
@@ -248,9 +299,11 @@ button.active:hover {
         padding: 8px 10px;
     }
 
-    /* Adjust canvas container for mobile */
+    /* Canvas sticky on mobile */
     .canvas-container {
-        margin-bottom: 180px; /* Space for bottom controls */
+        position: sticky;
+        top: 0;
+        margin-bottom: 10px;
     }
 }
 
@@ -285,5 +338,98 @@ button.active:hover {
 
     .problem-container {
         padding: 20px 25px;
+    }
+}
+
+/* Solution Panel - Below Canvas */
+.solution-panel {
+    width: 100%;
+    max-width: 900px;
+    max-height: 300px;
+    background-color: #faf8f3;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(139, 125, 107, 0.2);
+    overflow: hidden;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.solution-panel.hidden {
+    display: none;
+}
+
+.solution-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: #e8e3d8;
+    border-bottom: 1px solid #d4cec3;
+}
+
+.solution-panel-title {
+    color: #5a5247;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.solution-panel-close-btn {
+    background: none;
+    border: none;
+    color: #5a5247;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    line-height: 20px;
+    transition: color 0.2s;
+}
+
+.solution-panel-close-btn:hover {
+    color: #8b7d6b;
+}
+
+.solution-panel-content {
+    padding: 15px 20px;
+    color: #2a2520;
+    font-size: 15px;
+    line-height: 1.8;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Scrollbar styling for solution panel */
+.solution-panel-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.solution-panel-content::-webkit-scrollbar-track {
+    background: #e8e3d8;
+}
+
+.solution-panel-content::-webkit-scrollbar-thumb {
+    background: #b0a89a;
+    border-radius: 3px;
+}
+
+.solution-panel-content::-webkit-scrollbar-thumb:hover {
+    background: #8b7d6b;
+}
+
+/* Mobile Responsive for Solution Panel */
+@media (max-width: 768px) {
+    .solution-panel {
+        max-width: 100%;
+        max-height: none;
+        margin-bottom: 20px;
+    }
+
+    .solution-panel-content {
+        max-height: 250px;
+        overflow-y: auto;
     }
 }

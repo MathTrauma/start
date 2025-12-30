@@ -25,7 +25,7 @@ npx http-server -p 8080
 ### 새 문제 추가
 ```bash
 # 1. 템플릿 복사
-cp -r templates/problem-template problems/problem-002
+cp -r templates/problem-template problems/002
 
 # 2. 파일 수정
 # - config.json: id, title, tags 등

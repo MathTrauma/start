@@ -19,7 +19,7 @@
 
 ## 배포 구조
 
-**로컬 작업**: `problems/problem-XXX/` 폴더에서 작업
+**로컬 작업**: `problems/XXX/` 폴더에서 작업
 **배포 대상**: Cloudflare R2 버킷 `euclide-geometry`
 **업로드 순서**: 공통 라이브러리 → 문제 파일 → 메타데이터
 
@@ -59,9 +59,9 @@ viewer.html
 ```
 
 ### 2. Claude가 구현
-- `problems/problem-XXX/config.json` 생성
-- `problems/problem-XXX/problem.tex` 생성
-- `problems/problem-XXX/sketch.js` 애니메이션 구현
+- `problems/XXX/config.json` 생성
+- `problems/XXX/problem.tex` 생성
+- `problems/XXX/sketch.js` 애니메이션 구현
 
 ### 3. 배포
 ```bash

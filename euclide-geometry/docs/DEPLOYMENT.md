@@ -27,6 +27,15 @@ npx wrangler deploy
 # https://euclide-worker.painfultrauma.workers.dev
 ```
 
+## 배포 규칙
+
+**중요**: `lib/`, `problems/` 폴더의 파일들은 `.md` 파일을 제외하고 해시값이 변경되면 **예외 없이** 모두 업로드해야 함.
+
+| 폴더 | 업로드 대상 | 제외 |
+|------|------------|------|
+| `lib/` | `*.js`, `*.css` | `*.md` |
+| `problems/*/` | `*.js`, `*.json`, `*.tex`, `*.png` | `*.md` |
+
 ## 파일 배포
 
 ### 자동 배포 (권장)
@@ -36,6 +45,7 @@ npx wrangler deploy
 # 해시 비교로 변경된 파일만 업로드
 # - 공통 라이브러리 (lib/)
 # - 문제 파일 (problems/001/)
+# - 풀이 파일 (problems/001/solution-phase-*.tex)
 # - 인덱스 파일 (problems/index.json)
 ```
 
@@ -49,7 +59,7 @@ npx wrangler r2 object put euclide-geometry/lib/geometry.v1.0.0.js \
 
 # 문제 파일
 npx wrangler r2 object put euclide-geometry/problems/001/sketch.js \
-  --file=problems/problem-001/sketch.js \
+  --file=problems/001/sketch.js \
   --content-type=application/javascript \
   --remote
 ```

@@ -1,29 +1,101 @@
 {
   "version": "1.0.0",
-  "updated": "2025-12-28T00:00:00Z",
+  "updated": "2025-12-29T00:00:00Z",
   "problems": [
     {
       "id": "001",
-      "title": "이등변삼각형의 직교성",
+      "title": "공원점",
       "level": 2,
-      "tags": ["medium", "right-angles", "concyclic-points"],
+      "tags": ["닮음", "공원점"],
       "category": "euclidean-geometry",
       "url": "viewer.html?problem=001",
       "description": "이등변삼각형에서 수선의 발과 중점을 이용한 직교성 증명"
+    },
+    {
+      "id": "002",
+      "title": "등적변환",
+      "level": 1,
+      "tags": ["등적변환", "사각형", "중점"],
+      "category": "euclidean-geometry",
+      "url": "viewer.html?problem=002",
+      "description": "볼록 사각형에서 O를 각 변의 중점과 연결하면 넓이가 4등분됨"
+    },
+    {
+      "id": "003",
+      "title": "꺾은선에 의한 넓이 이등분",
+      "level": 1,
+      "tags": ["등적변환", "원", "내접사각형"],
+      "category": "euclidean-geometry",
+      "url": "viewer.html?problem=003",
+      "description": "원에 내접하는 사각형에서 꺾은선 AOC가 넓이를 이등분"
+    },
+    {
+      "id": "004",
+      "title": "공원점",
+      "level": 2,
+      "tags": ["공원점", "정사각형", "수선의 발", "외접원"],
+      "category": "euclidean-geometry",
+      "url": "viewer.html?problem=004",
+      "description": "정사각형에서 수선의 발과 외접원을 이용한 공원점 증명"
+    },
+    {
+      "id": "005",
+      "title": "닮음 옮기기",
+      "level": 1,
+      "tags": ["닮음", "평행사변형"],
+      "category": "euclidean-geometry",
+      "url": "viewer.html?problem=005",
+      "description": "평행사변형에서 닮음을 이용한 선분 길이 계산"
+    },
+    {
+      "id": "006",
+      "title": "각의 이등분과 비율",
+      "level": 1,
+      "tags": ["닮음", "정사각형", "각의 이등분"],
+      "category": "euclidean-geometry",
+      "url": "viewer.html?problem=006",
+      "description": "정사각형에서 각의 이등분을 이용한 선분 비율 계산"
+    },
+    {
+      "id": "007",
+      "title": "내심과 외접원",
+      "level": 2,
+      "tags": ["내심", "외접원", "원의 접선"],
+      "category": "euclidean-geometry",
+      "url": "viewer.html?problem=007",
+      "description": "삼각형의 내심과 외접원을 이용한 선분 길이 계산"
+    },
+    {
+      "id": "009",
+      "title": "이등변삼각형과 수선",
+      "level": 2,
+      "tags": ["이등변삼각형", "수선", "중점"],
+      "category": "euclidean-geometry",
+      "url": "viewer.html?problem=009",
+      "description": "이등변삼각형에서 수선과 중점을 이용한 관계 증명"
+    },
+    {
+      "id": "010",
+      "title": "접선과 각의 이등분",
+      "level": 2,
+      "tags": ["접선", "외접원", "각의 이등분"],
+      "category": "euclidean-geometry",
+      "url": "viewer.html?problem=010",
+      "description": "이등변삼각형의 외접원 접선과 각의 이등분을 이용한 선분 길이 계산"
     }
   ],
   "categories": [
     {
       "id": "euclidean-geometry",
       "name": "유클리드 기하",
-      "count": 1
+      "count": 9
     }
   ],
   "stats": {
-    "total": 1,
+    "total": 9,
     "byLevel": {
-      "1": 0,
-      "2": 1,
+      "1": 4,
+      "2": 5,
       "3": 0
     }
   }
