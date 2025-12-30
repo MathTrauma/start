@@ -24,11 +24,11 @@
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-    <!-- Common Resources (Worker) -->
-    <link rel="stylesheet" href="https://euclide-worker.painfultrauma.workers.dev/lib/styles/common.v1.0.0.css">
-    <script src="https://euclide-worker.painfultrauma.workers.dev/lib/geometry.v1.0.0.js"></script>
-    <script src="https://euclide-worker.painfultrauma.workers.dev/lib/draw-utils.v1.0.0.js"></script>
-    <script src="https://euclide-worker.painfultrauma.workers.dev/lib/animation.v1.0.0.js"></script>
+    <!-- Common Resources (R2) -->
+    <link rel="stylesheet" href="https://pub-ee7de6fd03c14e4cbfd39fd65431c645.r2.dev/lib/styles/common.v1.0.0.css">
+    <script src="https://pub-ee7de6fd03c14e4cbfd39fd65431c645.r2.dev/lib/geometry.v1.0.0.js"></script>
+    <script src="https://pub-ee7de6fd03c14e4cbfd39fd65431c645.r2.dev/lib/draw-utils.v1.0.0.js"></script>
+    <script src="https://pub-ee7de6fd03c14e4cbfd39fd65431c645.r2.dev/lib/animation.v1.0.0.js"></script>
 </head>
 <body>
     <main>
@@ -59,7 +59,7 @@
 
         async function loadProblem(id) {
             const paddedId = id.padStart(3, '0');
-            const baseUrl = 'https://euclide-worker.painfultrauma.workers.dev';
+            const baseUrl = 'https://pub-ee7de6fd03c14e4cbfd39fd65431c645.r2.dev';
             const configUrl = `${baseUrl}/problems/${paddedId}/config.json`;
 
             // Set global variables for updateProblemText
