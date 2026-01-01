@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 package-lock.json
+package.json
+app.js
+class_design.js
+
 
 # Build outputs
 dist/

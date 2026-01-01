@@ -130,3 +130,12 @@
     </div>
 </body>
 </html>
+
+<script>
+    const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: 'http://www.mathtrauma.com', // 로그인 완료 후 돌아올 내 사이트 주소
+            },
+        })
+</script>

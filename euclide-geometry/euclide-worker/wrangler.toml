@@ -8,8 +8,10 @@ binding = "EUCLIDE_BUCKET"
 bucket_name = "euclide-geometry"
 preview_bucket_name = "euclide-geometry"
 
-[dev]
-remote = true
+# KV Namespace Binding for Rate Limiting
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "656563deea8e49958294f5df78bc7c38"
 
 # CORS headers
 [vars]
