@@ -102,6 +102,8 @@
             text-decoration: underline;
         }
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div class="container">
@@ -123,6 +125,8 @@
             </div>
         </div>
 
+        <button id="login-btn">구글로 로그인하기</button>
+
         <div class="footer">
             <p>Made with ❤️ using <a href="https://p5js.org/" target="_blank">p5.js</a></p>
             <p><a href="https://github.com/MathTrauma/start" target="_blank">View on GitHub</a></p>
@@ -132,10 +136,26 @@
 </html>
 
 <script>
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    // 2. Supabase 클라이언트 초기화
+    // Supabase Project Settings > API 메뉴에서 확인 가능합니다.
+    const SUPABASE_URL = 'https://bdunrluoivhgypwangcx.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkdW5ybHVvaXZoZ3lwd2FuZ2N4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNjc1NTksImV4cCI6MjA4Mjg0MzU1OX0.JBkLVuR8RyOmwMl6_-KPIgsYBy1_qoG90v5j_vt0mSQ';
+
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 3. 로그인 함수 정의
+    async function signInWithGoogle() {
+        const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: 'http://www.mathtrauma.com', // 로그인 완료 후 돌아올 내 사이트 주소
+                // 로그인 성공 후 돌아올 주소 (Supabase 설정에 등록되어 있어야 함)
+                redirectTo: window.location.origin
             },
-        })
+        });
+
+        if (error) console.error('로그인 에러:', error.message);
+    }
+
+    // 버튼 클릭 이벤트 연결
+    document.getElementById('login-btn').addEventListener('click', signInWithGoogle);
 </script>
