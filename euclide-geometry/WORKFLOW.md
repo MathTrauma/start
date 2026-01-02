@@ -6,6 +6,62 @@
 
 ---
 
+## ⚠️ 변경 추적 프로토콜 (필수!)
+
+### 핵심 원칙
+> **"problem.tex가 Single Source of Truth"**
+>
+> problem.tex 첫 줄의 level, contest 정보가 모든 다른 파일에 자동 반영되어야 함.
+
+### 작업 시작 전
+1. `git status` 실행하여 현재 상태 확인
+2. 작업 대상 문제의 problem.tex 첫 줄 확인 (level, contest 여부)
+
+### 작업 완료 후 (필수!)
+1. **메타데이터 동기화**: `./scripts/sync-metadata.sh <problem_id>` 또는 `all`
+2. **일관성 검사**: `./scripts/validate-metadata.sh`
+3. **R2 배포**: `./scripts/deploy-changes.sh`
+4. 로컬 브라우저에서 테스트
+
+### R2 업로드 제외 규칙 (필수!)
+> **README.md를 제외한 모든 .md 파일은 R2에 업로드하지 않음**
+
+다음 파일들은 R2 버킷에 업로드하지 말 것:
+- `WORKFLOW.md` - 개발 워크플로우 문서
+- `UI-CONTROLS-REFACTOR.md` - 리팩토링 문서
+- `problems/XXX/animation.md` - 애니메이션 명세 (개발용)
+- 기타 개발/문서화 목적의 `.md` 파일들
+
+**허용되는 .md 파일:**
+- `README.md` - 프로젝트 설명 (공개용)
+
+### 스크립트 사용법
+
+```bash
+# 메타데이터 일관성 검사
+./scripts/validate-metadata.sh
+
+# 특정 문제 메타데이터 동기화 (problem.tex → config.json → index.json)
+./scripts/sync-metadata.sh 007
+
+# 전체 문제 동기화
+./scripts/sync-metadata.sh all
+
+# 변경된 파일 R2 배포
+./scripts/deploy-changes.sh
+```
+
+### 메타데이터 동기화 규칙
+
+| 소스 | 대상 | 동기화 항목 |
+|------|------|------------|
+| problem.tex 첫 줄 | config.json | level |
+| config.json | problems/index.json | level, tags, title |
+| config.json | metadata/problems-index.json | level, tags, title |
+| index.json | stats.byLevel | 자동 재계산 |
+
+---
+
 ## Sub-Agent 구조
 
 ### 1. **animation-creator** Agent (애니메이션 생성)

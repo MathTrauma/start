@@ -25,10 +25,11 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <!-- Common Resources (R2) -->
-    <link rel="stylesheet" href="https://euclide-worker.painfultrauma.workers.dev/lib/styles/common.v1.0.0.css">
+    <link rel="stylesheet" href="https://euclide-worker.painfultrauma.workers.dev/lib/styles/common.v1.1.0.css">
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/geometry.v1.0.0.js"></script>
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/draw-utils.v1.0.0.js"></script>
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/animation.v1.0.0.js"></script>
+    <script src="https://euclide-worker.painfultrauma.workers.dev/lib/ui-controls.v1.0.0.js"></script>
 </head>
 <body>
     <main>
@@ -93,21 +94,28 @@
         }
 
         async function renderProblem(config, paddedId, baseUrl) {
-            // 문제 HTML 생성
-            const problemContainer = document.getElementById('problem-container');
-            problemContainer.className = 'problem-container';
-            problemContainer.innerHTML = `
-                <div class="problem-header">
-                    <span class="problem-tag level">Level ${config.level}</span>
-                    ${config.tags.map(tag => `<span class="problem-tag">${tag}</span>`).join('')}
-                </div>
-                <div class="problem-content" id="problem-text"></div>
-            `;
-
-            // LaTeX 로드
+            // LaTeX 로드 (먼저 contest 여부 확인)
+            let isContest = false;
             try {
                 const response = await fetch(`${baseUrl}/problems/${paddedId}/problem.tex`);
                 const latex = await response.text();
+
+                // 첫 줄에서 contest 확인
+                const firstLine = latex.split('\n')[0];
+                isContest = firstLine.includes('contest');
+
+                // 문제 HTML 생성
+                const problemContainer = document.getElementById('problem-container');
+                problemContainer.className = 'problem-container';
+                problemContainer.innerHTML = `
+                    <div class="problem-header">
+                        <span class="problem-tag level">Level ${config.level}</span>
+                        ${config.tags.map(tag => `<span class="problem-tag">${tag}</span>`).join('')}
+                        ${isContest ? '<span class="problem-tag contest">Contest</span>' : ''}
+                    </div>
+                    <div class="problem-content" id="problem-text"></div>
+                    ${isContest ? '<button id="toggle-canvas-btn" class="toggle-canvas-btn">▼ 그림 보기</button>' : ''}
+                `;
 
                 // LaTeX 텍스트 처리
                 const problemText = document.getElementById('problem-text');
@@ -127,6 +135,20 @@
                     await MathJax.typesetPromise([problemText]);
                 } else {
                     console.warn('MathJax not loaded yet');
+                }
+
+                // Contest 문제면 캔버스 초기에 숨김
+                if (isContest) {
+                    const canvasWrapper = document.getElementById('canvas-wrapper');
+                    canvasWrapper.style.display = 'none';
+
+                    // 토글 버튼 이벤트
+                    const toggleBtn = document.getElementById('toggle-canvas-btn');
+                    toggleBtn.addEventListener('click', () => {
+                        const isHidden = canvasWrapper.style.display === 'none';
+                        canvasWrapper.style.display = isHidden ? 'block' : 'none';
+                        toggleBtn.textContent = isHidden ? '▲ 그림 숨기기' : '▼ 그림 보기';
+                    });
                 }
             } catch (error) {
                 console.error('Failed to load problem text:', error);

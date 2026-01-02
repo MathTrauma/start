@@ -64,7 +64,7 @@ upload_if_changed() {
 # 1. 공통 라이브러리 배포 (버전 관리)
 echo "Step 1: 공통 라이브러리 배포..."
 
-VERSION="1.0.0"
+VERSION="1.1.0"
 
 # Geometry library
 upload_if_changed \
