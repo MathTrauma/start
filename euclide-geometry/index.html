@@ -68,7 +68,7 @@
 
         // 문제 목록 로드
         const workerUrl = 'https://euclide-worker.painfultrauma.workers.dev';
-        fetch(`${workerUrl}/metadata/problems-index.json`)
+        fetch(`${workerUrl}/problems/index.json`)
             .then(res => res.json())
             .then(data => {
                 allProblems = data.problems;
