@@ -8,24 +8,19 @@
     <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
 
-    <!-- MathJax Configuration -->
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true,
-                processEnvironments: true
-            },
-            options: {
-                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-            }
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Korean Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- Common Resources (R2) -->
-    <link rel="stylesheet" href="https://euclide-worker.painfultrauma.workers.dev/lib/styles/common.v1.1.0.css">
+    <link rel="stylesheet" href="https://euclide-worker.painfultrauma.workers.dev/lib/styles/common.v1.2.0.css">
+    <style>
+        body, .problem-content, .problem-tag, .solution-panel-content, .solution-panel-title, p, span, div {
+            font-family: 'Noto Serif KR', serif !important;
+        }
+    </style>
+    
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/geometry.v1.0.0.js"></script>
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/draw-utils.v1.0.0.js"></script>
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/animation.v1.0.0.js"></script>
@@ -58,6 +53,10 @@
         // 문제 로드
         loadProblem(problemId);
 
+        // Global state for contest mode
+        let isContestMode = false;
+        let canvasRevealed = false;
+
         async function loadProblem(id) {
             const paddedId = id.padStart(3, '0');
             const baseUrl = 'https://euclide-worker.painfultrauma.workers.dev';
@@ -67,17 +66,38 @@
             globalPaddedId = paddedId;
             globalBaseUrl = baseUrl;
 
+            // 캔버스를 초기에 숨김 (렌더링 안정화)
+            const canvasWrapper = document.getElementById('canvas-wrapper');
+            canvasWrapper.style.opacity = '0';
+            canvasWrapper.style.visibility = 'hidden';
+
             try {
                 const response = await fetch(configUrl);
                 const config = await response.json();
 
-                // 스케치 로드 먼저 (setupControls 정의를 위해)
+                // 문제 텍스트와 UI를 먼저 렌더링
+                await renderProblem(config, paddedId, baseUrl);
+
+                // 모든 렌더링 완료 후 스케치 로드
                 const script = document.createElement('script');
                 script.src = `${baseUrl}/problems/${paddedId}/sketch.js`;
 
-                // 스케치 로드 완료 후 문제 렌더링
                 script.onload = () => {
-                    renderProblem(config, paddedId, baseUrl);
+                    // 컨트롤 생성
+                    renderControls(config, paddedId, baseUrl);
+
+                    // 렌더링 완료 후 캔버스 표시 (Contest가 아닌 경우)
+                    setTimeout(() => {
+                        if (!isContestMode) {
+                            canvasWrapper.style.opacity = '1';
+                            canvasWrapper.style.visibility = 'visible';
+                        } else {
+                            // Contest 모드: 캔버스가 열릴 때까지 애니메이션 정지
+                            if (window._p5Instance) {
+                                window._p5Instance.noLoop();
+                            }
+                        }
+                    }, 100);
                 };
 
                 document.body.appendChild(script);
@@ -94,15 +114,13 @@
         }
 
         async function renderProblem(config, paddedId, baseUrl) {
-            // LaTeX 로드 (먼저 contest 여부 확인)
-            let isContest = false;
+            // Pre-rendered HTML 로드
             try {
-                const response = await fetch(`${baseUrl}/problems/${paddedId}/problem.tex`);
-                const latex = await response.text();
+                const response = await fetch(`${baseUrl}/problems/${paddedId}/problem.html`);
+                const html = await response.text();
 
-                // 첫 줄에서 contest 확인
-                const firstLine = latex.split('\n')[0];
-                isContest = firstLine.includes('contest');
+                // config에서 contest 여부 확인
+                isContestMode = config.contest === true;
 
                 // 문제 HTML 생성
                 const problemContainer = document.getElementById('problem-container');
@@ -111,34 +129,18 @@
                     <div class="problem-header">
                         <span class="problem-tag level">Level ${config.level}</span>
                         ${config.tags.map(tag => `<span class="problem-tag">${tag}</span>`).join('')}
-                        ${isContest ? '<span class="problem-tag contest">Contest</span>' : ''}
+                        ${isContestMode ? '<span class="problem-tag contest">Contest</span>' : ''}
                     </div>
                     <div class="problem-content" id="problem-text"></div>
-                    ${isContest ? '<button id="toggle-canvas-btn" class="toggle-canvas-btn">▼ 그림 보기</button>' : ''}
+                    ${isContestMode ? '<button id="toggle-canvas-btn" class="toggle-canvas-btn">▼ 그림 보기</button>' : ''}
                 `;
 
-                // LaTeX 텍스트 처리
+                // Pre-rendered HTML 삽입 (MathJax 불필요)
                 const problemText = document.getElementById('problem-text');
+                problemText.innerHTML = html;
 
-                // 주석 제거하고 내용 표시
-                const cleanLatex = latex
-                    .split('\n')
-                    .filter(line => !line.trim().startsWith('%'))
-                    .join('\n')
-                    .replace(/\\\\/g, '') // Remove LaTeX line breaks
-                    .trim();
-
-                problemText.textContent = cleanLatex;
-
-                // MathJax 렌더링
-                if (window.MathJax) {
-                    await MathJax.typesetPromise([problemText]);
-                } else {
-                    console.warn('MathJax not loaded yet');
-                }
-
-                // Contest 문제면 캔버스 초기에 숨김
-                if (isContest) {
+                // Contest 문제면 캔버스 숨김 및 토글 설정
+                if (isContestMode) {
                     const canvasWrapper = document.getElementById('canvas-wrapper');
                     canvasWrapper.style.display = 'none';
 
@@ -146,16 +148,39 @@
                     const toggleBtn = document.getElementById('toggle-canvas-btn');
                     toggleBtn.addEventListener('click', () => {
                         const isHidden = canvasWrapper.style.display === 'none';
-                        canvasWrapper.style.display = isHidden ? 'block' : 'none';
-                        toggleBtn.textContent = isHidden ? '▲ 그림 숨기기' : '▼ 그림 보기';
+
+                        if (isHidden) {
+                            // 캔버스 펼치기
+                            canvasWrapper.style.display = 'block';
+                            canvasWrapper.style.opacity = '1';
+                            canvasWrapper.style.visibility = 'visible';
+                            toggleBtn.textContent = '▲ 그림 숨기기';
+
+                            // 애니메이션 시작 (처음 펼칠 때만 리셋)
+                            if (!canvasRevealed) {
+                                canvasRevealed = true;
+                                if (typeof resetAnimation === 'function') {
+                                    resetAnimation();
+                                }
+                            }
+                            // p5 루프 시작
+                            if (window._p5Instance) {
+                                window._p5Instance.loop();
+                            }
+                        } else {
+                            // 캔버스 숨기기
+                            canvasWrapper.style.display = 'none';
+                            toggleBtn.textContent = '▼ 그림 보기';
+                            // p5 루프 정지 (성능 최적화)
+                            if (window._p5Instance) {
+                                window._p5Instance.noLoop();
+                            }
+                        }
                     });
                 }
             } catch (error) {
                 console.error('Failed to load problem text:', error);
             }
-
-            // 컨트롤 생성
-            renderControls(config, paddedId, baseUrl);
         }
 
         // Update problem text based on current mode and phase
@@ -164,24 +189,14 @@
                 // Hide solution panel in problem mode
                 hideSolutionPanel();
 
-                // Ensure problem text shows problem.tex
+                // Ensure problem text shows problem.html
                 const problemText = document.getElementById('problem-text');
                 if (!problemText) return;
 
                 try {
-                    const response = await fetch(`${baseUrl}/problems/${paddedId}/problem.tex`);
-                    const latex = await response.text();
-                    const cleanLatex = latex
-                        .split('\n')
-                        .filter(line => !line.trim().startsWith('%'))
-                        .join('\n')
-                        .replace(/\\\\/g, '')
-                        .trim();
-                    problemText.textContent = cleanLatex;
-
-                    if (window.MathJax) {
-                        await MathJax.typesetPromise([problemText]);
-                    }
+                    const response = await fetch(`${baseUrl}/problems/${paddedId}/problem.html`);
+                    const html = await response.text();
+                    problemText.innerHTML = html;
                 } catch (error) {
                     console.error('Failed to load problem text:', error);
                 }
@@ -192,9 +207,9 @@
 
                 let filename;
                 if (phase === 'all' || !phase) {
-                    filename = 'solution-phase-1.tex';
+                    filename = 'solution-phase-1.html';
                 } else {
-                    filename = `solution-phase-${phase}.tex`;
+                    filename = `solution-phase-${phase}.html`;
                 }
 
                 try {
@@ -205,22 +220,11 @@
                         return;
                     }
 
-                    const latex = await response.text();
-                    const cleanLatex = latex
-                        .split('\n')
-                        .filter(line => !line.trim().startsWith('%'))
-                        .join('\n')
-                        .replace(/\\\\/g, '')
-                        .trim();
+                    const html = await response.text();
+                    solutionText.innerHTML = html;
 
-                    solutionText.textContent = cleanLatex;
-
-                    // Show panel and render MathJax
+                    // Show panel
                     showSolutionPanel();
-
-                    if (window.MathJax) {
-                        await MathJax.typesetPromise([solutionText]);
-                    }
                 } catch (error) {
                     console.error('Failed to update solution text:', error);
                     hideSolutionPanel();

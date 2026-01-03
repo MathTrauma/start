@@ -1,5 +1,5 @@
 /* Base Styles */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Creepster&family=Cormorant+Garamond:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Creepster&family=Cormorant+Garamond:wght@400;600&family=Noto+Serif+KR:wght@400;600;700&display=swap');
 
 body {
     margin: 0;
@@ -9,7 +9,7 @@ body {
     align-items: flex-start;
     min-height: 100vh;
     background-color: #f5f3ed;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Noto Serif KR', serif;
     box-sizing: border-box;
 }
 
@@ -72,7 +72,8 @@ main {
 
 /* Toggle Canvas Button */
 .toggle-canvas-btn {
-    width: 100%;
+    width: auto;
+    max-width: 600px;
     margin-top: 15px;
     padding: 10px 20px;
     background-color: #8b7d6b;
@@ -83,7 +84,7 @@ main {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;

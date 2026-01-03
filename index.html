@@ -1,161 +1,268 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Math with p5.js</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Math More</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons (Vanilla JS version) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e0e0e0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
         }
 
-        .container {
-            max-width: 800px;
-            text-align: center;
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
         }
 
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: #a0a0a0;
-            margin-bottom: 3rem;
-        }
-
-        .projects {
-            display: grid;
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .project-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .project-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(102, 126, 234, 0.5);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
-        }
-
-        .project-card h2 {
-            color: #667eea;
-            margin-bottom: 0.5rem;
-            font-size: 1.8rem;
-        }
-
-        .project-card p {
-            color: #b0b0b0;
-            line-height: 1.6;
-        }
-
-        .badge {
-            display: inline-block;
-            background: rgba(102, 126, 234, 0.2);
-            color: #667eea;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-top: 1rem;
-        }
-
-        .footer {
-            margin-top: 4rem;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .footer a {
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
     </style>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
 </head>
-<body>
-    <div class="container">
-        <h1>📐 Interactive Math</h1>
-        <p class="subtitle">Visualizations and problem sets powered by p5.js</p>
 
-        <div class="projects">
-            <a href="euclide-geometry/" class="project-card">
-                <h2>Euclidean Geometry</h2>
-                <p>Interactive animated geometry problems with step-by-step solutions. Explore classic Euclidean constructions and theorems through dynamic visualizations.</p>
-                <span class="badge">9 Problems Available</span>
-            </a>
+<body
+    class="bg-slate-50 text-slate-900 antialiased selection:bg-primary-500 selection:text-white flex flex-col min-h-screen">
 
-            <!-- More projects coming soon -->
-            <div class="project-card" style="opacity: 0.5; cursor: default;">
-                <h2>Coming Soon</h2>
-                <p>More interactive math visualizations in development...</p>
-                <span class="badge">Under Construction</span>
+    <main class="flex-grow">
+        <!-- 1단: Hero Video Section -->
+        <section class="relative h-screen w-full overflow-hidden bg-slate-900">
+            <!-- Background Video -->
+            <div class="absolute inset-0 w-full h-full">
+                <video class="w-full h-full object-cover opacity-80" autoplay loop muted playsinline
+                    poster="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2426&q=80">
+                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                        type="video/mp4" />
+                </video>
+                <div class="absolute inset-0 bg-black/30"></div>
+            </div>
+
+            <!-- Top Right Login Button -->
+            <div class="absolute top-6 right-6 z-20">
+                <button
+                    class="flex items-center gap-2 bg-white/10 backdrop-blur-md text-white px-6 py-2.5 rounded-full font-medium hover:bg-white/20 transition-all border border-white/20">
+                    <i data-lucide="user" class="w-[18px] h-[18px]"></i>
+                    <span>로그인</span>
+                </button>
+            </div>
+
+            <!-- Main Content (Centered/Bottom) -->
+            <div class="absolute inset-0 flex flex-col items-center justify-end pb-24 z-20 px-4">
+                <div class="mb-12 text-center">
+                    <h1 class="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-lg">
+                        풀이 애니메이션이
+                    </h1>
+                    <p class="text-lg md:text-xl text-white/90 font-medium drop-shadow-md">
+                        도움이 될 거야. 조금은... 아마도...
+                    </p>
+                </div>
+
+                <button onclick="location.href='euclide-geometry/'"
+                    class="group relative px-10 py-5 bg-primary-600 hover:bg-primary-500 text-white text-xl font-bold rounded-full transition-all shadow-[0_0_40px_-10px_rgba(99,102,241,0.5)] hover:shadow-[0_0_60px_-15px_rgba(99,102,241,0.7)] hover:-translate-y-1 flex items-center gap-3">
+                    <span>바로 보기</span>
+                    <i data-lucide="arrow-right" class="group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- 2단: Pricing Section -->
+        <section id="pricing" class="py-12 md:py-20 bg-white">
+            <div class="max-w-6xl mx-auto px-2 md:px-6 lg:px-8">
+                <div class="text-center mb-8 md:mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
+                        요금제 선택
+                    </h2>
+                    <p class="text-sm md:text-base text-slate-500">
+                        복잡한 고민 없이, 심플하게 선택하세요.
+                    </p>
+                </div>
+
+                <!-- Force grid-cols-2 even on mobile -->
+                <div class="grid grid-cols-2 gap-3 md:gap-6 lg:gap-12 items-stretch max-w-5xl mx-auto">
+
+                    <!-- Free Tier -->
+                    <div
+                        class="flex flex-col h-full p-4 md:p-8 rounded-2xl md:rounded-3xl border border-slate-200 bg-slate-50 hover:border-slate-300 transition-colors">
+                        <div class="mb-4 md:mb-6">
+                            <h3 class="text-lg md:text-xl font-bold text-slate-900 mb-1 break-keep">무료 회원</h3>
+                            <p class="text-slate-500 text-xs md:text-sm break-keep">가볍게 시작</p>
+                        </div>
+
+                        <div class="mb-6 md:mb-8">
+                            <span class="text-2xl md:text-4xl font-bold text-slate-900">0</span>
+                            <span class="text-lg md:text-xl font-bold text-slate-900">원</span>
+                        </div>
+
+                        <ul class="space-y-2 md:space-y-4 mb-6 md:mb-8 flex-grow">
+                            <li class="flex items-start gap-2 md:gap-3 text-slate-700">
+                                <i data-lucide="check"
+                                    class="w-4 h-4 md:w-5 md:h-5 text-green-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-xs md:text-base leading-tight">Base 문제 풀이 애니메이션</span>
+                            </li>
+                            <li class="flex items-start gap-2 md:gap-3 text-slate-700">
+                                <i data-lucide="check"
+                                    class="w-4 h-4 md:w-5 md:h-5 text-green-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-xs md:text-base leading-tight">Level 1 샘플 문제 풀이 애니메이션</span>
+                            </li>
+                            <li class="flex items-start gap-2 md:gap-3 text-slate-400">
+                                <i data-lucide="x" class="w-4 h-4 md:w-5 md:h-5 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-xs md:text-base leading-tight">Level 2 이상 ❌</span>
+                            </li>
+                        </ul>
+
+                        <div class="mt-auto">
+                            <button
+                                class="w-full py-3 md:py-4 rounded-xl font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition-colors text-xs md:text-base">
+                                무료 시작
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Paid Tier -->
+                    <div
+                        class="relative flex flex-col h-full p-4 md:p-8 rounded-2xl md:rounded-3xl bg-slate-900 text-white shadow-xl shadow-primary-900/20 border border-slate-800">
+                        <div
+                            class="absolute top-0 right-0 bg-primary-500 text-white text-[10px] md:text-xs font-bold px-2 py-1 md:px-3 md:py-1 rounded-bl-xl rounded-tr-xl md:rounded-tr-2xl">
+                            BEST
+                        </div>
+
+                        <div class="mb-4 md:mb-6">
+                            <h3 class="text-lg md:text-xl font-bold text-white mb-1 break-keep">프리미엄</h3>
+                            <p class="text-slate-400 text-xs md:text-sm break-keep">무제한 이용</p>
+                        </div>
+
+                        <div class="mb-6 md:mb-8 flex flex-col md:flex-row md:items-baseline gap-1">
+                            <div>
+                                <span class="text-2xl md:text-4xl font-bold text-white">9,900</span>
+                                <span class="text-lg md:text-xl font-bold text-white">원</span>
+                            </div>
+                            <span class="text-slate-400 text-xs md:text-sm">/ 3개월</span>
+                        </div>
+
+                        <ul class="space-y-2 md:space-y-4 mb-6 md:mb-8 flex-grow">
+                            <li class="flex items-start gap-2 md:gap-3 text-slate-200">
+                                <i data-lucide="check"
+                                    class="w-4 h-4 md:w-5 md:h-5 text-primary-400 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-xs md:text-base leading-tight">모든 애니메이션 열람 가능</span>
+                            </li>
+                            <li class="flex items-start gap-2 md:gap-3 text-slate-200">
+                                <i data-lucide="check"
+                                    class="w-4 h-4 md:w-5 md:h-5 text-primary-400 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-xs md:text-base leading-tight">푼 문제 데이터 베이스 제공</span>
+                            </li>
+                            <!-- <li class="flex items-start gap-2 md:gap-3 text-slate-200">
+                                <i data-lucide="check"
+                                    class="w-4 h-4 md:w-5 md:h-5 text-primary-400 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-xs md:text-base leading-tight"></span>
+                            </li> -->
+                        </ul>
+
+                        <div class="mt-auto">
+                            <button
+                                class="w-full py-3 md:py-4 rounded-xl font-bold bg-primary-600 hover:bg-primary-500 text-white transition-all shadow-lg shadow-primary-600/30 text-xs md:text-base">
+                                구매하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 3단: Business Info (Compact Footer) -->
+    <footer class="bg-slate-950 py-6 border-t border-slate-900 text-slate-500 text-[11px] md:text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap items-center justify-between gap-y-4">
+
+                <!-- Left: Brand & Legal -->
+                <div class="flex flex-col gap-2 max-w-4xl">
+                    <div class="flex items-center gap-2 text-white mb-1">
+                        <i data-lucide="zap" class="w-[14px] h-[14px]" fill="currentColor"></i>
+                        <span class="font-bold text-sm">MathMore</span>
+                    </div>
+
+                    <div class="flex flex-wrap gap-x-3 gap-y-1 text-slate-500 leading-tight">
+                        <span>매쓰모어</span>
+                        <span class="text-slate-800">|</span>
+                        <span>홍석주</span>
+                        <span class="text-slate-800">|</span>
+                        <span>사업자등록번호: 462-18-02496</span>
+                        <span class="text-slate-800">|</span>
+                        <span>통신판매업신고: 2024-서울강남-00000호</span>
+                        <span class="text-slate-800">|</span>
+                        <span>경기 고양 일산동구 무궁화로 75</span>
+                        <span class="text-slate-800">|</span>
+                        <span>painfultrauma@gmail.com</span>
+                    </div>
+
+                    <div class="text-slate-600 mt-1">
+                        Copyright © 2024 NextStream Inc. All rights reserved.
+                    </div>
+                </div>
+
+                <!-- Right: Links -->
+                <div class="flex items-center gap-4 text-slate-400">
+                    <a href="#" class="hover:text-white transition-colors">이용약관</a>
+                    <a href="#" class="hover:text-white transition-colors">개인정보처리방침</a>
+                    <div class="w-px h-3 bg-slate-800"></div>
+                    <div class="flex gap-3">
+                        <a href="#" class="hover:text-white"><i data-lucide="github" class="w-[14px] h-[14px]"></i></a>
+                        <a href="#" class="hover:text-white"><i data-lucide="twitter" class="w-[14px] h-[14px]"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
+    </footer>
 
-        <button id="login-btn">구글로 로그인하기</button>
-
-        <div class="footer">
-            <p>Made with ❤️ using <a href="https://p5js.org/" target="_blank">p5.js</a></p>
-            <p><a href="https://github.com/MathTrauma/start" target="_blank">View on GitHub</a></p>
-        </div>
-    </div>
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
+
 </html>
-
-<script>
-    // 2. Supabase 클라이언트 초기화
-    // Supabase Project Settings > API 메뉴에서 확인 가능합니다.
-    const SUPABASE_URL = 'https://bdunrluoivhgypwangcx.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkdW5ybHVvaXZoZ3lwd2FuZ2N4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNjc1NTksImV4cCI6MjA4Mjg0MzU1OX0.JBkLVuR8RyOmwMl6_-KPIgsYBy1_qoG90v5j_vt0mSQ';
-
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // 3. 로그인 함수 정의
-    async function signInWithGoogle() {
-        const { data, error } = await supabaseClient.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                // 로그인 성공 후 돌아올 주소 (Supabase 설정에 등록되어 있어야 함)
-                redirectTo: window.location.origin
-            },
-        });
-
-        if (error) console.error('로그인 에러:', error.message);
-    }
-
-    // 버튼 클릭 이벤트 연결
-    document.getElementById('login-btn').addEventListener('click', signInWithGoogle);
-</script>

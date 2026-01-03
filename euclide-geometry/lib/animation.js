@@ -208,58 +208,6 @@ class MBlinkingRightAngle extends Animatable {
     render(t) {}
 }
 
-// ===== 외접원 클래스 =====
-class MCircumcircle extends Animatable {
-    constructor(p, p1, p2, p3, startPoint, options = {}) {
-        super(p);
-        this.p1 = p1;
-        this.p2 = p2;
-        this.p3 = p3;
-        this.startPoint = startPoint;
-        this.color = options.color || [100, 150, 200];
-        this.weight = options.weight || 1.5;
-        this.circ = this.calculateCircumcircle();
-    }
-
-    calculateCircumcircle() {
-        let ax = this.p1.x, ay = this.p1.y;
-        let bx = this.p2.x, by = this.p2.y;
-        let cx = this.p3.x, cy = this.p3.y;
-
-        let d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by));
-        if (Math.abs(d) < 0.0001) return null;
-
-        let ux = ((ax * ax + ay * ay) * (by - cy) + (bx * bx + by * by) * (cy - ay) + (cx * cx + cy * cy) * (ay - by)) / d;
-        let uy = ((ax * ax + ay * ay) * (cx - bx) + (bx * bx + by * by) * (ax - cx) + (cx * cx + cy * cy) * (bx - ax)) / d;
-
-        let center = this.p.createVector(ux, uy);
-        let radius = p5.Vector.dist(center, this.p1);
-
-        return { center, radius };
-    }
-
-    render(t) {
-        if (!this.circ) return;
-
-        let alpha = t * 200;
-        this.p.noFill();
-        this.p.stroke(...this.color, alpha);
-        this.p.strokeWeight(this.weight);
-
-        let startAngle = this.p.atan2(
-            ty(this.startPoint) - ty(this.circ.center),
-            tx(this.startPoint) - tx(this.circ.center)
-        );
-        let endAngle = startAngle + t * 360;
-
-        this.p.arc(
-            tx(this.circ.center), ty(this.circ.center),
-            this.circ.radius * scale * 2, this.circ.radius * scale * 2,
-            startAngle, endAngle
-        );
-    }
-}
-
 // ===== 별 이모지 클래스 =====
 class MAngleStar extends Animatable {
     constructor(p, P1, V, P2, distance = 0.3) {
