@@ -1,46 +1,112 @@
 #!/bin/bash
-# git status 기반 변경 파일 R2 배포
-# Usage: ./scripts/deploy-changes.sh
+# R2 배포 스크립트
+# Usage:
+#   ./scripts/deploy-changes.sh 011        # 특정 문제 배포
+#   ./scripts/deploy-changes.sh all        # 전체 문제 배포
+#   ./scripts/deploy-changes.sh lib        # 라이브러리만 배포
+#   ./scripts/deploy-changes.sh index      # index.json만 배포
 
 cd "$(dirname "$0")/.." || exit 1
 
-echo "=== 변경 파일 R2 배포 ==="
+TARGET=$1
 
-# 변경된 파일 목록 (수정 + 신규), .tex 파일 제외
-changed_files=$(git status --porcelain | grep -E "^\s*M|^\?\?" | awk '{print $2}' | grep -v '\.tex$')
-
-if [ -z "$changed_files" ]; then
-  echo "변경된 파일 없음"
-  exit 0
+if [ -z "$TARGET" ]; then
+  echo "Usage:"
+  echo "  ./scripts/deploy-changes.sh <problem_id>  # 특정 문제 배포"
+  echo "  ./scripts/deploy-changes.sh all           # 전체 문제 배포"
+  echo "  ./scripts/deploy-changes.sh lib           # 라이브러리만 배포"
+  echo "  ./scripts/deploy-changes.sh index         # index.json만 배포"
+  exit 1
 fi
 
-echo "변경된 파일:"
-echo "$changed_files"
-echo ""
-
-# 각 파일 R2 업로드
 success_count=0
 fail_count=0
 
-for file in $changed_files; do
-  if [ -f "$file" ]; then
-    # 특수 경로 처리: problems/index.json → metadata/problems-index.json
-    if [ "$file" = "problems/index.json" ]; then
-      r2_path="euclide-geometry/metadata/problems-index.json"
-    else
-      r2_path="euclide-geometry/$file"
-    fi
-    echo -n "배포: $file → $r2_path ... "
+upload_file() {
+  local file=$1
+  local r2_path="euclide-geometry/$file"
 
-    if npx wrangler r2 object put "$r2_path" --file="$file" --remote > /dev/null 2>&1; then
-      echo "✅"
-      ((success_count++))
-    else
-      echo "❌"
-      ((fail_count++))
-    fi
+  if [ ! -f "$file" ]; then
+    echo "  ⚠️  $file 없음"
+    return 1
   fi
-done
+
+  echo -n "  $file → $r2_path ... "
+  if npx wrangler r2 object put "$r2_path" --file="$file" --remote > /dev/null 2>&1; then
+    echo "✅"
+    ((success_count++))
+    return 0
+  else
+    echo "❌"
+    ((fail_count++))
+    return 1
+  fi
+}
+
+deploy_problem() {
+  local id=$1
+  local dir="problems/$id"
+
+  if [ ! -d "$dir" ]; then
+    echo "  ⚠️  $dir 폴더 없음"
+    return 1
+  fi
+
+  echo "문제 $id 배포..."
+  upload_file "$dir/config.json"
+  upload_file "$dir/sketch.js"
+  upload_file "$dir/problem.html"
+
+  # solution-phase 파일들 (있으면)
+  for sol in "$dir"/solution-phase-*.html; do
+    [ -f "$sol" ] && upload_file "$sol"
+  done
+}
+
+deploy_lib() {
+  echo "라이브러리 배포..."
+  for file in lib/*.js; do
+    [ -f "$file" ] && upload_file "$file"
+  done
+  for file in lib/styles/*.css; do
+    [ -f "$file" ] && upload_file "$file"
+  done
+}
+
+deploy_index() {
+  echo "인덱스 배포..."
+  upload_file "problems/index.json"
+}
+
+echo "=== R2 배포 ==="
+echo ""
+
+case $TARGET in
+  all)
+    echo "전체 배포..."
+    echo ""
+    for dir in problems/*/; do
+      id=$(basename "$dir")
+      deploy_problem "$id"
+      echo ""
+    done
+    deploy_lib
+    echo ""
+    deploy_index
+    ;;
+  lib)
+    deploy_lib
+    ;;
+  index)
+    deploy_index
+    ;;
+  *)
+    # 문제 번호로 간주
+    deploy_problem "$TARGET"
+    echo ""
+    deploy_index
+    ;;
+esac
 
 echo ""
 echo "=== 배포 결과 ==="

@@ -13,7 +13,7 @@
 ## 동기화 흐름
 
 ```
-problem.tex → config.json → problems/index.json -> metadata/problem-index.json
+problem.tex → config.json → problems/index.json
 ```
 
 | 소스 | 대상 | 항목 |

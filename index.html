@@ -55,15 +55,15 @@
         }
     </style>
     <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
-  }
-}
-</script>
+    {
+        "imports": {
+            "react": "https://esm.sh/react@^19.2.3",
+            "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+            "react/": "https://esm.sh/react@^19.2.3/",
+            "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+        }
+    }
+    </script>
 </head>
 
 <body
@@ -84,7 +84,7 @@
 
             <!-- Top Right Login Button -->
             <div class="absolute top-6 right-6 z-20">
-                <button
+                <button id="login-btn"
                     class="flex items-center gap-2 bg-white/10 backdrop-blur-md text-white px-6 py-2.5 rounded-full font-medium hover:bg-white/20 transition-all border border-white/20">
                     <i data-lucide="user" class="w-[18px] h-[18px]"></i>
                     <span>로그인</span>
@@ -266,3 +266,29 @@
 </body>
 
 </html>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // 2. Supabase 클라이언트 초기화
+    // Supabase Project Settings > API 메뉴에서 확인 가능합니다.
+    const SUPABASE_URL = 'https://bdunrluoivhgypwangcx.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkdW5ybHVvaXZoZ3lwd2FuZ2N4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNjc1NTksImV4cCI6MjA4Mjg0MzU1OX0.JBkLVuR8RyOmwMl6_-KPIgsYBy1_qoG90v5j_vt0mSQ';
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 3. 로그인 함수 정의
+    async function signInWithGoogle() {
+        const { data, error } = await supabaseClient.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                // 로그인 성공 후 돌아올 주소 (Supabase 설정에 등록되어 있어야 함)
+                redirectTo: window.location.origin
+            },
+        });
+
+        if (error) console.error('로그인 에러:', error.message);
+    }
+
+    // 버튼 클릭 이벤트 연결
+    document.getElementById('login-btn').addEventListener('click', signInWithGoogle);
+</script>

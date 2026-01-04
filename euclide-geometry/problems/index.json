@@ -131,20 +131,34 @@
       "category": "euclidean-geometry",
       "url": "viewer.html?problem=010",
       "description": "이등변삼각형의 외접원 접선과 각의 이등분을 이용한 선분 길이 계산"
+    },
+    {
+      "id": "011",
+      "title": "수심과 외심",
+      "level": 2,
+      "tags": [
+        "수심",
+        "외심",
+        "수심관련각",
+        "외심관련각"
+      ],
+      "category": "euclidean-geometry",
+      "url": "viewer.html?problem=011",
+      "description": "예각삼각형의 수심과 외심을 이용한 선분 비율 계산"
     }
   ],
   "categories": [
     {
       "id": "euclidean-geometry",
       "name": "유클리드 기하",
-      "count": 10
+      "count": 11
     }
   ],
   "stats": {
-    "total": 10,
+    "total": 11,
     "byLevel": {
       "1": 4,
-      "2": 3,
+      "2": 4,
       "3": 3
     }
   }

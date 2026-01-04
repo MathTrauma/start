@@ -8,8 +8,17 @@
 ## 배포 명령어
 
 ```bash
-# 변경된 파일 자동 배포
-./scripts/deploy-changes.sh
+# 특정 문제 배포
+./scripts/deploy-changes.sh 011
+
+# 전체 배포
+./scripts/deploy-changes.sh all
+
+# 라이브러리만 배포
+./scripts/deploy-changes.sh lib
+
+# index.json만 배포
+./scripts/deploy-changes.sh index
 
 # 수동 배포 (개별 파일)
 npx wrangler r2 object put "euclide-geometry/[경로]" --file="[로컬파일]" --remote
@@ -38,7 +47,7 @@ npx wrangler r2 object put "euclide-geometry/[경로]" --file="[로컬파일]" -
 
 index.json 변경 시:
 ```bash
-npx wrangler r2 object put "euclide-geometry/metadata/problems-index.json" \
+npx wrangler r2 object put "euclide-geometry/problems/index.json" \
   --file="problems/index.json" \
   --content-type="application/json" \
   --remote

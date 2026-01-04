@@ -159,7 +159,7 @@ echo "Step 3: 인덱스 파일 업데이트..."
 
 upload_if_changed \
     "problems/index.json" \
-    "metadata/problems-index.json" \
+    "problems/index.json" \
     "application/json" \
     "public, max-age=300"
 

@@ -8,11 +8,11 @@
 
 **원인:**
 - 로컬 index.json은 업데이트됨
-- R2의 metadata/problems-index.json은 오래된 상태
+- R2의 problems/index.json은 오래된 상태
 
 **해결:**
 ```bash
-npx wrangler r2 object put "euclide-geometry/metadata/problems-index.json" \
+npx wrangler r2 object put "euclide-geometry/problems/index.json" \
   --file="problems/index.json" \
   --content-type="application/json" \
   --remote

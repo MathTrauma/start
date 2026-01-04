@@ -30,16 +30,4 @@ cp templates/* problems/002/
 # https://euclide-worker.painfultrauma.workers.dev/viewer.html?problem=002
 ```
 
-## Phase 시스템
 
-```javascript
-// config.json - phase 시간 정의
-"phases": [
-  { "id": 1, "start": 0, "duration": 2.0 },
-  { "id": 2, "start": 2.0, "duration": 2.0 }
-]
-
-// sketch.js - phase별 그리기
-m_triangle(p, A, B, C, 0.0);      // phase 1 시작
-m_segment(p, A, D, 2.0, 1.0);     // phase 2 시작, 1초간 그리기
-```

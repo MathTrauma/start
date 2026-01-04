@@ -21,7 +21,6 @@ sync_problem() {
   local TEX_FILE="$PROBLEM_DIR/problem.tex"
   local CONFIG_FILE="$PROBLEM_DIR/config.json"
   local INDEX_FILE="problems/index.json"
-  local META_INDEX="metadata/problems-index.json"
 
   if [ ! -f "$TEX_FILE" ]; then
     echo "  ⚠️  $TEX_FILE 없음"
@@ -49,11 +48,6 @@ sync_problem() {
 
   # 3. index.json 업데이트
   jq "(.problems[] | select(.id == \"$id\")).level = $LEVEL" "$INDEX_FILE" > /tmp/index_$id.json && mv /tmp/index_$id.json "$INDEX_FILE"
-
-  # 4. problems-index.json 업데이트
-  if [ -f "$META_INDEX" ]; then
-    jq "(.problems[] | select(.id == \"$id\")).level = $LEVEL" "$META_INDEX" > /tmp/meta_$id.json && mv /tmp/meta_$id.json "$META_INDEX"
-  fi
 }
 
 echo "=== 메타데이터 동기화 ==="
@@ -68,10 +62,9 @@ else
   sync_problem "$PROBLEM_ID"
 fi
 
-# 5. stats 재계산
+# 4. stats 재계산
 echo -e "\nstats 재계산..."
 INDEX_FILE="problems/index.json"
-META_INDEX="metadata/problems-index.json"
 
 # level별 카운트 계산
 level1=$(jq '[.problems[] | select(.level==1)] | length' "$INDEX_FILE")
@@ -81,10 +74,6 @@ total=$(jq '.problems | length' "$INDEX_FILE")
 
 # stats 업데이트
 jq ".stats.total = $total | .stats.byLevel.\"1\" = $level1 | .stats.byLevel.\"2\" = $level2 | .stats.byLevel.\"3\" = $level3" "$INDEX_FILE" > /tmp/index_stats.json && mv /tmp/index_stats.json "$INDEX_FILE"
-
-if [ -f "$META_INDEX" ]; then
-  jq ".stats.total = $total | .stats.byLevel.\"1\" = $level1 | .stats.byLevel.\"2\" = $level2 | .stats.byLevel.\"3\" = $level3" "$META_INDEX" > /tmp/meta_stats.json && mv /tmp/meta_stats.json "$META_INDEX"
-fi
 
 echo "  Level 1: $level1"
 echo "  Level 2: $level2"

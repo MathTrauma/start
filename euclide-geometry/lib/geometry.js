@@ -50,6 +50,21 @@ function getCircumcenter(A, B, C) {
     return intersectLines(midAB, pointAB, midBC, pointBC);
 }
 
+// orthocenter of triangle ABC (수심)
+function getOrthocenter(A, B, C) {
+    // A에서 BC에 수직인 선과 B에서 AC에 수직인 선의 교점
+    let dirBC = p5.Vector.sub(C, B);
+    let perpBC = new p5.Vector(-dirBC.y, dirBC.x); // BC에 수직인 방향
+    let pointFromA = p5.Vector.add(A, perpBC);
+
+    let dirAC = p5.Vector.sub(C, A);
+    let perpAC = new p5.Vector(-dirAC.y, dirAC.x); // AC에 수직인 방향
+    let pointFromB = p5.Vector.add(B, perpAC);
+
+    // 두 수선의 교점
+    return intersectLines(A, pointFromA, B, pointFromB);
+}
+
 // reflect point P over line AB
 function reflectPoint(P, A, B) {
     let projection = projectPointToLine(P, A, B);
