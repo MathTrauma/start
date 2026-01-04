@@ -196,25 +196,29 @@
     </footer>
 
     <!-- Initialize Lucide Icons and Supabase Auth -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="js/auth.js" defer></script>
     <script>
-        // Lucide 아이콘 초기화
-        lucide.createIcons();
-        
-        // UI 요소 가져오기
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
+        window.addEventListener('DOMContentLoaded', () => {
+            // Lucide 아이콘 초기화
+            lucide.createIcons();
+            
+            // UI 요소 가져오기
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
 
-        // 인증 초기화 및 UI 업데이트 연결
-        initAuth((session) => {
-            if (session) {
-                loginBtn.style.display = 'none';
-                logoutBtn.style.display = 'flex';
-                console.log('사용자:', session.user.email);
-            } else {
-                loginBtn.style.display = 'flex';
-                logoutBtn.style.display = 'none';
+            // 인증 초기화 및 UI 업데이트 연결
+            if (typeof initAuth === 'function') {
+                initAuth((session) => {
+                    if (session) {
+                        loginBtn.style.display = 'none';
+                        logoutBtn.style.display = 'flex';
+                        console.log('사용자:', session.user.email);
+                    } else {
+                        loginBtn.style.display = 'flex';
+                        logoutBtn.style.display = 'none';
+                    }
+                });
             }
         });
     </script>
