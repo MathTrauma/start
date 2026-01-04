@@ -18,7 +18,7 @@
 
 `problems/XXX/` 폴더에 필요한 파일:
 - `problem.tex` - 원본 LaTeX 문제
-- `problem.html` - MathJax SVG로 변환된 HTML
+- `problem.html` - MathJax SVG로 변환된 HTML (index 카드에 표시됨)
 - `config.json` - 문제 메타데이터 및 phase 정의
 - `sketch.js` - p5.js 애니메이션 코드
 - `animation.md` - 애니메이션 설계 문서
@@ -62,6 +62,7 @@ MathJax의 `jax="SVG"` 형식으로 미리 변환하여 저장한다.
 변환 형식:
 - LaTeX 수식은 `<mjx-container class="MathJax" jax="SVG">` 형태의 SVG로 변환
 - 인라인 수식과 블록 수식 모두 SVG로 사전 렌더링
+- 생성된 `problem.html`은 viewer.html과 index.html(문제 목록 카드)에서 사용됨
 - 참고: `problems/003/problem.html`
 
 ```bash
@@ -73,6 +74,12 @@ node scripts/convert-tex.js XXX
 ./scripts/sync-metadata.sh XXX
 ./scripts/validate-metadata.sh
 ```
+
+이 스크립트는:
+- `problem.tex`에서 level 추출하여 `config.json`과 `problems/index.json` 업데이트
+- `problem.html`이 존재하면 내용을 읽어서 `problems/index.json`의 `problemHtml` 필드에 추가
+- index.html에서 카드 표시 시 `problemHtml`(있으면) 또는 `description` 사용
+
 → docs/metadata.md 참조
 
 ### 7단계: R2 배포

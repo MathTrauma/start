@@ -165,7 +165,7 @@
                     <div class="problem-meta">
                         <span class="problem-tag level">Level ${problem.level}</span>
                     </div>
-                    <p class="problem-description">${problem.description || ''}</p>
+                    <div class="problem-description">${problem.problemHtml || problem.description || ''}</div>
                 </a>
             `).join('');
         }

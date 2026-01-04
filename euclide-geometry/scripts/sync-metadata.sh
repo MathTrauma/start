@@ -19,6 +19,7 @@ sync_problem() {
   local id=$1
   local PROBLEM_DIR="problems/$id"
   local TEX_FILE="$PROBLEM_DIR/problem.tex"
+  local HTML_FILE="$PROBLEM_DIR/problem.html"
   local CONFIG_FILE="$PROBLEM_DIR/config.json"
   local INDEX_FILE="problems/index.json"
 
@@ -46,8 +47,18 @@ sync_problem() {
   # 2. config.json 업데이트
   jq ".level = $LEVEL" "$CONFIG_FILE" > /tmp/config_$id.json && mv /tmp/config_$id.json "$CONFIG_FILE"
 
-  # 3. index.json 업데이트
-  jq "(.problems[] | select(.id == \"$id\")).level = $LEVEL" "$INDEX_FILE" > /tmp/index_$id.json && mv /tmp/index_$id.json "$INDEX_FILE"
+  # 3. problem.html 읽기 (존재하는 경우)
+  if [ -f "$HTML_FILE" ]; then
+    # HTML을 JSON 문자열로 변환 (jq의 -R -s로 raw input, slurp)
+    PROBLEM_HTML=$(cat "$HTML_FILE" | jq -R -s '.')
+
+    # 4. index.json 업데이트 (level과 problemHtml)
+    jq "(.problems[] | select(.id == \"$id\")) |= (.level = $LEVEL | .problemHtml = $PROBLEM_HTML)" "$INDEX_FILE" > /tmp/index_$id.json && mv /tmp/index_$id.json "$INDEX_FILE"
+  else
+    echo "  ⚠️  $id: $HTML_FILE 없음 (level만 업데이트)"
+    # 3. index.json 업데이트 (level만)
+    jq "(.problems[] | select(.id == \"$id\")).level = $LEVEL" "$INDEX_FILE" > /tmp/index_$id.json && mv /tmp/index_$id.json "$INDEX_FILE"
+  fi
 }
 
 echo "=== 메타데이터 동기화 ==="

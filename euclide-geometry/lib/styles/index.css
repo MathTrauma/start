@@ -1,5 +1,14 @@
 /* Problem List Page Styles */
 
+/* common.css의 flex 레이아웃을 유지하되 방향을 세로로 변경 */
+body {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
 /* Navigation Bar */
 .top-nav {
     display: flex;
