@@ -30,7 +30,7 @@ async function signInWithGoogle() {
         const { error } = await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: window.location.href // 현재 보고 있는 페이지로 복귀
+                redirectTo: window.location.origin + window.location.pathname // 해시나 쿼리 스트링을 제외한 순수 경로로 복귀
             },
         });
         if (error) throw error;
