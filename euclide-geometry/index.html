@@ -22,18 +22,7 @@
         <a href="../" class="nav-logo">
             <span>MathMore</span>
         </a>
-        <div class="auth-buttons">
-            <button id="login-btn" onclick="signInWithGoogle()" style="display: none;">로그인</button>
-            <button id="logout-btn" onclick="signOut()" style="display: none;">로그아웃</button>
-        </div>
-    </header>
-    <div class="problem-list-container">
-        <p id="font-indicator" style="text-align: center; color: #8b7d6b; font-size: 12px; 
-            margin-bottom: 20px; height: 18px; line-height: 18px; overflow: hidden;"></p>
-
-        <!-- 문제 그리드 -->
-        <div id="problem-grid"></div>
-
+        
         <!-- 필터 -->
         <div class="filters">
             <select id="level-filter">
@@ -48,8 +37,24 @@
             </select>
         </div>
 
-        <div class="stats-container" id="stats-container"></div>
+        <div class="auth-buttons">
+            <button id="login-btn" onclick="signInWithGoogle()" style="display: none;">로그인</button>
+            <button id="logout-btn" onclick="signOut()" style="display: none;">로그아웃</button>
+        </div>
+    </header>
+
+    <div class="problem-list-container">
+        <p id="font-indicator" style="text-align: center; color: #8b7d6b; font-size: 12px; 
+            margin-bottom: 20px; height: 18px; line-height: 18px; overflow: hidden;"></p>
+
+        <!-- 문제 그리드 -->
+        <div id="problem-grid"></div>
+
     </div>
+
+
+
+    <!-- <div class="stats-container" id="stats-container"></div> -->
 
     <!-- Supabase & Auth -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
