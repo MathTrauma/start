@@ -19,14 +19,65 @@
         body, .problem-content, .problem-tag, .solution-panel-content, .solution-panel-title, p, span, div {
             font-family: 'Noto Serif KR', serif !important;
         }
+
+        /* 상단 네비게이션 바 스타일 */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-logo {
+            font-weight: bold;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .auth-buttons button {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            background: #f8f9fa;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .auth-buttons button:hover {
+            background: #e9ecef;
+        }
+
+        /* 모바일에서는 상단 바 숨김 */
+        @media (max-width: 768px) {
+            .top-nav {
+                display: none !important;
+            }
+        }
     </style>
     
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/geometry.v1.0.0.js"></script>
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/draw-utils.v1.0.0.js"></script>
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/animation.v1.0.0.js"></script>
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/ui-controls.v1.0.0.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+    <header class="top-nav">
+        <a href="../" class="nav-logo">
+            <i data-lucide="zap" width="18" height="18"></i>
+            <span>MathMore</span>
+        </a>
+        <div class="auth-buttons">
+            <button id="login-btn" onclick="signInWithGoogle()" style="display: none;">로그인</button>
+            <button id="logout-btn" onclick="signOut()" style="display: none;">로그아웃</button>
+        </div>
+    </header>
     <main>
         <div id="problem-container"></div>
         <div class="canvas-container" id="canvas-wrapper"></div>
@@ -41,7 +92,27 @@
         <div id="controls-container"></div>
     </main>
 
+    <!-- Supabase & Auth -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/auth.js"></script>
     <script>
+        // Lucide 초기화
+        lucide.createIcons();
+
+        // 인증 초기화
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        initAuth((session) => {
+            if (session) {
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'block';
+            } else {
+                loginBtn.style.display = 'block';
+                logoutBtn.style.display = 'none';
+            }
+        });
+
         // URL 파라미터에서 문제 ID 추출
         const urlParams = new URLSearchParams(window.location.search);
         const problemId = urlParams.get('problem') || '001';
