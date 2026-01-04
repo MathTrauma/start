@@ -68,9 +68,6 @@ deploy_lib() {
   for file in lib/*.js; do
     [ -f "$file" ] && upload_file "$file"
   done
-  for file in lib/styles/*.css; do
-    [ -f "$file" ] && upload_file "$file"
-  done
 }
 
 deploy_index() {
