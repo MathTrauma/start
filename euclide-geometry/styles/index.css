@@ -133,7 +133,7 @@ h1 {
     color: inherit;
     display: flex;
     flex-direction: column;
-    height: 180px;
+    height: 145px;
 }
 
 .problem-card:hover {
@@ -150,14 +150,6 @@ h1 {
     font-weight: 600;
 }
 
-.problem-card .problem-meta {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-    flex-shrink: 0;
-}
-
 .problem-tag {
     padding: 4px 12px;
     border-radius: 4px;
@@ -169,6 +161,8 @@ h1 {
 .problem-tag.level {
     background-color: #8b7d6b;
     color: #fff;
+    display: block;
+    margin-bottom: 6px;
 }
 
 .problem-card .problem-description {

@@ -167,9 +167,7 @@
 
             grid.innerHTML = problems.map(problem => `
                 <a href="${problem.url}" class="problem-card">
-                    <div class="problem-meta">
-                        <span class="problem-tag level">Level ${problem.level}</span>
-                    </div>
+                    <span class="problem-tag level">Level ${problem.level}</span>
                     <div class="problem-description">${problem.problemHtml || problem.description || ''}</div>
                 </a>
             `).join('');
