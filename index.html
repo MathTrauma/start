@@ -6,54 +6,15 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Math More</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
         rel="stylesheet">
     <!-- Lucide Icons (Vanilla JS version) -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Noto Sans KR"', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            200: '#c7d2fe',
-                            300: '#a5b4fc',
-                            400: '#818cf8',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            800: '#3730a3',
-                            900: '#312e81',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-    </style>
+    
     <script type="importmap">
     {
         "imports": {
@@ -66,193 +27,161 @@
     </script>
 </head>
 
-<body
-    class="bg-slate-50 text-slate-900 antialiased selection:bg-primary-500 selection:text-white flex flex-col min-h-screen">
+<body>
 
-    <main class="flex-grow">
+    <main>
         <!-- 1단: Hero Video Section -->
-        <section class="relative h-screen w-full overflow-hidden bg-slate-900">
+        <section class="hero-section">
             <!-- Background Video -->
-            <div class="absolute inset-0 w-full h-full">
-                <video class="w-full h-full object-cover opacity-80" autoplay loop muted playsinline
+            <div class="hero-bg-video-container">
+                <video class="hero-bg-video" autoplay loop muted playsinline
                     poster="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2426&q=80">
                     <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
                         type="video/mp4" />
                 </video>
-                <div class="absolute inset-0 bg-black/30"></div>
+                <div class="hero-overlay"></div>
             </div>
 
             <!-- Top Right Login Button -->
-            <div class="absolute top-6 right-6 z-50">
-                <button id="login-btn"
-                    class="flex items-center gap-2 bg-white/10 backdrop-blur-md text-white px-6 py-2.5 rounded-full font-medium hover:bg-white/20 transition-all border border-white/20">
-                    <i data-lucide="user" class="w-[18px] h-[18px]"></i>
+            <div class="login-container">
+                <button id="login-btn" onclick="signInWithGoogle()" class="btn-login">
+                    <i data-lucide="user" width="18" height="18"></i>
                     <span>로그인</span>
                 </button>
             </div>
 
             <!-- Main Content (Centered/Bottom) -->
-            <div class="absolute inset-0 flex flex-col items-center justify-end pb-24 z-20 px-4">
-                <div class="mb-12 text-center">
-                    <h1 class="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-lg">
+            <div class="hero-content-wrapper">
+                <div class="hero-text-group">
+                    <h1 class="hero-title">
                         풀이 애니메이션이
                     </h1>
-                    <p class="text-lg md:text-xl text-white/90 font-medium drop-shadow-md">
+                    <p class="hero-subtitle">
                         도움이 될 거야. 조금은... 아마도...
                     </p>
                 </div>
 
-                <button onclick="location.href='euclide-geometry/'"
-                    class="group relative px-10 py-5 bg-primary-600 hover:bg-primary-500 text-white text-xl font-bold rounded-full transition-all shadow-[0_0_40px_-10px_rgba(99,102,241,0.5)] hover:shadow-[0_0_60px_-15px_rgba(99,102,241,0.7)] hover:-translate-y-1 flex items-center gap-3">
+                <button onclick="location.href='euclide-geometry/'" class="btn-cta group">
                     <span>바로 보기</span>
-                    <i data-lucide="arrow-right" class="group-hover:translate-x-1 transition-transform"></i>
+                    <i data-lucide="arrow-right"></i>
                 </button>
             </div>
         </section>
 
         <!-- 2단: Pricing Section -->
-        <section id="pricing" class="py-12 md:py-20 bg-white">
-            <div class="max-w-6xl mx-auto px-2 md:px-6 lg:px-8">
-                <div class="text-center mb-8 md:mb-12">
-                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
-                        요금제 선택
-                    </h2>
-                    <p class="text-sm md:text-base text-slate-500">
-                        복잡한 고민 없이, 심플하게 선택하세요.
-                    </p>
+        <section id="pricing" class="pricing-section">
+            <div class="container">
+                <div class="pricing-header">
+                    <h2>요금제 선택</h2>
+                    <p>복잡한 고민 없이, 심플하게 선택하세요.</p>
                 </div>
 
-                <!-- Force grid-cols-2 even on mobile -->
-                <div class="grid grid-cols-2 gap-3 md:gap-6 lg:gap-12 items-stretch max-w-5xl mx-auto">
+                <div class="pricing-grid">
 
                     <!-- Free Tier -->
-                    <div
-                        class="flex flex-col h-full p-4 md:p-8 rounded-2xl md:rounded-3xl border border-slate-200 bg-slate-50 hover:border-slate-300 transition-colors">
-                        <div class="mb-4 md:mb-6">
-                            <h3 class="text-lg md:text-xl font-bold text-slate-900 mb-1 break-keep">무료 회원</h3>
-                            <p class="text-slate-500 text-xs md:text-sm break-keep">가볍게 시작</p>
+                    <div class="pricing-card card-free">
+                        <div class="card-title-group">
+                            <h3 class="card-title">무료 회원</h3>
+                            <p class="card-desc">가볍게 시작</p>
                         </div>
 
-                        <div class="mb-6 md:mb-8">
-                            <span class="text-2xl md:text-4xl font-bold text-slate-900">0</span>
-                            <span class="text-lg md:text-xl font-bold text-slate-900">원</span>
+                        <div class="price-group">
+                            <span class="price-val">0</span>
+                            <span class="price-unit">원</span>
                         </div>
 
-                        <ul class="space-y-2 md:space-y-4 mb-6 md:mb-8 flex-grow">
-                            <li class="flex items-start gap-2 md:gap-3 text-slate-700">
-                                <i data-lucide="check"
-                                    class="w-4 h-4 md:w-5 md:h-5 text-green-500 flex-shrink-0 mt-0.5"></i>
-                                <span class="text-xs md:text-base leading-tight">Base 문제 풀이 애니메이션</span>
+                        <ul class="feature-list">
+                            <li class="feature-item text-active">
+                                <i data-lucide="check" class="feature-icon icon-check"></i>
+                                <span class="feature-text">Base 문제 풀이 애니메이션</span>
                             </li>
-                            <li class="flex items-start gap-2 md:gap-3 text-slate-700">
-                                <i data-lucide="check"
-                                    class="w-4 h-4 md:w-5 md:h-5 text-green-500 flex-shrink-0 mt-0.5"></i>
-                                <span class="text-xs md:text-base leading-tight">Level 1 샘플 문제 풀이 애니메이션</span>
+                            <li class="feature-item text-active">
+                                <i data-lucide="check" class="feature-icon icon-check"></i>
+                                <span class="feature-text">Level 1 샘플 문제 풀이 애니메이션</span>
                             </li>
-                            <li class="flex items-start gap-2 md:gap-3 text-slate-400">
-                                <i data-lucide="x" class="w-4 h-4 md:w-5 md:h-5 flex-shrink-0 mt-0.5"></i>
-                                <span class="text-xs md:text-base leading-tight">Level 2 이상 ❌</span>
+                            <li class="feature-item text-inactive">
+                                <i data-lucide="x" class="feature-icon icon-x"></i>
+                                <span class="feature-text">Level 2 이상 ❌</span>
                             </li>
                         </ul>
 
-                        <div class="mt-auto">
-                            <button
-                                class="w-full py-3 md:py-4 rounded-xl font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 transition-colors text-xs md:text-base">
-                                무료 시작
-                            </button>
-                        </div>
+                        <button class="btn-card">무료 시작</button>
                     </div>
 
                     <!-- Paid Tier -->
-                    <div
-                        class="relative flex flex-col h-full p-4 md:p-8 rounded-2xl md:rounded-3xl bg-slate-900 text-white shadow-xl shadow-primary-900/20 border border-slate-800">
-                        <div
-                            class="absolute top-0 right-0 bg-primary-500 text-white text-[10px] md:text-xs font-bold px-2 py-1 md:px-3 md:py-1 rounded-bl-xl rounded-tr-xl md:rounded-tr-2xl">
-                            BEST
+                    <div class="pricing-card card-paid">
+                        <div class="badge-best">BEST</div>
+
+                        <div class="card-title-group">
+                            <h3 class="card-title">프리미엄</h3>
+                            <p class="card-desc">무제한 이용</p>
                         </div>
 
-                        <div class="mb-4 md:mb-6">
-                            <h3 class="text-lg md:text-xl font-bold text-white mb-1 break-keep">프리미엄</h3>
-                            <p class="text-slate-400 text-xs md:text-sm break-keep">무제한 이용</p>
-                        </div>
-
-                        <div class="mb-6 md:mb-8 flex flex-col md:flex-row md:items-baseline gap-1">
+                        <div class="price-group">
                             <div>
-                                <span class="text-2xl md:text-4xl font-bold text-white">9,900</span>
-                                <span class="text-lg md:text-xl font-bold text-white">원</span>
+                                <span class="price-val">9,900</span>
+                                <span class="price-unit">원</span>
                             </div>
-                            <span class="text-slate-400 text-xs md:text-sm">/ 3개월</span>
+                            <span class="price-period">/ 3개월</span>
                         </div>
 
-                        <ul class="space-y-2 md:space-y-4 mb-6 md:mb-8 flex-grow">
-                            <li class="flex items-start gap-2 md:gap-3 text-slate-200">
-                                <i data-lucide="check"
-                                    class="w-4 h-4 md:w-5 md:h-5 text-primary-400 flex-shrink-0 mt-0.5"></i>
-                                <span class="text-xs md:text-base leading-tight">모든 애니메이션 열람 가능</span>
+                        <ul class="feature-list">
+                            <li class="feature-item text-active">
+                                <i data-lucide="check" class="feature-icon icon-check"></i>
+                                <span class="feature-text">모든 애니메이션 열람 가능</span>
                             </li>
-                            <li class="flex items-start gap-2 md:gap-3 text-slate-200">
-                                <i data-lucide="check"
-                                    class="w-4 h-4 md:w-5 md:h-5 text-primary-400 flex-shrink-0 mt-0.5"></i>
-                                <span class="text-xs md:text-base leading-tight">푼 문제 데이터 베이스 제공</span>
+                            <li class="feature-item text-active">
+                                <i data-lucide="check" class="feature-icon icon-check"></i>
+                                <span class="feature-text">푼 문제 데이터 베이스 제공</span>
                             </li>
-                            <!-- <li class="flex items-start gap-2 md:gap-3 text-slate-200">
-                                <i data-lucide="check"
-                                    class="w-4 h-4 md:w-5 md:h-5 text-primary-400 flex-shrink-0 mt-0.5"></i>
-                                <span class="text-xs md:text-base leading-tight"></span>
-                            </li> -->
                         </ul>
 
-                        <div class="mt-auto">
-                            <button
-                                class="w-full py-3 md:py-4 rounded-xl font-bold bg-primary-600 hover:bg-primary-500 text-white transition-all shadow-lg shadow-primary-600/30 text-xs md:text-base">
-                                구매하기
-                            </button>
-                        </div>
+                        <button class="btn-card">구매하기</button>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- 3단: Business Info (Compact Footer) -->
-    <footer class="bg-slate-950 py-6 border-t border-slate-900 text-slate-500 text-[11px] md:text-xs">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap items-center justify-between gap-y-4">
+    <!-- 3단: Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
 
                 <!-- Left: Brand & Legal -->
-                <div class="flex flex-col gap-2 max-w-4xl">
-                    <div class="flex items-center gap-2 text-white mb-1">
-                        <i data-lucide="zap" class="w-[14px] h-[14px]" fill="currentColor"></i>
-                        <span class="font-bold text-sm">MathMore</span>
+                <div class="brand-section">
+                    <div class="brand-logo">
+                        <i data-lucide="zap" width="14" height="14" fill="currentColor"></i>
+                        <span>MathMore</span>
                     </div>
 
-                    <div class="flex flex-wrap gap-x-3 gap-y-1 text-slate-500 leading-tight">
+                    <div class="brand-info">
                         <span>매쓰모어</span>
-                        <span class="text-slate-800">|</span>
+                        <span class="separator">|</span>
                         <span>홍석주</span>
-                        <span class="text-slate-800">|</span>
+                        <span class="separator">|</span>
                         <span>사업자등록번호: 462-18-02496</span>
-                        <span class="text-slate-800">|</span>
+                        <span class="separator">|</span>
                         <span>통신판매업신고: 2024-서울강남-00000호</span>
-                        <span class="text-slate-800">|</span>
+                        <span class="separator">|</span>
                         <span>경기 고양 일산동구 무궁화로 75</span>
-                        <span class="text-slate-800">|</span>
+                        <span class="separator">|</span>
                         <span>painfultrauma@gmail.com</span>
                     </div>
 
-                    <div class="text-slate-600 mt-1">
+                    <div class="copyright">
                         Copyright © 2024 NextStream Inc. All rights reserved.
                     </div>
                 </div>
 
                 <!-- Right: Links -->
-                <div class="flex items-center gap-4 text-slate-400">
-                    <a href="#" class="hover:text-white transition-colors">이용약관</a>
-                    <a href="#" class="hover:text-white transition-colors">개인정보처리방침</a>
-                    <div class="w-px h-3 bg-slate-800"></div>
-                    <div class="flex gap-3">
-                        <a href="#" class="hover:text-white"><i data-lucide="github" class="w-[14px] h-[14px]"></i></a>
-                        <a href="#" class="hover:text-white"><i data-lucide="twitter" class="w-[14px] h-[14px]"></i></a>
+                <div class="footer-links">
+                    <a href="#">이용약관</a>
+                    <a href="#">개인정보처리방침</a>
+                    <div class="link-separator"></div>
+                    <div class="social-links">
+                        <a href="#"><i data-lucide="github" width="14" height="14"></i></a>
+                        <a href="#"><i data-lucide="twitter" width="14" height="14"></i></a>
                     </div>
                 </div>
             </div>
@@ -274,21 +203,23 @@
         // 로그인 함수 정의
         async function signInWithGoogle() {
             console.log('로그인 시도 중...');
-            const { data, error } = await supabaseClient.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: window.location.origin
-                },
-            });
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.origin
+                    },
+                });
 
-            if (error) {
-                console.error('로그인 에러:', error.message);
-                alert('로그인 중 오류가 발생했습니다: ' + error.message);
+                if (error) {
+                    console.error('로그인 에러:', error.message);
+                    alert('로그인 중 오류가 발생했습니다: ' + error.message);
+                }
+            } catch (err) {
+                console.error('예기치 못한 에러:', err);
+                alert('로그인 시스템에 문제가 발생했습니다.');
             }
         }
-
-        // 버튼 클릭 이벤트 연결
-        document.getElementById('login-btn').addEventListener('click', signInWithGoogle);
     </script>
 </body>
 
