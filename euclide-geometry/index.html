@@ -17,10 +17,12 @@
 </head>
 <body>
     <div class="problem-list-container">
-        <h1 id="main-title">📐 Euclidean Geometry Problems</h1>
-        <p id="font-indicator" style="text-align: center; color: #8b7d6b; font-size: 12px; margin-top: -20px; margin-bottom: 20px; height: 18px; line-height: 18px; overflow: hidden;"></p>
+        <!-- <h1 id="main-title">📐 Euclidean Geometry Problems</h1> -->
+        <p id="font-indicator" style="text-align: center; color: #8b7d6b; font-size: 12px; 
+            margin-top: -20px; margin-bottom: 20px; height: 18px; line-height: 18px; overflow: hidden;"></p>
 
-        <div class="stats-container" id="stats-container"></div>
+        <!-- 문제 그리드 -->
+        <div id="problem-grid"></div>
 
         <!-- 필터 -->
         <div class="filters">
@@ -30,14 +32,13 @@
                 <option value="2">Level 2</option>
                 <option value="3">Level 3</option>
             </select>
-
+        
             <select id="category-filter">
                 <option value="">모든 카테고리</option>
             </select>
         </div>
 
-        <!-- 문제 그리드 -->
-        <div id="problem-grid"></div>
+        <div class="stats-container" id="stats-container"></div>
     </div>
 
     <script>
