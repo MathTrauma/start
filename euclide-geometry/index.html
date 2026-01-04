@@ -20,7 +20,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
+            padding: 15px 30px;
             background: #fff;
             border-bottom: 1px solid #eee;
             position: sticky;
@@ -34,17 +34,52 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 1.2rem;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
         }
         .auth-buttons button {
-            padding: 6px 16px;
+            padding: 8px 18px;
             border-radius: 20px;
             border: 1px solid #ddd;
             background: #f8f9fa;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
         }
         .auth-buttons button:hover {
             background: #e9ecef;
+            border-color: #ccc;
+        }
+
+        /* 반응형 문제 그리드 설정 */
+        #problem-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* 모바일 기본 1열 */
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 640px) {
+            #problem-grid {
+                grid-template-columns: repeat(2, 1fr); /* 태블릿 2열 */
+            }
+        }
+
+        @media (min-width: 1024px) {
+            #problem-grid {
+                grid-template-columns: repeat(3, 1fr); /* 데스크탑 3열 */
+            }
+        }
+
+        /* 카드 스타일 미세 조정 */
+        .problem-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
     </style>
     <!-- Lucide Icons -->
@@ -53,7 +88,7 @@
 <body>
     <header class="top-nav">
         <a href="../" class="nav-logo">
-            <!-- <i data-lucide="zap" width="18" height="18"></i> -->
+            <i data-lucide="zap" width="18" height="18"></i>
             <span>MathMore</span>
         </a>
         <div class="auth-buttons">
@@ -62,9 +97,8 @@
         </div>
     </header>
     <div class="problem-list-container">
-        <!-- <h1 id="main-title">📐 Euclidean Geometry Problems</h1> -->
         <p id="font-indicator" style="text-align: center; color: #8b7d6b; font-size: 12px; 
-            margin-top: -20px; margin-bottom: 20px; height: 18px; line-height: 18px; overflow: hidden;"></p>
+            margin-bottom: 20px; height: 18px; line-height: 18px; overflow: hidden;"></p>
 
         <!-- 문제 그리드 -->
         <div id="problem-grid"></div>
@@ -128,7 +162,7 @@
             currentFontIndex = (currentFontIndex + 1) % fonts.length;
         }
 
-        // 초기 폰트 설정 및 3초마다 로테이션
+        // 초기 폰트 설정 및 3초마다 로테이션 (현재 사용 안 함)
         // rotateFont();
         // setInterval(rotateFont, 3000);
 
