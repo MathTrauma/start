@@ -128,7 +128,6 @@
                 problemContainer.innerHTML = `
                     <div class="problem-header">
                         <span class="problem-tag level">Level ${config.level}</span>
-                        ${config.tags.map(tag => `<span class="problem-tag">${tag}</span>`).join('')}
                         ${isContestMode ? '<span class="problem-tag contest">Contest</span>' : ''}
                     </div>
                     <div class="problem-content" id="problem-text"></div>
