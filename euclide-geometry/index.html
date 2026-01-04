@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Euclidean Geometry Problems</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/common.css">
+    <style>
+        body, .problem-description, .stat-item, select, option, p, h2, span {
+            font-family: 'Noto Serif KR', serif !important;
+        }
+    </style>
+    <link rel="stylesheet" href="styles/index.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <header class="top-nav">
+        <a href="../" class="nav-logo">
+            <span>MathMore</span>
+        </a>
+
+        <!-- 필터 -->
+        <div class="filters">
+            <select id="level-filter">
+                <option value="">모든 레벨</option>
+                <option value="1">Level 1</option>
+                <option value="2">Level 2</option>
+                <option value="3">Level 3</option>
+            </select>
+        
+            <select id="category-filter">
+                <option value="">모든 카테고리</option>
+            </select>
+        </div>
+
+        <div class="auth-buttons">
+            <button id="login-btn" onclick="signInWithGoogle()" style="display: none;">로그인</button>
+            <button id="logout-btn" onclick="signOut()" style="display: none;">로그아웃</button>
+        </div>
+    </header>
+
+    <div class="problem-list-container">
+        <p id="font-indicator" style="text-align: center; color: #8b7d6b; font-size: 12px; 
+            margin-bottom: 20px; height: 18px; line-height: 18px; overflow: hidden;"></p>
+
+        <!-- 문제 그리드 -->
+        <div id="problem-grid"></div>
+
+    </div>
+
+
+
+    <div class="stats-container" id="stats-container"></div>
+
+    <!-- Supabase & Auth -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        // Lucide 초기화
+        lucide.createIcons();
+
+        // 인증 초기화
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        initAuth((session) => {
+            if (session) {
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'block';
+            } else {
+                loginBtn.style.display = 'block';
+                logoutBtn.style.display = 'none';
+            }
+        });
+
+        let allProblems = [];
+
+        // 폰트 로테이션 설정
+        const fonts = [
+            { name: 'Playfair Display', family: "'Playfair Display', serif", description: '우아한 클래식 세리프' },
+            { name: 'Creepster', family: "'Creepster', cursive", description: '기괴한 호러 스타일' },
+            { name: 'Cormorant Garamond', family: "'Cormorant Garamond', serif", description: '세련된 가독성 세리프' }
+        ];
+        let currentFontIndex = 0;
+
+        function rotateFont() {
+            const title = document.getElementById('main-title');
+            const indicator = document.getElementById('font-indicator');
+            const font = fonts[currentFontIndex];
+
+            title.style.fontFamily = font.family;
+            indicator.textContent = `Current Font: ${font.name} (${font.description})`;
+
+            currentFontIndex = (currentFontIndex + 1) % fonts.length;
+        }
+
+        // 초기 폰트 설정 및 3초마다 로테이션 (현재 사용 안 함)
+        // rotateFont();
+        // setInterval(rotateFont, 3000);
+
+        // 문제 목록 로드
+        const workerUrl = 'https://euclide-worker.painfultrauma.workers.dev';
+        fetch(`${workerUrl}/problems/index.json`)
+            .then(res => res.json())
+            .then(data => {
+                allProblems = data.problems;
+                renderStats(data.stats);
+                renderCategories(data.categories);
+                renderProblemList(allProblems);
+                setupFilters();
+            })
+            .catch(error => {
+                console.error('Failed to load problems:', error);
+                document.getElementById('problem-grid').innerHTML = `
+                    <p style="color: #ccc; text-align: center;">
+                        문제 목록을 불러올 수 없습니다.
+                    </p>
+                `;
+            });
+
+        function renderStats(stats) {
+            const container = document.getElementById('stats-container');
+            container.innerHTML = `
+                <h2>통계</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number">${stats.total}</span>
+                        <span>전체 문제</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">${stats.byLevel['1'] || 0}</span>
+                        <span>Level 1</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">${stats.byLevel['2'] || 0}</span>
+                        <span>Level 2</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">${stats.byLevel['3'] || 0}</span>
+                        <span>Level 3</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCategories(categories) {
+            const select = document.getElementById('category-filter');
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.textContent = `${cat.name} (${cat.count})`;
+                select.appendChild(option);
+            });
+        }
+
+        function renderProblemList(problems) {
+            const grid = document.getElementById('problem-grid');
+
+            if (problems.length === 0) {
+                grid.innerHTML = '<p style="color: #ccc; text-align: center;">검색 결과가 없습니다.</p>';
+                return;
+            }
+
+            grid.innerHTML = problems.map(problem => `
+                <a href="${problem.url}" class="problem-card">
+                    <div class="problem-meta">
+                        <span class="problem-tag level">Level ${problem.level}</span>
+                    </div>
+                    <div class="problem-description">${problem.problemHtml || problem.description || ''}</div>
+                </a>
+            `).join('');
+        }
+
+        function setupFilters() {
+            const levelFilter = document.getElementById('level-filter');
+            const categoryFilter = document.getElementById('category-filter');
+
+            function applyFilters() {
+                const level = levelFilter.value;
+                const category = categoryFilter.value;
+
+                let filtered = allProblems;
+
+                if (level) {
+                    filtered = filtered.filter(p => p.level == level);
+                }
+
+                if (category) {
+                    filtered = filtered.filter(p => p.category === category);
+                }
+
+                renderProblemList(filtered);
+            }
+
+            levelFilter.addEventListener('change', applyFilters);
+            categoryFilter.addEventListener('change', applyFilters);
+        }
+    </script>
+</body>
+</html>
