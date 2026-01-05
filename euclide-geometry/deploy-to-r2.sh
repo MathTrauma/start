@@ -89,14 +89,14 @@ upload_if_changed \
 
 # Styles - common.css
 upload_if_changed \
-    "lib/styles/common.css" \
+    "styles/common.css" \
     "lib/styles/common.v$VERSION.css" \
     "text/css" \
     "public, max-age=31536000, immutable"
 
 # Styles - index.css
 upload_if_changed \
-    "lib/styles/index.css" \
+    "styles/index.css" \
     "lib/styles/index.v$VERSION.css" \
     "text/css" \
     "public, max-age=31536000, immutable"

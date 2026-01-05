@@ -5,65 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Euclidean Geometry Problem Viewer</title>
 
-    <!-- External Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-
     <!-- Korean Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-
+    
     <!-- Common Resources -->
     <link rel="stylesheet" href="styles/common.css">
-    <style>
-        body, .problem-content, .problem-tag, .solution-panel-content, .solution-panel-title, p, span, div {
-            font-family: 'Noto Serif KR', serif !important;
-        }
 
-        /* 상단 네비게이션 바 스타일 */
-        .top-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background: #fff;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .nav-logo {
-            font-weight: bold;
-            text-decoration: none;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .auth-buttons button {
-            padding: 6px 16px;
-            border-radius: 20px;
-            border: 1px solid #ddd;
-            background: #f8f9fa;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .auth-buttons button:hover {
-            background: #e9ecef;
-        }
-
-        /* 모바일에서는 상단 바 숨김 */
-        @media (max-width: 768px) {
-            .top-nav {
-                display: none !important;
-            }
-        }
-    </style>
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
 
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/geometry.js"></script>
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/draw-utils.js"></script>
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/animation.js"></script>
     <script src="https://euclide-worker.painfultrauma.workers.dev/lib/ui-controls.js"></script>
+    
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>

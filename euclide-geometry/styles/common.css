@@ -1,16 +1,58 @@
 /* Base Styles */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Creepster&family=Cormorant+Garamond:wght@400;600&family=Noto+Serif+KR:wght@400;600;700&display=swap');
 
+/* Top Navigation Bar */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.nav-logo {
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.auth-buttons button {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background: #f8f9fa;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.auth-buttons button:hover {
+    background: #e9ecef;
+}
+
 body {
     margin: 0;
-    padding: 20px 0 0 0;
+    padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
     min-height: 100vh;
     background-color: #f5f3ed;
     font-family: 'Noto Serif KR', serif;
     box-sizing: border-box;
+}
+
+/* Form elements don't inherit font */
+select, option, input, textarea {
+    font-family: 'Noto Serif KR', serif;
 }
 
 main {
@@ -19,7 +61,7 @@ main {
     align-items: center;
     width: 100%;
     max-width: 1400px;
-    padding: 20px;
+    padding: 30px 20px 20px;
     box-sizing: border-box;
 }
 
@@ -263,6 +305,10 @@ button.active:hover {
 
 /* Mobile Styles */
 @media (max-width: 768px) {
+    .top-nav {
+        display: none !important;
+    }
+
     body {
         align-items: flex-start;
         padding-top: 10px;
