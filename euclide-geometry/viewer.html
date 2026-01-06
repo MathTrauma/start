@@ -324,7 +324,15 @@
                 <div class="controls collapsed" id="draggable-controls">
                     <!-- Header with drag handle and collapse -->
                     <div class="controls-header" id="controls-drag-handle">
-                        <span class="controls-title">Controls</span>
+                        <!-- Collapsed View: Mode Shortcuts -->
+                        <div class="collapsed-view" style="display: none;">
+                            <button class="mode-shortcut-btn" id="btn-shortcut-problem">Problem</button>
+                            <button class="mode-shortcut-btn" id="btn-shortcut-solution" ${!hasSolution ? 'disabled' : ''}>Solution</button>
+                        </div>
+                        
+                        <!-- Expanded View: Title -->
+                        <span class="controls-title expanded-view">Controls</span>
+                        
                         <button class="controls-collapse-btn" id="btn-collapse">+</button>
                     </div>
 
@@ -382,6 +390,31 @@
             document.getElementById('btn-mode-problem').addEventListener('click', expandOnModeClick);
             const solBtn = document.getElementById('btn-mode-solution');
             if (solBtn) solBtn.addEventListener('click', expandOnModeClick);
+
+            // Shortcut Buttons Logic
+            document.getElementById('btn-shortcut-problem').addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent drag start
+                document.getElementById('btn-mode-problem').click();
+                // Ensure it expands
+                const controls = document.getElementById('draggable-controls');
+                if (controls.classList.contains('collapsed')) {
+                     toggleControls(controls, document.getElementById('btn-collapse'));
+                }
+            });
+
+            const shortSolBtn = document.getElementById('btn-shortcut-solution');
+            if (shortSolBtn) {
+                shortSolBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (!shortSolBtn.disabled) {
+                        document.getElementById('btn-mode-solution').click();
+                        const controls = document.getElementById('draggable-controls');
+                        if (controls.classList.contains('collapsed')) {
+                            toggleControls(controls, document.getElementById('btn-collapse'));
+                        }
+                    }
+                });
+            }
 
             // Setup solution panel close button
             const closeBtn = document.getElementById('solution-panel-close');

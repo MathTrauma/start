@@ -47,7 +47,7 @@ body {
     background-color: #f5f3ed;
     font-family: 'Noto Serif KR', serif;
     box-sizing: border-box;
-    overflow: hidden; /* Prevent body scroll */
+    overflow: auto; /* Changed from hidden to allow scroll if needed */
 }
 
 /* Form elements don't inherit font */
@@ -60,8 +60,9 @@ select, option, input, textarea {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    flex: 1;
-    overflow: hidden;
+    min-height: 100vh; /* Changed from flex: 1 and height: 100vh */
+    height: auto;
+    overflow: visible; /* Changed from hidden */
     position: relative;
 }
 
@@ -79,13 +80,13 @@ select, option, input, textarea {
 .content-section {
     flex: 1;
     width: 100%;
-    overflow-y: auto;
+    /* overflow-y: auto;  Removed to allow main scroll */
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
-    scroll-behavior: smooth;
+    /* scroll-behavior: smooth; */
 }
 
 /* Problem Display */
@@ -239,6 +240,49 @@ select, option, input, textarea {
 
 .controls.collapsed .controls-title {
     display: none;
+}
+
+/* Shortcuts in collapsed view */
+.collapsed-view {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.controls.collapsed .collapsed-view {
+    display: flex !important; /* Force display when collapsed */
+}
+
+.controls:not(.collapsed) .collapsed-view {
+    display: none !important;
+}
+
+.controls:not(.collapsed) .expanded-view {
+    display: block;
+}
+
+.mode-shortcut-btn {
+    padding: 3px 8px;
+    font-size: 11px;
+    background-color: #f0ece6;
+    border: 1px solid #d4cec3;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    color: #5a5247;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.mode-shortcut-btn:hover {
+    background-color: #e8e3d8;
+    border-color: #8b7d6b;
+}
+
+.mode-shortcut-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f0ece6;
 }
 
 .controls-collapse-btn {
