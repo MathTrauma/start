@@ -100,3 +100,13 @@ export function calculateScaleFromPoints(p, points, width, height, margin = 60) 
     p.tx = (v) => (v.x - centerX) * scale;
     p.ty = (v) => (v.y - centerY) * scale;
 }
+
+/**
+ * Returns responsive canvas size (1:1 ratio).
+ * @param {number} maxSize - Maximum canvas size (default 800)
+ * @param {number} padding - Padding from viewport edges (default 20)
+ * @returns {number} - Canvas size (width = height)
+ */
+export function getCanvasSize(maxSize = 800, padding = 20) {
+    return Math.min(maxSize, window.innerWidth - padding);
+}
