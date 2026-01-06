@@ -13,16 +13,20 @@
     <!-- Common Resources -->
     <link rel="stylesheet" href="styles/common.css">
 
-    <!-- External Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-
-    <script src="https://euclide-worker.painfultrauma.workers.dev/lib/geometry.js"></script>
-    <script src="https://euclide-worker.painfultrauma.workers.dev/lib/draw-utils.js"></script>
-    <script src="https://euclide-worker.painfultrauma.workers.dev/lib/animation.js"></script>
-    <script src="https://euclide-worker.painfultrauma.workers.dev/lib/ui-controls.js"></script>
+    <!-- Import Map for ES Modules -->
+    <script type="importmap">
+    {
+        "imports": {
+            "p5": "https://esm.sh/p5@1.9.4"
+        }
+    }
+    </script>
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- UI Controls (legacy compatibility) -->
+    <script src="https://euclide-worker.painfultrauma.workers.dev/lib/ui-controls.js"></script>
 </head>
 <body>
     <header class="top-nav">
@@ -106,8 +110,9 @@
                 // 문제 텍스트와 UI를 먼저 렌더링
                 await renderProblem(config, paddedId, baseUrl);
 
-                // 모든 렌더링 완료 후 스케치 로드
+                // 모든 렌더링 완료 후 스케치 로드 (ES Module)
                 const script = document.createElement('script');
+                script.type = 'module';
                 script.src = `${baseUrl}/problems/${paddedId}/sketch.js`;
 
                 script.onload = () => {

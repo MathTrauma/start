@@ -1,164 +1,102 @@
-// Drawing utility functions
+/**
+ * euclide-geometry/lib_gemini/draw-utils.js
+ * 
+ * Utility functions for geometry, drawing, and theming.
+ */
 
-let scale = 50;           // 동적 변경 가능
-let offsetX = 0;          // 중심 맞추기용
-let offsetY = 0;
-
-// 표준 색상 정의 (모든 문제에서 일관되게 사용)
-const COLORS = {
-    // 삼각형 채우기 색상 (RGB 값)
-    TRIANGLE_BLUE: [100, 150, 255],      // 파란색 삼각형
-    TRIANGLE_RED: [255, 100, 100],       // 빨간색 삼각형
-    TRIANGLE_GREEN: [100, 200, 100],     // 초록색 삼각형
-    TRIANGLE_YELLOW: [255, 200, 100],    // 노란색 삼각형
-
-    // 테두리 강조 색상 (emission용)
-    EMISSION_BLUE: [50, 100, 255],
-    EMISSION_RED: [255, 50, 50],
-    EMISSION_GREEN: [50, 200, 50],
-    EMISSION_YELLOW: [255, 180, 50],
-
-    // 투명도 (maxAlpha)
-    ALPHA_LIGHT: 50,      // 옅은 투명도
-    ALPHA_MEDIUM: 80,     // 중간 투명도
-    ALPHA_HEAVY: 120      // 진한 투명도
-};
-
-// Animation control state
-let startTime = null;
-let isPaused = false;
-let pausedTime = 0;
-let totalPausedDuration = 0;
-let selectedPhase = 'all'; // 'all', 1, 2, 3, 4, 5
-
-// Mode control state
-let currentMode = 'problem'; // 'problem' | 'solution'
-let problemPhaseCount = 5;
-let solutionPhaseCount = 0;
-
-// Phase definitions (start time, duration) - nested by mode
-const PHASES = {
-    problem: {
-        1: { start: 0, duration: 2.0, end: 2.0 },
-        2: { start: 2.0, duration: 2.0, end: 4.0 },
-        3: { start: 4.0, duration: 1.0, end: 5.0 },
-        4: { start: 5.0, duration: 2.0, end: 7.0 },
-        5: { start: 7.0, duration: 1.0, end: 8.0 }
+export const THEMES = {
+    light: {
+        background: '#FFFFFF',
+        stroke: '#333333',
+        text: '#000000',
+        fillBlue: [0, 100, 255, 50],
+        fillRed: [255, 50, 50, 50],
+        highlight: '#FFD700', // Gold
+        auxiliary: '#AAAAAA'  // Dashed lines
     },
-    solution: {}
+    dark: {
+        background: '#1E1E2E', // Deep Navy/Grey
+        stroke: '#CDD6F4',     // Soft White
+        text: '#FFFFFF',
+        fillBlue: [137, 180, 250, 80], // Neon Blue
+        fillRed: [243, 139, 168, 80],  // Neon Red/Pink
+        highlight: '#F9E2AF', // Soft Yellow
+        auxiliary: '#6C7086'
+    },
+    sepia: {
+        background: '#F4ECD8', // Warm Beige
+        stroke: '#433422',     // Dark Brown
+        text: '#5D4037',
+        fillBlue: [100, 149, 237, 60], // Cornflower Blue
+        fillRed: [205, 92, 92, 60],    // Indian Red
+        highlight: '#D4AF37', // Antique Gold
+        auxiliary: '#A1887F'
+    },
+    chalkboard: {
+        background: '#2F4F4F', // Dark Slate Gray
+        stroke: '#F0F8FF',     // Alice Blue
+        text: '#FFFFFF',
+        fillBlue: [135, 206, 235, 80], // Sky Blue
+        fillRed: [255, 182, 193, 80],  // Light Pink
+        highlight: '#FFFACD', // Lemon Chiffon
+        auxiliary: '#778899'
+    }
 };
 
-function resetAnimation() {
-    startTime = null;
-    isPaused = false;
-    pausedTime = 0;
-    totalPausedDuration = 0;
+/**
+ * Applies a theme to the p5 instance.
+ * @param {Object} p - p5 instance
+ * @param {string} themeName - 'light', 'dark', 'sepia', 'chalkboard'
+ */
+export function applyTheme(p, themeName = 'light') {
+    const theme = THEMES[themeName] || THEMES.light;
+    p.theme = theme;
+    if (p.background) p.background(theme.background);
 }
 
-function togglePause(p) {
-    isPaused = !isPaused;
-    if (isPaused) {
-        pausedTime = p.millis();
-    } else {
-        totalPausedDuration += (p.millis() - pausedTime);
-    }
-    return isPaused;
-}
-
-function setPhase(phase) {
-    selectedPhase = phase;
-    resetAnimation();
-}
-
-// Initialize phases from config
-function initializePhases(config) {
-    // Backward compatibility: if config has 'phases' instead of 'problemPhases'
-    if (config.phases && !config.problemPhases) {
-        config.problemPhases = config.phases;
-    }
-
-    // Build problem phases map
-    if (config.problemPhases) {
-        PHASES.problem = {};
-        problemPhaseCount = config.problemPhases.length;
-        config.problemPhases.forEach(phase => {
-            PHASES.problem[phase.id] = {
-                start: phase.startTime,
-                duration: phase.duration,
-                end: phase.endTime
-            };
-        });
-    }
-
-    // Build solution phases map
-    if (config.solutionPhases && config.solutionPhases.length > 0) {
-        PHASES.solution = {};
-        solutionPhaseCount = config.solutionPhases.length;
-        config.solutionPhases.forEach(phase => {
-            PHASES.solution[phase.id] = {
-                start: phase.startTime,
-                duration: phase.duration,
-                end: phase.endTime
-            };
-        });
-    } else {
-        solutionPhaseCount = 0;
-        PHASES.solution = {};
-    }
-}
-
-// Switch between problem and solution modes
-function setMode(mode) {
-    if (currentMode !== mode) {
-        currentMode = mode;
-        selectedPhase = 'all';
-        resetAnimation();
-        return true; // Mode changed
-    }
-    return false; // Mode unchanged
-}
-
-function getCurrentMode() {
-    return currentMode;
-}
-
-function getCurrentPhaseCount() {
-    return currentMode === 'problem' ? problemPhaseCount : solutionPhaseCount;
-}
-
-// Calculate scale and offset from points array
-function calculateScaleFromPoints(points, canvasWidth, canvasHeight, padding = 50) {
+/**
+ * Calculates scale based on points to fit in width/height.
+ * Attaches tx() and ty() to p5 instance.
+ * IMPORTANT: tx/ty return RELATIVE coordinates from the center (0,0).
+ * The p5 draw loop MUST use translate(width/2, height/2).
+ */
+export function calculateScaleFromPoints(p, points, width, height, margin = 60) {
     if (!points || points.length === 0) return;
 
-    // Bounding box 계산
     let minX = Infinity, maxX = -Infinity;
     let minY = Infinity, maxY = -Infinity;
 
     points.forEach(pt => {
-        if (pt) {
-            minX = Math.min(minX, pt.x);
-            maxX = Math.max(maxX, pt.x);
-            minY = Math.min(minY, pt.y);
-            maxY = Math.max(maxY, pt.y);
-        }
+        if (pt.x < minX) minX = pt.x;
+        if (pt.x > maxX) maxX = pt.x;
+        if (pt.y < minY) minY = pt.y;
+        if (pt.y > maxY) maxY = pt.y;
     });
 
-    const rangeX = maxX - minX;
-    const rangeY = maxY - minY;
+    const dataW = maxX - minX;
+    const dataH = maxY - minY;
 
-    if (rangeX === 0 || rangeY === 0) return;
+    const availableW = width - 2 * margin;
+    const availableH = height - 2 * margin;
 
-    // Scale 계산 (패딩 고려)
-    const availableWidth = canvasWidth - padding * 2;
-    const availableHeight = canvasHeight - padding * 2;
+    // Calculate scale
+    let scaleX = dataW > 0 ? availableW / dataW : Infinity;
+    let scaleY = dataH > 0 ? availableH / dataH : Infinity;
+    
+    let scale = Math.min(scaleX, scaleY);
+    if (scale === Infinity) scale = 100;
 
-    scale = Math.min(availableWidth / rangeX, availableHeight / rangeY);
+    if (scale > 200) scale = 200;
 
-    // 중심 오프셋 계산
-    offsetX = (minX + maxX) / 2;
-    offsetY = (minY + maxY) / 2;
+    p.geometryScale = scale;
+
+    // Data Center
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
+
+    // Attach transform functions
+    // Returns coordinates relative to the center.
+    // Drawing context is expected to be translated to center.
+    p.tx = (v) => (v.x - centerX) * scale;
+    p.ty = (v) => (v.y - centerY) * scale;
 }
-
-// Helper to transform coordinates
-function tx(v) { return scale * (v.x - offsetX); }
-function ty(v) { return scale * (v.y - offsetY); }

@@ -1,21 +1,21 @@
 # AGENTS.md - Development Guidelines for Euclide Geometry Project
 
-This file contains guidelines for agentic coding agents working on this Euclidean Geometry animation project.
+Guidelines for agentic coding agents working on this Euclidean Geometry animation project.
 
 ## Project Overview
 
-This is an educational web application for visualizing geometry problems with step-by-step animations. The project consists of:
+Educational web application for visualizing geometry problems with step-by-step p5.js animations.
 - **Main Application** (`euclide-geometry/`): Frontend geometry viewer with p5.js animations
 - **Cloudflare Worker** (`euclide-worker/`): Backend API serving content from R2 storage
-- **Root Services** (`/`): Express.js app with Google OAuth authentication
+- **Root Services** (`/`): Express.js app with Supabase authentication
 
 ## Build & Development Commands
 
 ### Main Application (euclide-geometry/)
 ```bash
 # Convert LaTeX to HTML (MathJax SVG rendering)
-npm run convert
-npm run convert:all
+npm run convert              # Convert single problem (prompts for ID)
+npm run convert:all          # Convert all problems
 
 # Local development server
 npx http-server -p 8080
@@ -32,173 +32,209 @@ npx http-server -p 8080
 
 ### Root Services
 ```bash
-# Start Express server with OAuth
+# Start Express server
 npm start
 ```
 
 ### Cloudflare Worker
 ```bash
-# Deploy worker
 cd euclide-worker && npx wrangler deploy
 ```
 
 ## Testing
 
-**No formal testing framework is currently configured.** Testing is done through:
-- Manual testing via local HTTP server (`npx http-server -p 8080`)
-- Validation scripts (`./scripts/validate-metadata.sh`)
+**No formal testing framework configured.** Manual testing only:
+- Local HTTP server: `npx http-server -p 8080`
+- Validation scripts: `./scripts/validate-metadata.sh`
 - Manual verification of deployed content
 
 ## Code Style Guidelines
 
 ### JavaScript Conventions
 
-#### p5.js Sketch Structure
-- **Instance mode required**: All sketches must use `const sketch = (p) => { ... }`
-- **Global p5 reference**: Store `p5Instance = p` for utility functions
-- **Canvas setup**: `p.createCanvas(800, 600)` with `canvas.parent('canvas-wrapper')`
-- **Coordinate system**: Use mathematical coordinates with origin at center
+#### General Rules
+- **No TypeScript**: Pure JavaScript only
+- **No semicolons**: Project uses semicolon-free style
+- **Indentation**: 4 spaces (not tabs)
+- **Quotes**: Single quotes for strings
+- **Comments**: Korean and English mixed; maintain existing language style
 
-#### File Organization
+#### Naming Conventions
+- **Problem IDs**: 3-digit padded numbers (`001`, `002`, etc.)
+- **Functions**: 
+  - camelCase for regular functions (`projectPointToLine`, `getIncenter`)
+  - `m_` prefix for drawing functions (`m_drawPoint`, `m_drawLine`)
+- **Constants**: UPPER_SNAKE_CASE (`COLORS`, `PHASES`)
+- **Variables**: camelCase for locals, UPPER_SNAKE_CASE for globals
+- **Files**: kebab-case (`draw-utils.js`, `problem-template.tex`)
+
+#### p5.js Sketch Structure
+**CRITICAL: Always use p5.js instance mode**
+```javascript
+const sketch = (p) => {
+    let p5Instance = p;  // Store for utility functions
+    
+    p.setup = () => {
+        const canvas = p.createCanvas(800, 600);
+        canvas.parent('canvas-wrapper');
+        // Mathematical coordinates: origin at center
+    };
+    
+    p.draw = () => {
+        // Use p5.Vector for all geometric calculations
+        // Access geometry utilities: projectPointToLine, intersectLines, etc.
+    };
+};
+new p5(sketch);
+```
+
+#### Vector Usage
+```javascript
+// CORRECT: Use p5.Vector for all points
+const A = new p5.Vector(0, 0);
+const B = p5.Vector.sub(C, A);
+
+// INCORRECT: Don't use plain objects
+const A = { x: 0, y: 0 };  // ❌
+```
+
+#### Drawing Functions
+```javascript
+// Use COLORS constant for consistency
+const COLORS = {
+    TRIANGLE_BLUE: [100, 150, 255],
+    TRIANGLE_RED: [255, 100, 100],
+    EMISSION_BLUE: [50, 100, 255],
+    ALPHA_LIGHT: 50,
+    ALPHA_MEDIUM: 80
+};
+
+// Drawing function pattern (from draw-utils.js)
+function m_drawPoint(v, label, color = [0, 0, 0]) {
+    p.push();
+    p.fill(color);
+    p.noStroke();
+    p.circle(tx(v), ty(v), 8);
+    // ... label rendering
+    p.pop();
+}
+```
+
+#### Error Handling
+- No formal error handling required
+- Use `console.log` for debugging
+- Validate structure with `./scripts/validate-metadata.sh`
+
+### File Organization
 ```
 problems/XXX/
-├── problem.tex          # LaTeX problem description
+├── problem.tex          # LaTeX source (first line: % level N)
 ├── problem.html         # MathJax SVG rendered HTML
 ├── config.json          # Problem metadata and phases
 ├── sketch.js            # p5.js animation code
 └── animation.md         # Animation design document
 ```
 
-#### Naming Conventions
-- **Problem IDs**: 3-digit padded numbers (001, 002, etc.)
-- **Functions**: CamelCase with descriptive names (`m_drawPoint`, `m_triangle`)
-- **Constants**: UPPER_SNAKE_CASE (`COLORS`, `PHASES`)
-- **Variables**: camelCase for local variables, UPPER_SNAKE_CASE for globals
-- **Files**: kebab-case for resources, camelCase for code
-
-#### Import Patterns
+### Phase-Based Animation Pattern
 ```javascript
-// p5.js instance mode
-const sketch = (p) => {
-    // Geometry utilities (always available)
-    // projectPointToLine, intersectLines, getIncenter, etc.
-    
-    // Animation utilities
-    // m_drawPoint, m_drawLine, m_drawCircle, etc.
-    
-    // Use p5.Vector for all geometric calculations
+// config.json structure
+{
+    "id": "001",
+    "level": 2,
+    "problemPhases": [
+        { "id": 1, "startTime": 0, "duration": 2.0, "endTime": 2.0 }
+    ],
+    "solutionPhases": [
+        { "id": 1, "startTime": 0, "duration": 2.0, "endTime": 2.0 }
+    ]
+}
+
+// sketch.js pattern
+const prob = {};  // Problem phase animations
+const sol = {};   // Solution phase animations
+
+prob[1] = (p) => {
+    // Animation for problem phase 1
 };
 ```
 
-### Code Structure
+## Key Libraries & Utilities
 
-#### Phase-Based Animation
-```javascript
-let prob = {};  // Problem phases
-let sol = {};   // Solution phases
+### Available in All Sketches
+- **`lib/geometry.js`**: Geometric calculations
+  - `projectPointToLine(P, A, B)` - Project point P onto line AB
+  - `intersectLines(A, B, C, D)` - Intersection of lines AB and CD
+  - `getIncenter(A, B, C)` - Incenter of triangle ABC
+  - `getCircumcenter(A, B, C)` - Circumcenter of triangle ABC
+  - `getOrthocenter(A, B, C)` - Orthocenter of triangle ABC
+  - `reflectPoint(P, A, B)` - Reflect point P over line AB
+  - `circleLineIntersection(center, radius, p1, p2)` - Circle-line intersections
 
-// Phase structure in config.json
-{
-    "phases": {
-        "prob-1": "문제 설명",
-        "prob-2": "보조선 그리기",
-        "sol-1": "풀이 1단계",
-        "sol-2": "풀이 2단계"
-    }
-}
-```
+- **`lib/draw-utils.js`**: Drawing utilities
+  - `m_drawPoint(v, label, color)` - Draw labeled point
+  - `m_drawLine(v1, v2, color)` - Draw line segment
+  - `m_drawCircle(center, radius, color)` - Draw circle
+  - `COLORS` constant - Standard color palette
+  - `tx(v)`, `ty(v)` - Transform coordinates to canvas space
+  - `calculateScaleFromPoints(points, w, h, padding)` - Auto-scale canvas
 
-#### Drawing Functions
-- Use utility functions from `lib/draw-utils.js`
-- Prefix drawing functions with `m_` (e.g., `m_drawPoint`, `m_drawLine`)
-- Consistent color scheme using `COLORS` constant
-
-#### Error Handling
-- No formal error handling required
-- Use console.log for debugging
-- Validate problem structure with `./scripts/validate-metadata.sh`
-
-## LaTeX & MathJax Guidelines
-
-### LaTeX Format
-```latex
-% level 2
-% #태그1 #태그2
-
-문제 내용...
-```
-
-### HTML Conversion
-- **Critical**: Convert LaTeX to MathJax SVG before deployment
-- Use `jax="SVG"` format for client-side rendering
-- All formulas become `<mjx-container class="MathJax" jax="SVG">` elements
-- Run `npm run convert` for single problem or `npm run convert:all` for all
+- **`lib/animator.js`**: Animation framework
+  - `PolyAnimator` class - Polygon animation with fade-in/out, motion, effects
 
 ## Development Workflow
 
 ### 7-Step Problem Creation Process
-1. **User writes** `problem.tex` with LaTeX
-2. **AI generates** `animation.md` draft  
-3. **User completes** animation phases
-4. **AI creates** `sketch.js` animation
-5. **Convert** LaTeX → HTML using MathJax
-6. **Sync metadata** to index.json
-7. **Deploy to R2** using custom scripts
+1. User writes `problem.tex` with LaTeX (first line: `% level N`)
+2. AI generates `animation.md` draft (see `docs/tex-parser.md`)
+3. User completes animation phases in `animation.md`
+4. AI creates `sketch.js` animation (see `docs/animator.md`)
+5. Convert LaTeX → HTML: `npm run convert`
+6. Sync metadata: `./scripts/sync-metadata.sh XXX`
+7. Deploy to R2: `./scripts/deploy-changes.sh XXX`
 
-### Key Libraries
-- `lib/geometry.js`: Geometric calculations (projectPointToLine, intersectLines, etc.)
-- `lib/animation.js`: Animation utilities and phase management
-- `lib/draw-utils.js`: Drawing functions (m_drawPoint, m_drawLine, etc.)
-- `lib/ui-controls.v1.0.0.js`: UI controls for animation playback
+### Critical Deployment Notes
+- **Always convert LaTeX before deployment**: `npm run convert`
+- **Always sync metadata after changes**: `./scripts/sync-metadata.sh`
+- **Validate before deployment**: `./scripts/validate-metadata.sh`
+- **MathJax SVG format**: All formulas pre-rendered as `<mjx-container jax="SVG">`
 
-## Deployment Architecture
-
-```
-GitHub → GitHub Pages (static site)
-       → Cloudflare R2 (content storage)  
-       → Cloudflare Workers (API endpoint)
-```
-
-### R2 Storage Structure
-- `/problems/XXX/`: Individual problem folders
-- `/lib/`: Shared libraries and styles
-- `/index.json`: Problem metadata index
-
-## Important Notes
+## Important Project Rules
 
 ### Korean Documentation
-- Extensive use of Korean comments and documentation
-- Workflow documents are in Korean (`.claude/WORKFLOW.md`)
-- Maintain Korean comments in existing code
+- Korean comments are standard in this codebase
+- Workflow documents in Korean (`.claude/WORKFLOW.md`)
+- **Maintain existing comment language** (don't translate Korean to English)
+- Phase descriptions in `config.json` are in Korean
 
 ### Version Control
-- All library files include version numbers (e.g., `v1.0.0`)
+- Library files include version numbers (`ui-controls.v1.0.0.js`)
 - Use semantic versioning for library updates
 - Problem IDs are immutable once assigned
 
-### Performance Considerations  
-- MathJax SVG pre-rendering for faster load times
-- Cloudflare R2 for global content distribution
-- p5.js instance mode to avoid global conflicts
+### Git Workflow
+- Standard git workflow (add, commit, push)
+- No pre-commit hooks configured
+- Commit messages can be in English or Korean
 
-### Security
-- Google OAuth for authentication (Express.js backend)
-- No sensitive data in frontend code
-- Cloudflare Workers for serverless API
+### Performance & Architecture
+- MathJax SVG pre-rendering for fast client-side display
+- Cloudflare R2 for global CDN distribution
+- p5.js instance mode to avoid global namespace pollution
+- Supabase for authentication (configured in `js/auth.js`)
 
-## Common Issues & Solutions
+## Common Issues
 
-### LaTeX Conversion Issues
+### LaTeX Conversion
 - Ensure MathJax is loaded before conversion
-- Check for malformed LaTeX syntax
+- Check for malformed LaTeX syntax in `problem.tex`
 - Verify SVG output in `problem.html`
 
-### Animation Problems
-- Check phase names match between `config.json` and `sketch.js`
-- Verify p5.Vector usage in instance mode
-- Ensure canvas parent element exists
+### Animation Issues
+- Phase names must match between `config.json` and `sketch.js`
+- Always use `p5.Vector` in instance mode (never plain objects)
+- Ensure canvas parent element `#canvas-wrapper` exists
 
 ### Deployment Issues
-- Validate metadata before deployment
-- Check R2 bucket permissions
-- Verify Cloudflare Worker configuration
+- Run `./scripts/validate-metadata.sh` before deploying
+- Check Cloudflare R2 bucket permissions if upload fails
+- Verify `wrangler.toml` configuration in `euclide-worker/`

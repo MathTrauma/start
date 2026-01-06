@@ -1,7 +1,9 @@
+import p5 from 'p5';
+
 // Geometry utility functions
 
 // projection of P onto line AB
-function projectPointToLine(P, A, B) {
+export function projectPointToLine(P, A, B) {
     let AB = p5.Vector.sub(B, A);
     let AP = p5.Vector.sub(P, A);
     let t = AP.dot(AB) / AB.magSq();
@@ -10,7 +12,7 @@ function projectPointToLine(P, A, B) {
 }
 
 // intersection of line AB and CD
-function intersectLines(A, B, C, D) {
+export function intersectLines(A, B, C, D) {
     let r = p5.Vector.sub(B, A);
     let s = p5.Vector.sub(D, C);
     let t = p5.Vector.sub(C, A).cross(s).z / r.cross(s).z;
@@ -19,7 +21,7 @@ function intersectLines(A, B, C, D) {
 }
 
 // incenter of triangle ABC
-function getIncenter(A, B, C) {
+export function getIncenter(A, B, C) {
     let a = p5.Vector.dist(B, C);  // BC
     let b = p5.Vector.dist(C, A);  // CA
     let c = p5.Vector.dist(A, B);  // AB
@@ -33,7 +35,7 @@ function getIncenter(A, B, C) {
 }
 
 // circumcenter of triangle ABC
-function getCircumcenter(A, B, C) {
+export function getCircumcenter(A, B, C) {
     // 수직이등분선 방법 사용
     let midAB = new p5.Vector((A.x + B.x) / 2, (A.y + B.y) / 2);
     let midBC = new p5.Vector((B.x + C.x) / 2, (B.y + C.y) / 2);
@@ -51,7 +53,7 @@ function getCircumcenter(A, B, C) {
 }
 
 // orthocenter of triangle ABC (수심)
-function getOrthocenter(A, B, C) {
+export function getOrthocenter(A, B, C) {
     // A에서 BC에 수직인 선과 B에서 AC에 수직인 선의 교점
     let dirBC = p5.Vector.sub(C, B);
     let perpBC = new p5.Vector(-dirBC.y, dirBC.x); // BC에 수직인 방향
@@ -66,7 +68,7 @@ function getOrthocenter(A, B, C) {
 }
 
 // reflect point P over line AB
-function reflectPoint(P, A, B) {
+export function reflectPoint(P, A, B) {
     let projection = projectPointToLine(P, A, B);
     let reflection = p5.Vector.sub(projection, P).mult(2);
     return p5.Vector.add(P, reflection);
@@ -74,7 +76,7 @@ function reflectPoint(P, A, B) {
 
 // circle-line intersection
 // returns array of intersection points (0, 1, or 2 points)
-function circleLineIntersection(center, radius, p1, p2) {
+export function circleLineIntersection(center, radius, p1, p2) {
     let d = p5.Vector.sub(p2, p1);
     let f = p5.Vector.sub(p1, center);
 
