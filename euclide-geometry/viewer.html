@@ -119,18 +119,21 @@
                     // 컨트롤 생성
                     renderControls(config, paddedId, baseUrl);
 
-                    // 렌더링 완료 후 캔버스 표시 (Contest가 아닌 경우)
-                    setTimeout(() => {
-                        if (!isContestMode) {
-                            canvasWrapper.style.opacity = '1';
-                            canvasWrapper.style.visibility = 'visible';
-                        } else {
-                            // Contest 모드: 캔버스가 열릴 때까지 애니메이션 정지
-                            if (window._p5Instance) {
+                    // p5가 첫 프레임을 그릴 때까지 대기 후 캔버스 표시
+                    function waitForP5Ready() {
+                        if (window._p5Instance && window._p5Instance.frameCount > 0) {
+                            if (!isContestMode) {
+                                canvasWrapper.style.opacity = '1';
+                                canvasWrapper.style.visibility = 'visible';
+                            } else {
+                                // Contest 모드: 캔버스가 열릴 때까지 애니메이션 정지
                                 window._p5Instance.noLoop();
                             }
+                        } else {
+                            requestAnimationFrame(waitForP5Ready);
                         }
-                    }, 100);
+                    }
+                    waitForP5Ready();
                 };
 
                 document.body.appendChild(script);

@@ -1,23 +1,22 @@
-
 import p5 from 'p5';
 
 export class TObject {
-    constructor(p, options = {}) { // Changed to accept options in constructor for base style
+    constructor(p, options = {}) {
         this.p = p;
         this.progress = 0;
         this.started = false;
         this.completed = false;
         this.visible = false;
-        this.mode = 'default'; 
+        this.mode = 'default';
+        this.savedState = null; // State storage
         
         // Theme resolving logic
         const theme = p.theme || {
             stroke: [0, 0, 0],
-            fillBlue: [255, 255, 255, 0], // Fallback
+            fillBlue: [255, 255, 255, 0],
             fillRed: [255, 255, 255, 0]
         };
 
-        // Determine defaults based on theme
         const defaultStroke = theme.stroke || [0, 0, 0];
         const defaultFill = [255, 255, 255, 0];
 
@@ -29,19 +28,12 @@ export class TObject {
         };
     }
 
-    // Helper to handle p5 color strings (#FFF) vs arrays ([255,0,0])
     parseColor(c) {
         if (typeof c === 'string') {
-            // p5 color parsing usually happens inside p5 functions.
-            // But we need RGBA array for alpha manipulation.
-            // Since we don't want to create p5.Color objects every time (overhead),
-            // let's rely on p5's color() function once and extract components if it's a string.
-            // OR simpler: just return it and handle alpha separately if possible?
-            // getRenderStyle expects array for alpha logic.
             const col = this.p.color(c);
             return [col.levels[0], col.levels[1], col.levels[2], col.levels[3]];
         }
-        return c; // Assume array
+        return c; 
     }
 
     start(config = {}) {
@@ -50,6 +42,7 @@ export class TObject {
              this.mode = mode;
              this.progress = 0;
              this.completed = false;
+             this.visible = true; // Always visible on new start
              this.onStart(config);
         } else if (!this.started) {
             this.started = true;
@@ -67,17 +60,34 @@ export class TObject {
         this.completed = false;
         this.visible = false;
         this.mode = 'default';
+        this.savedState = null; // Reset saved state
         this.onReset();
     }
     
     onReset() {}
 
+    saveCurrentState() {
+        this.savedState = {
+            visible: this.visible,
+            mode: this.mode,
+            progress: this.progress
+        };
+    }
+
     complete() {
-        this.progress = 1;
-        this.completed = true;
-        this.started = true;
-        this.visible = true;
-        this.mode = 'default';
+        if (this.savedState) {
+            this.visible = this.savedState.visible;
+            this.mode = this.savedState.mode;
+            this.progress = 1;
+            this.completed = true;
+            this.started = true;
+        } else {
+            this.progress = 1;
+            this.completed = true;
+            this.started = true;
+            this.visible = true;
+            this.mode = 'default';
+        }
         this.onComplete();
     }
     
@@ -93,12 +103,17 @@ export class TObject {
         if (duration === 0) {
             this.progress = 1;
             this.completed = true;
+            this.saveCurrentState(); // Save state immediately
             return;
         }
         this.progress += dt / duration;
         if (this.progress >= 1) {
             this.progress = 1;
             this.completed = true;
+            if (this.mode === 'fadeOut') {
+                this.visible = false;
+            }
+            this.saveCurrentState(); // Save final state
         }
     }
 
@@ -107,7 +122,6 @@ export class TObject {
     getRenderStyle() {
         let strokeAlpha = 255;
         let fillAlpha = 0;
-        // Handle array color [r,g,b,a]
         const baseStrokeAlpha = (this.style.strokeColor.length > 3) ? this.style.strokeColor[3] : 255;
         const baseFillAlpha = (this.style.fillColor.length > 3) ? this.style.fillColor[3] : 100;
         let weight = this.style.strokeWeight;
@@ -119,8 +133,6 @@ export class TObject {
         } 
         else if (this.mode === 'pulse') {
             const pulse = (Math.sin(this.progress * Math.PI * 6) + 1) / 2; 
-            strokeAlpha = baseStrokeAlpha; // Keep base
-            // Highlight logic: maybe change color? For now just alpha/weight
             strokeAlpha = Math.min(255, baseStrokeAlpha + 55 * pulse);
             fillAlpha = baseFillAlpha + (255 - baseFillAlpha) * 0.3 * pulse; 
             weight = this.style.strokeWeight + 1 * pulse;
@@ -163,11 +175,9 @@ export class TPoint extends TObject {
         this.dx = options.dx || 10;
         this.dy = options.dy || 10;
         
-        // Points specific style override
         const theme = p.theme || {};
-        const defaultColor = theme.text || [0, 0, 0]; // Points usually match text color
+        const defaultColor = theme.text || [0, 0, 0];
         
-        // If color was not explicitly passed in options, use theme text color
         if (!options.color && !options.fillColor) {
             this.style.fillColor = this.parseColor(defaultColor);
         }
@@ -207,7 +217,6 @@ export class TSegment extends TObject {
         this.endPos = endPos;
         
         const theme = p.theme || {};
-        // If dashed, use auxiliary color from theme unless overridden
         if (options.dashed && !options.color) {
              this.style.strokeColor = this.parseColor(theme.auxiliary || [150,150,150]);
         }
@@ -246,8 +255,6 @@ export class TRightAngle extends TObject {
         this.vertex = vertex;
         this.p2 = p2;
         this.size = size;
-        
-        // Right angles match stroke color usually
     }
     render() {
         const p = this.p;
@@ -300,7 +307,6 @@ export class TAngleMarker extends TObject {
         this.p2 = p2;
         this.distance = options.distance || 0.4;
         this.size = options.size || 4;
-        // Fill color usually passed in options or default black
     }
     render() {
         const p = this.p;

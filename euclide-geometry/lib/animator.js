@@ -92,6 +92,7 @@ export class Animator {
 
         // Initialize step
         if (!this.currentStepStarted) {
+            this.currentStepTime = 0; // Initialize time tracker
             if (currentStep.group) {
                 currentStep.group.forEach(item => {
                     if (item.target) item.target.start(item);
@@ -119,11 +120,31 @@ export class Animator {
                 target.process(dt, duration);
                 stepComplete = target.isCompleted();
             } else {
-                stepComplete = true; 
+                // Delay logic
+                this.currentStepTime += dt;
+                if (this.currentStepTime >= duration) {
+                    stepComplete = true;
+                }
             }
         }
 
         if (stepComplete) {
+            // Handle 'op' (e.g., remove)
+            const handleOp = (item) => {
+                if (item.op === 'remove' && item.target) {
+                    const idx = this.renderList.indexOf(item.target);
+                    if (idx > -1) {
+                        this.renderList.splice(idx, 1);
+                    }
+                }
+            };
+
+            if (currentStep.group) {
+                currentStep.group.forEach(handleOp);
+            } else {
+                handleOp(currentStep);
+            }
+
             this.currentStepIndex++;
             this.currentStepStarted = false; 
         }
