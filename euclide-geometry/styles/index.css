@@ -161,8 +161,8 @@ h1 {
 .problem-tag.level {
     background-color: #8b7d6b;
     color: #fff;
-    display: block;
-    margin-bottom: 6px;
+    display: inline-block;
+    margin-right: 8px;
 }
 
 .problem-card .problem-description {

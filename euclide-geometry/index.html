@@ -144,10 +144,11 @@
 
         function renderCategories(categories) {
             const select = document.getElementById('category-filter');
-            categories.forEach(cat => {
+            // categories는 이제 { "닮음": ["001", "005", "006"], ... } 형태
+            Object.keys(categories).forEach(catName => {
                 const option = document.createElement('option');
-                option.value = cat.id;
-                option.textContent = `${cat.name} (${cat.count})`;
+                option.value = catName;
+                option.textContent = `${catName} (${categories[catName].length})`;
                 select.appendChild(option);
             });
         }
@@ -163,7 +164,7 @@
             grid.innerHTML = problems.map(problem => `
                 <a href="${problem.url}" class="problem-card">
                     <div class="problem-description">
-                        <span class="problem-tag level">Level ${problem.level}</span> ${problem.problemHtml || problem.description || ''}
+                        <span class="problem-tag level">Level ${problem.level}</span> ${problem.problemHtml || ''}
                     </div>
                 </a>
             `).join('');
@@ -184,7 +185,8 @@
                 }
 
                 if (category) {
-                    filtered = filtered.filter(p => p.category === category);
+                    // categories는 배열이므로 includes로 확인
+                    filtered = filtered.filter(p => p.categories && p.categories.includes(category));
                 }
 
                 renderProblemList(filtered);
