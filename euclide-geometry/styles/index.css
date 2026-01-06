@@ -163,6 +163,7 @@ h1 {
     color: #fff;
     display: inline-block;
     margin-right: 8px;
+    float: left;
 }
 
 .problem-card .problem-description {
@@ -174,6 +175,12 @@ h1 {
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
+}
+
+.problem-card .problem-description::after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 .stats-container {
