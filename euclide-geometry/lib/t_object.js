@@ -284,7 +284,7 @@ export class TCircle extends TObject {
         const cy = this.ty(this.center);
         const s = (this.p.geometryScale) ? this.p.geometryScale : 60; 
         if (this.mode === 'default' && this.progress < 1) {
-            p.arc(cx, cy, this.radius * 2 * s, this.radius * 2 * s, 0, this.progress * 360);
+            p.arc(cx, cy, this.radius * 2 * s, this.radius * 2 * s, 0, this.progress * p.TWO_PI);
         } else {
             p.circle(cx, cy, this.radius * 2 * s);
         }
