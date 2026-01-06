@@ -279,9 +279,6 @@
         }
 
         function renderControls(config, paddedId, baseUrl) {
-            // Initialize phases from config
-            initializePhases(config);
-
             const hasSolution = config.solutionPhases && config.solutionPhases.length > 0;
 
             const controlsContainer = document.getElementById('controls-container');

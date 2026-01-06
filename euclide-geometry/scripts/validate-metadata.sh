@@ -11,8 +11,8 @@ echo -e "\n[1] problem.tex levels:"
 for dir in problems/*/; do
   id=$(basename "$dir")
   if [ -f "$dir/problem.tex" ]; then
-    level=$(head -1 "$dir/problem.tex" | grep -oE "level [0-9]" | cut -d' ' -f2)
-    contest=$(head -1 "$dir/problem.tex" | grep -q "contest" && echo " (contest)" || echo "")
+    level=$(head -3 "$dir/problem.tex" | grep -oE "level [0-9]" | head -1 | cut -d' ' -f2)
+    contest=$(head -3 "$dir/problem.tex" | grep -q "contest" && echo " (contest)" || echo "")
     echo "  $id: level $level$contest"
   fi
 done
@@ -37,7 +37,7 @@ has_mismatch=false
 for dir in problems/*/; do
   id=$(basename "$dir")
   if [ -f "$dir/problem.tex" ] && [ -f "$dir/config.json" ]; then
-    tex_level=$(head -1 "$dir/problem.tex" | grep -oE "level [0-9]" | cut -d' ' -f2)
+    tex_level=$(head -3 "$dir/problem.tex" | grep -oE "level [0-9]" | head -1 | cut -d' ' -f2)
     config_level=$(jq -r '.level' "$dir/config.json")
     index_level=$(jq -r ".problems[] | select(.id==\"$id\") | .level" problems/index.json)
 

@@ -28,7 +28,9 @@ export class Animator {
         
         const collectObjects = (seqName) => {
             const objs = new Set();
-            if (!this.sequences.has(seqName)) return objs;
+            if (!this.sequences.has(seqName)) 
+                return objs;
+
             const steps = this.sequences.get(seqName);
             steps.forEach(step => {
                 if (step.target) objs.add(step.target);
