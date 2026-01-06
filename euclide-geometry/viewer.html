@@ -39,17 +39,23 @@
             <button id="logout-btn" onclick="signOut()" style="display: none;">로그아웃</button>
         </div>
     </header>
-    <main>
-        <div id="problem-container"></div>
-        <div class="canvas-container" id="canvas-wrapper"></div>
-        <!-- Solution Panel - Below Canvas -->
-        <div id="solution-panel" class="solution-panel hidden">
-            <div class="solution-panel-header">
-                <span class="solution-panel-title">풀이</span>
-                <button id="solution-panel-close" class="solution-panel-close-btn">×</button>
-            </div>
-            <div class="solution-panel-content" id="solution-text"></div>
+    <main class="viewer-main">
+        <div class="canvas-section">
+            <div class="canvas-container" id="canvas-wrapper"></div>
         </div>
+        
+        <div class="content-section" id="scroll-container">
+            <div id="problem-container"></div>
+            <!-- Solution Panel - Below Canvas -->
+            <div id="solution-panel" class="solution-panel hidden">
+                <div class="solution-panel-header">
+                    <span class="solution-panel-title">풀이</span>
+                    <button id="solution-panel-close" class="solution-panel-close-btn">×</button>
+                </div>
+                <div class="solution-panel-content" id="solution-text"></div>
+            </div>
+        </div>
+        
         <div id="controls-container"></div>
     </main>
 
@@ -218,6 +224,9 @@
             }
         }
 
+        // Cache for loaded phase contents
+        const loadedPhasesCache = {};
+
         // Update problem text based on current mode and phase
         async function updateProblemText(mode, phase, paddedId, baseUrl) {
             if (mode === 'problem') {
@@ -236,35 +245,59 @@
                     console.error('Failed to load problem text:', error);
                 }
             } else if (mode === 'solution') {
-                // Show solution panel
                 const solutionText = document.getElementById('solution-text');
                 if (!solutionText) return;
 
-                let filename;
-                if (phase === 'all' || !phase) {
-                    filename = 'solution-phase-1.html';
-                } else {
-                    filename = `solution-phase-${phase}.html`;
+                showSolutionPanel();
+                
+                // Clear existing content to rebuild sequentially
+                solutionText.innerHTML = '';
+                
+                const targetPhase = (phase === 'all' || !phase) ? (window.solutionPhaseCount || 1) : phase;
+                
+                for (let i = 1; i <= targetPhase; i++) {
+                    await appendPhaseBlock(i, paddedId, baseUrl);
                 }
 
-                try {
-                    const response = await fetch(`${baseUrl}/problems/${paddedId}/${filename}`);
-                    if (!response.ok) {
-                        console.warn(`Failed to load ${filename}`);
-                        hideSolutionPanel();
-                        return;
-                    }
-
-                    const html = await response.text();
-                    solutionText.innerHTML = html;
-
-                    // Show panel
-                    showSolutionPanel();
-                } catch (error) {
-                    console.error('Failed to update solution text:', error);
-                    hideSolutionPanel();
+                // Scroll to the bottom of the content section to show the newest phase
+                const scrollContainer = document.getElementById('scroll-container');
+                if (scrollContainer) {
+                    setTimeout(() => {
+                        scrollContainer.scrollTo({
+                            top: scrollContainer.scrollHeight,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
                 }
             }
+        }
+
+        async function appendPhaseBlock(phase, paddedId, baseUrl) {
+            const solutionText = document.getElementById('solution-text');
+            const cacheKey = `${paddedId}_${phase}`;
+            
+            let html;
+            if (loadedPhasesCache[cacheKey]) {
+                html = loadedPhasesCache[cacheKey];
+            } else {
+                try {
+                    const response = await fetch(`${baseUrl}/problems/${paddedId}/solution-phase-${phase}.html`);
+                    if (!response.ok) return;
+                    html = await response.text();
+                    loadedPhasesCache[cacheKey] = html;
+                } catch (e) {
+                    console.warn(`Failed to load phase ${phase}`);
+                    return;
+                }
+            }
+
+            const block = document.createElement('div');
+            block.className = 'phase-block';
+            block.innerHTML = `
+                <div class="phase-block-title">Step ${phase}</div>
+                <div class="phase-block-content">${html}</div>
+            `;
+            solutionText.appendChild(block);
         }
 
         function showSolutionPanel() {
@@ -283,19 +316,21 @@
 
         function renderControls(config, paddedId, baseUrl) {
             const hasSolution = config.solutionPhases && config.solutionPhases.length > 0;
+            // Store global solution phase count for sequential loading
+            window.solutionPhaseCount = config.solutionPhases ? config.solutionPhases.length : 0;
 
             const controlsContainer = document.getElementById('controls-container');
             controlsContainer.innerHTML = `
-                <div class="controls" id="draggable-controls">
+                <div class="controls collapsed" id="draggable-controls">
                     <!-- Header with drag handle and collapse -->
                     <div class="controls-header" id="controls-drag-handle">
                         <span class="controls-title">Controls</span>
-                        <button class="controls-collapse-btn" id="btn-collapse">−</button>
+                        <button class="controls-collapse-btn" id="btn-collapse">+</button>
                     </div>
 
                     <div class="controls-body">
                         <!-- Mode Toggle -->
-                        <div class="control-section">
+                        <div class="control-section mode-section">
                             <div class="control-label">Mode</div>
                             <div class="button-group mode-toggle">
                                 <button id="btn-mode-problem" class="active mode-btn">Problem</button>
@@ -337,12 +372,44 @@
                 setupControls();
             }
 
+            // Expand when clicking mode buttons if collapsed
+            const expandOnModeClick = () => {
+                const controls = document.getElementById('draggable-controls');
+                if (controls && controls.classList.contains('collapsed')) {
+                    toggleControls(controls, document.getElementById('btn-collapse'));
+                }
+            };
+            document.getElementById('btn-mode-problem').addEventListener('click', expandOnModeClick);
+            const solBtn = document.getElementById('btn-mode-solution');
+            if (solBtn) solBtn.addEventListener('click', expandOnModeClick);
+
             // Setup solution panel close button
             const closeBtn = document.getElementById('solution-panel-close');
             if (closeBtn) {
                 closeBtn.addEventListener('click', () => {
                     hideSolutionPanel();
                 });
+            }
+        }
+
+        function toggleControls(controls, collapseBtn) {
+            const isCollapsed = controls.classList.toggle('collapsed');
+            collapseBtn.textContent = isCollapsed ? '+' : '−';
+            
+            // If expanding, ensure it's still within boundaries
+            if (!isCollapsed) {
+                const canvasWrapper = document.getElementById('canvas-wrapper');
+                const canvasRect = canvasWrapper.getBoundingClientRect();
+                const controlRect = controls.getBoundingClientRect();
+                
+                let currentLeft = parseFloat(controls.style.left) || controlRect.left;
+                let currentTop = parseFloat(controls.style.top) || controlRect.top;
+                
+                const maxLeft = canvasRect.right - controlRect.width - 20;
+                const maxTop = canvasRect.bottom - controlRect.height - 20;
+                
+                if (currentLeft > maxLeft) controls.style.left = maxLeft + 'px';
+                if (currentTop > maxTop) controls.style.top = maxTop + 'px';
             }
         }
 
@@ -397,10 +464,35 @@
             document.addEventListener('mousemove', (e) => {
                 if (!isDragging) return;
                 e.preventDefault();
-                const dx = e.clientX - startX;
-                const dy = e.clientY - startY;
-                controls.style.left = (initialX + dx) + 'px';
-                controls.style.top = (initialY + dy) + 'px';
+                
+                const canvasWrapper = document.getElementById('canvas-wrapper');
+                const parent = controls.offsetParent || document.body;
+                const parentRect = parent.getBoundingClientRect();
+                
+                // Get canvas boundaries relative to parent
+                const canvasLeft = canvasWrapper.offsetLeft;
+                const canvasTop = canvasWrapper.offsetTop;
+                const canvasWidth = canvasWrapper.offsetWidth;
+                const canvasHeight = canvasWrapper.offsetHeight;
+                
+                let newX = initialX + (e.clientX - startX);
+                let newY = initialY + (e.clientY - startY);
+                
+                // Convert current position to be relative to parent if needed
+                // (initialX/Y are from getBoundingClientRect which is viewport relative)
+                const relX = newX - parentRect.left;
+                const relY = newY - parentRect.top;
+                
+                const controlWidth = controls.offsetWidth;
+                const controlHeight = controls.offsetHeight;
+                
+                // Clamp within canvas boundaries
+                const padding = 10;
+                const clampedRelX = Math.max(canvasLeft + padding, Math.min(relX, canvasLeft + canvasWidth - controlWidth - padding));
+                const clampedRelY = Math.max(canvasTop + padding, Math.min(relY, canvasTop + canvasHeight - controlHeight - padding));
+                
+                controls.style.left = clampedRelX + 'px';
+                controls.style.top = clampedRelY + 'px';
                 controls.style.right = 'auto';
             });
 
@@ -412,8 +504,7 @@
             // Collapse/expand functionality
             collapseBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                controls.classList.toggle('collapsed');
-                collapseBtn.textContent = controls.classList.contains('collapsed') ? '+' : '−';
+                toggleControls(controls, collapseBtn);
             });
         }
     </script>
