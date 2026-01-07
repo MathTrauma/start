@@ -1,10 +1,4 @@
-// UI Controls for Geometry Problem Viewer
-// Version 1.0.0
 
-/**
- * Setup main control buttons (restart, play/pause, mode toggle)
- * This function should be called from viewer.html after sketch.js is loaded
- */
 function setupControls() {
     document.getElementById('btn-restart').addEventListener('click', () => {
         resetAnimation();

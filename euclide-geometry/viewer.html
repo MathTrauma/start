@@ -48,18 +48,14 @@
             <div id="problem-container"></div>
             <!-- Solution Panel - Below Canvas -->
             <div id="solution-panel" class="solution-panel hidden">
-                <div class="solution-panel-header">
+                <!-- <div class="solution-panel-header">
                     <span class="solution-panel-title">풀이</span>
                     <button id="solution-panel-close" class="solution-panel-close-btn">×</button>
-                </div>
+                </div> -->
                 <div class="solution-panel-content" id="solution-text"></div>
             </div>
         </div>
-        
-        <div id="controls-container"></div>
     </main>
-
-    <!-- Supabase & Auth -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/auth.js"></script>
     <script>
@@ -319,7 +315,22 @@
             // Store global solution phase count for sequential loading
             window.solutionPhaseCount = config.solutionPhases ? config.solutionPhases.length : 0;
 
-            const controlsContainer = document.getElementById('controls-container');
+            // Create controls inside canvas-wrapper
+            const canvasWrapper = document.getElementById('canvas-wrapper');
+            let controlsContainer = document.getElementById('controls-container');
+            
+            // Remove existing if any (cleanup)
+            if (controlsContainer) {
+                controlsContainer.remove();
+            }
+            
+            controlsContainer = document.createElement('div');
+            controlsContainer.id = 'controls-container';
+            // Insert as first child to be behind canvas if z-index matches, 
+            // but usually controls have higher z-index. 
+            // Appending is safer for stacking context on top.
+            canvasWrapper.appendChild(controlsContainer);
+
             controlsContainer.innerHTML = `
                 <div class="controls collapsed" id="draggable-controls">
                     <!-- Header with drag handle and collapse -->
@@ -432,17 +443,17 @@
             // If expanding, ensure it's still within boundaries
             if (!isCollapsed) {
                 const canvasWrapper = document.getElementById('canvas-wrapper');
-                const canvasRect = canvasWrapper.getBoundingClientRect();
-                const controlRect = controls.getBoundingClientRect();
                 
-                let currentLeft = parseFloat(controls.style.left) || controlRect.left;
-                let currentTop = parseFloat(controls.style.top) || controlRect.top;
+                const currentLeft = controls.offsetLeft;
+                const currentTop = controls.offsetTop;
+                const controlWidth = controls.offsetWidth;
+                const controlHeight = controls.offsetHeight;
                 
-                const maxLeft = canvasRect.right - controlRect.width - 20;
-                const maxTop = canvasRect.bottom - controlRect.height - 20;
+                const maxLeft = canvasWrapper.clientWidth - controlWidth - 10; // 10px padding
+                const maxTop = canvasWrapper.clientHeight - controlHeight - 10;
                 
-                if (currentLeft > maxLeft) controls.style.left = maxLeft + 'px';
-                if (currentTop > maxTop) controls.style.top = maxTop + 'px';
+                if (currentLeft > maxLeft) controls.style.left = Math.max(0, maxLeft) + 'px';
+                if (currentTop > maxTop) controls.style.top = Math.max(0, maxTop) + 'px';
             }
         }
 
@@ -476,7 +487,7 @@
             }
 
             let isDragging = false;
-            let startX, startY, initialX, initialY;
+            let startX, startY, initialLeft, initialTop;
 
             // Drag from header
             handle.addEventListener('mousedown', startDrag);
@@ -485,11 +496,14 @@
                 // Don't drag when clicking buttons
                 if (e.target.tagName === 'BUTTON') return;
                 isDragging = true;
+                
                 startX = e.clientX;
                 startY = e.clientY;
-                const rect = controls.getBoundingClientRect();
-                initialX = rect.left;
-                initialY = rect.top;
+                
+                // Use offsetLeft/Top which is relative to the parent (canvas-wrapper)
+                initialLeft = controls.offsetLeft;
+                initialTop = controls.offsetTop;
+                
                 controls.style.transition = 'none';
                 e.preventDefault();
             }
@@ -499,39 +513,61 @@
                 e.preventDefault();
                 
                 const canvasWrapper = document.getElementById('canvas-wrapper');
-                const parent = controls.offsetParent || document.body;
-                const parentRect = parent.getBoundingClientRect();
                 
-                // Get canvas boundaries relative to parent
-                const canvasLeft = canvasWrapper.offsetLeft;
-                const canvasTop = canvasWrapper.offsetTop;
-                const canvasWidth = canvasWrapper.offsetWidth;
-                const canvasHeight = canvasWrapper.offsetHeight;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
                 
-                let newX = initialX + (e.clientX - startX);
-                let newY = initialY + (e.clientY - startY);
-                
-                // Convert current position to be relative to parent if needed
-                // (initialX/Y are from getBoundingClientRect which is viewport relative)
-                const relX = newX - parentRect.left;
-                const relY = newY - parentRect.top;
+                let newLeft = initialLeft + dx;
+                let newTop = initialTop + dy;
                 
                 const controlWidth = controls.offsetWidth;
                 const controlHeight = controls.offsetHeight;
                 
-                // Clamp within canvas boundaries
+                // Clamp within canvas boundaries (0 to width/height)
                 const padding = 10;
-                const clampedRelX = Math.max(canvasLeft + padding, Math.min(relX, canvasLeft + canvasWidth - controlWidth - padding));
-                const clampedRelY = Math.max(canvasTop + padding, Math.min(relY, canvasTop + canvasHeight - controlHeight - padding));
+                const maxLeft = canvasWrapper.clientWidth - controlWidth - padding;
+                const maxTop = canvasWrapper.clientHeight - controlHeight - padding;
                 
-                controls.style.left = clampedRelX + 'px';
-                controls.style.top = clampedRelY + 'px';
-                controls.style.right = 'auto';
+                newLeft = Math.max(padding, Math.min(newLeft, maxLeft));
+                newTop = Math.max(padding, Math.min(newTop, maxTop));
+                
+                controls.style.left = newLeft + 'px';
+                controls.style.top = newTop + 'px';
+                controls.style.right = 'auto'; // Disable right alignment once moved
             });
 
             document.addEventListener('mouseup', () => {
-                isDragging = false;
-                controls.style.transition = '';
+                if (isDragging) {
+                    isDragging = false;
+                    controls.style.transition = '';
+                }
+            });
+
+            // 창 크기 변경 시 컨트롤 위치 조정
+            window.addEventListener('resize', () => {
+                if (window.matchMedia('(max-width: 768px)').matches) return;
+                
+                const canvasWrapper = document.getElementById('canvas-wrapper');
+                if (!canvasWrapper || !controls) return;
+
+                const padding = 10;
+                const controlWidth = controls.offsetWidth;
+                const controlHeight = controls.offsetHeight;
+                
+                const maxLeft = canvasWrapper.clientWidth - controlWidth - padding;
+                const maxTop = canvasWrapper.clientHeight - controlHeight - padding;
+                
+                let currentLeft = controls.offsetLeft;
+                let currentTop = controls.offsetTop;
+                
+                // 영역 밖으로 나갔다면 안으로 밀어넣기
+                if (currentLeft > maxLeft || currentTop > maxTop) {
+                    const newLeft = Math.max(padding, Math.min(currentLeft, maxLeft));
+                    const newTop = Math.max(padding, Math.min(currentTop, maxTop));
+                    
+                    controls.style.left = newLeft + 'px';
+                    controls.style.top = newTop + 'px';
+                }
             });
 
             // Collapse/expand functionality
