@@ -177,27 +177,34 @@ select, option, input, textarea {
     contain: layout paint;
     will-change: opacity;
     transition: opacity 0.3s ease;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.canvas-container canvas {
+    max-width: 100% !important;
+    height: auto !important;
 }
 
 /* Controls - Desktop */
 .controls {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 15px;
+    right: 15px;
     background-color: rgba(255, 255, 255, 0.95);
-    padding: 10px;
+    padding: 6px 8px;
     border-radius: 6px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    min-width: 140px;
-    max-width: 160px;
+    gap: 4px;
+    min-width: 110px;
+    max-width: 130px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(139, 125, 107, 0.2);
     z-index: 1000;
     cursor: move;
     user-select: none;
-    transition: width 0.3s ease, min-width 0.3s ease;
+    transition: width 0.2s ease, min-width 0.2s ease;
 }
 
 .controls.collapsed .controls-body .control-section:not(.mode-section) {
@@ -214,16 +221,16 @@ select, option, input, textarea {
 }
 
 .controls.collapsed {
-    min-width: 120px;
+    min-width: 90px;
     width: auto;
-    padding: 8px;
+    padding: 4px 6px;
 }
 
 .controls-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 6px;
+    padding-bottom: 4px;
     border-bottom: 1px solid #e8e3d8;
     cursor: move;
 }
@@ -233,7 +240,7 @@ select, option, input, textarea {
 }
 
 .controls-title {
-    font-size: 10px;
+    font-size: 9px;
     color: #8b7d6b;
     font-weight: 600;
 }
@@ -262,8 +269,8 @@ select, option, input, textarea {
 }
 
 .mode-shortcut-btn {
-    padding: 3px 8px;
-    font-size: 11px;
+    padding: 2px 6px;
+    font-size: 10px;
     background-color: #f0ece6;
     border: 1px solid #d4cec3;
     border-radius: 4px;
@@ -289,13 +296,13 @@ select, option, input, textarea {
     background: none !important;
     border: none !important;
     color: #8b7d6b;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
     padding: 0 !important;
-    width: 18px;
-    height: 18px;
-    min-width: 18px;
-    line-height: 16px;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    line-height: 14px;
     flex: none !important;
 }
 
@@ -305,7 +312,7 @@ select, option, input, textarea {
 
 /* Phase Block Stacking */
 .phase-block {
-    padding: 15px 0;
+    padding: 10px 0;
     border-bottom: 1px dashed rgba(139, 125, 107, 0.3);
     animation: fadeIn 0.5s ease-out;
 }
@@ -315,10 +322,10 @@ select, option, input, textarea {
 }
 
 .phase-block-title {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: bold;
     color: #8b7d6b;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -330,18 +337,18 @@ select, option, input, textarea {
 
 .button-group {
     display: flex;
-    gap: 4px;
+    gap: 3px;
     flex-wrap: wrap;
 }
 
 button {
-    padding: 4px 8px;
+    padding: 3px 6px;
     border: 1px solid #d4cec3;
     border-radius: 3px;
     background-color: #f9f7f1;
     color: #3a3530;
     cursor: pointer;
-    font-size: 10px;
+    font-size: 9px;
     transition: all 0.2s;
     flex: 1;
 }
@@ -367,25 +374,25 @@ button.active:hover {
 
 .phase-buttons {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
 }
 
 .phase-buttons button {
     font-size: 9px;
-    padding: 3px 5px;
+    padding: 2px 3px;
 }
 
 .control-label {
     color: #5a5247;
-    font-size: 9px;
+    font-size: 8px;
     margin-bottom: 2px;
     font-weight: 500;
 }
 
 .control-section {
     border-bottom: 1px solid #e8e3d8;
-    padding-bottom: 6px;
+    padding-bottom: 4px;
 }
 
 .control-section:last-child {
@@ -462,16 +469,16 @@ button.active:hover {
     /* Mobile Controls - Floating Top Right (Same as Desktop style) */
     .controls {
         position: absolute;
-        top: 10px;
-        right: 10px;
+        top: 8px;
+        right: 8px;
         bottom: auto;
         left: auto;
-        max-width: 180px;
-        min-width: 120px;
+        max-width: 140px;
+        min-width: 100px;
         width: auto;
         border-radius: 6px;
-        padding: 8px;
-        gap: 6px;
+        padding: 5px;
+        gap: 3px;
         cursor: default;
         z-index: 1001;
         background-color: rgba(255, 255, 255, 0.98);
@@ -484,44 +491,44 @@ button.active:hover {
 
     .controls-header {
         display: flex !important;
-        padding-bottom: 4px;
+        padding-bottom: 3px;
     }
 
     .controls-collapse-btn {
         display: block !important;
-        width: 24px;
-        height: 24px;
-        line-height: 22px;
-        font-size: 18px;
+        width: 20px;
+        height: 20px;
+        line-height: 18px;
+        font-size: 14px;
     }
 
     .controls.collapsed .collapsed-view {
         display: flex !important;
-        gap: 4px;
+        gap: 3px;
     }
 
     .mode-shortcut-btn {
-        padding: 4px 8px;
-        font-size: 12px;
+        padding: 3px 5px;
+        font-size: 10px;
     }
 
     .control-section {
-        padding-bottom: 6px;
+        padding-bottom: 4px;
     }
 
     button {
-        padding: 6px 10px;
-        font-size: 12px;
+        padding: 4px 6px;
+        font-size: 10px;
     }
 
     .phase-buttons {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 4px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3px;
     }
 
     .phase-buttons button {
-        font-size: 11px;
-        padding: 6px 4px;
+        font-size: 10px;
+        padding: 4px 2px;
     }
 
     /* Restore canvas position */

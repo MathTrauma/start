@@ -405,7 +405,10 @@
             // Shortcut Buttons Logic
             document.getElementById('btn-shortcut-problem').addEventListener('click', (e) => {
                 e.stopPropagation(); // Prevent drag start
-                document.getElementById('btn-mode-problem').click();
+                const probBtn = document.getElementById('btn-mode-problem');
+                if (!probBtn.classList.contains('active')) {
+                    probBtn.click();
+                }
                 // Ensure it expands
                 const controls = document.getElementById('draggable-controls');
                 if (controls.classList.contains('collapsed')) {
@@ -418,7 +421,10 @@
                 shortSolBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     if (!shortSolBtn.disabled) {
-                        document.getElementById('btn-mode-solution').click();
+                        const solBtn = document.getElementById('btn-mode-solution');
+                        if (!solBtn.classList.contains('active')) {
+                            solBtn.click();
+                        }
                         const controls = document.getElementById('draggable-controls');
                         if (controls.classList.contains('collapsed')) {
                             toggleControls(controls, document.getElementById('btn-collapse'));
