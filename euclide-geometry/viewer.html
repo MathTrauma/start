@@ -489,7 +489,7 @@
             }
         }
 
-        // Draggable controls (desktop only)
+        // Draggable controls
         function setupDraggable() {
             const controls = document.getElementById('draggable-controls');
             const handle = document.getElementById('controls-drag-handle');
@@ -497,53 +497,45 @@
 
             if (!controls || !handle) return;
 
-            // Check if mobile (don't enable drag on mobile)
-            const isMobile = window.matchMedia('(max-width: 768px)').matches;
-            if (isMobile) {
-                controls.style.cursor = 'default';
-                handle.style.cursor = 'default';
-                return;
-            }
-
             let isDragging = false;
             let startX, startY, initialLeft, initialTop;
 
-            // Drag from header
+            // Drag handling (Desktop & Mobile)
             handle.addEventListener('mousedown', startDrag);
+            handle.addEventListener('touchstart', startDrag, { passive: false });
 
             function startDrag(e) {
-                // Don't drag when clicking buttons
                 if (e.target.tagName === 'BUTTON') return;
                 isDragging = true;
                 
-                startX = e.clientX;
-                startY = e.clientY;
+                const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+                const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
                 
-                // Use offsetLeft/Top which is relative to the parent (canvas-wrapper)
+                startX = clientX;
+                startY = clientY;
                 initialLeft = controls.offsetLeft;
                 initialTop = controls.offsetTop;
                 
                 controls.style.transition = 'none';
-                e.preventDefault();
+                if (e.type === 'touchstart') e.preventDefault();
             }
 
-            document.addEventListener('mousemove', (e) => {
+            const onMove = (e) => {
                 if (!isDragging) return;
-                e.preventDefault();
+                
+                const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
                 
                 const canvasWrapper = document.getElementById('canvas-wrapper');
-                
-                const dx = e.clientX - startX;
-                const dy = e.clientY - startY;
+                const dx = clientX - startX;
+                const dy = clientY - startY;
                 
                 let newLeft = initialLeft + dx;
                 let newTop = initialTop + dy;
                 
                 const controlWidth = controls.offsetWidth;
                 const controlHeight = controls.offsetHeight;
-                
-                // Clamp within canvas boundaries (0 to width/height)
-                const padding = 10;
+                const padding = 5;
                 const maxLeft = canvasWrapper.clientWidth - controlWidth - padding;
                 const maxTop = canvasWrapper.clientHeight - controlHeight - padding;
                 
@@ -552,42 +544,22 @@
                 
                 controls.style.left = newLeft + 'px';
                 controls.style.top = newTop + 'px';
-                controls.style.right = 'auto'; // Disable right alignment once moved
-            });
+                controls.style.right = 'auto';
 
-            document.addEventListener('mouseup', () => {
+                if (e.type === 'touchmove') e.preventDefault();
+            };
+
+            const endDrag = () => {
                 if (isDragging) {
                     isDragging = false;
                     controls.style.transition = '';
                 }
-            });
+            };
 
-            // 창 크기 변경 시 컨트롤 위치 조정
-            window.addEventListener('resize', () => {
-                if (window.matchMedia('(max-width: 768px)').matches) return;
-                
-                const canvasWrapper = document.getElementById('canvas-wrapper');
-                if (!canvasWrapper || !controls) return;
-
-                const padding = 10;
-                const controlWidth = controls.offsetWidth;
-                const controlHeight = controls.offsetHeight;
-                
-                const maxLeft = canvasWrapper.clientWidth - controlWidth - padding;
-                const maxTop = canvasWrapper.clientHeight - controlHeight - padding;
-                
-                let currentLeft = controls.offsetLeft;
-                let currentTop = controls.offsetTop;
-                
-                // 영역 밖으로 나갔다면 안으로 밀어넣기
-                if (currentLeft > maxLeft || currentTop > maxTop) {
-                    const newLeft = Math.max(padding, Math.min(currentLeft, maxLeft));
-                    const newTop = Math.max(padding, Math.min(currentTop, maxTop));
-                    
-                    controls.style.left = newLeft + 'px';
-                    controls.style.top = newTop + 'px';
-                }
-            });
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('touchmove', onMove, { passive: false });
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
 
             // Collapse/expand functionality
             collapseBtn.addEventListener('click', (e) => {

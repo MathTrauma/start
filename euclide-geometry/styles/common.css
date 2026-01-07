@@ -467,71 +467,53 @@ button.active:hover {
         line-height: 1.6;
     }
 
-    /* Mobile Controls - Floating Top Right (Same as Desktop style) */
+    /* Mobile Controls - Floating Top Right */
     .controls {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        bottom: auto;
-        left: auto;
-        max-width: 140px;
-        min-width: 100px;
-        width: auto;
-        border-radius: 6px;
-        padding: 5px;
-        gap: 3px;
-        cursor: default;
-        z-index: 1001;
-        background-color: rgba(255, 255, 255, 0.98);
-    }
-
-    /* Override forced display from previous edit */
-    .controls.collapsed .controls-body {
-        display: none !important;
-    }
-
-    .controls-header {
-        display: flex !important;
-        padding-bottom: 3px;
-    }
-
-    .controls-collapse-btn {
-        display: block !important;
-        width: 28px;
-        height: 28px;
-        line-height: 26px;
-        font-size: 16px;
-        margin: -4px; /* hit area 확장 */
-        padding: 4px !important;
-    }
-
-    .controls.collapsed .collapsed-view {
-        display: flex !important;
-        gap: 3px;
-    }
-
-    .mode-shortcut-btn {
-        padding: 3px 5px;
-        font-size: 10px;
-    }
-
-    .control-section {
-        padding-bottom: 4px;
-    }
-
-    button {
-        padding: 3px 4px;
-        font-size: 9px;
-    }
-
-    .phase-buttons {
-        grid-template-columns: repeat(6, 1fr); /* 모바일도 6열로 변경 */
+        top: 6px;
+        right: 6px;
+        max-width: 120px;
+        min-width: 80px;
+        padding: 4px;
         gap: 2px;
     }
 
+    .controls-header {
+        padding-bottom: 2px;
+    }
+
+    .controls-title {
+        font-size: 8px;
+    }
+
+    .controls-collapse-btn {
+        width: 22px;
+        height: 22px;
+        line-height: 20px;
+        font-size: 14px;
+    }
+
+    .mode-shortcut-btn {
+        padding: 2px 4px;
+        font-size: 8.5px;
+    }
+
+    .control-label {
+        font-size: 7px;
+    }
+
+    button {
+        padding: 2px 3px;
+        font-size: 8.5px;
+    }
+
+    .phase-buttons {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1.5px;
+    }
+
     .phase-buttons button {
-        font-size: 9px;
-        padding: 3px 0;
+        font-size: 8px;
+        padding: 2px 0;
     }
 
     /* Restore canvas position */
