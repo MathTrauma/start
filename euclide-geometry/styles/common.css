@@ -182,7 +182,6 @@ body {
     contain: layout paint;
     will-change: opacity;
     transition: opacity 0.3s ease;
-    width: 100%;
     max-width: 800px; /* 데스크탑 최대 크기 */
     aspect-ratio: 1 / 1;
     overflow: hidden;
@@ -584,6 +583,7 @@ button.active:hover {
 
     /* Canvas sticky on mobile */
     .canvas-container {
+        width: 100%; /* 모바일에서는 화면 폭 사용 */
         position: sticky;
         top: 0;
         margin-bottom: 10px;
