@@ -90,49 +90,52 @@ select, option, input, textarea {
 /* Problem Display */
 .problem-container {
     background-color: rgba(255, 255, 255, 0.9);
-    padding: 20px 25px;
+    padding: 15px 20px;
     border-radius: 10px;
     margin-bottom: 0;
     width: 100%;
-    max-width: 900px;
+    max-width: 800px; /* 캔버스 폭에 맞춤 */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(139, 125, 107, 0.2);
     box-sizing: border-box;
 }
 
 .problem-header {
-    color: #8b7d6b;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    display: none; /* JS에서 제거했으므로 숨김 처리하거나 삭제 가능 */
 }
 
 .problem-tag {
     background-color: #e8e3d8;
-    padding: 4px 10px;
+    padding: 2px 6px; /* 패딩 축소 */
     border-radius: 4px;
     font-size: 11px;
     color: #5a5247;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    line-height: 1.4;
 }
 
 .problem-tag.level {
     background-color: #8b7d6b;
     color: #fff;
-}
-
-.problem-tag.contest {
-    background-color: #c74440;
-    color: #fff;
-    font-weight: 600;
+    font-weight: bold;
 }
 
 .problem-content {
     color: #2a2520;
     font-size: 16px;
-    line-height: 1.8;
+    line-height: 2.2; /* 행간 대폭 확대 */
+}
+
+.problem-content #problem-text {
+    display: inline;
+}
+
+/* problem.html 내부의 p 태그가 줄바꿈을 일으키지 않도록 */
+.problem-content p {
+    display: inline;
+    margin: 0;
 }
 
 /* Toggle Canvas Button */
@@ -595,7 +598,7 @@ button.active:hover {
 /* Solution Panel - Below Canvas */
 .solution-panel {
     width: 100%;
-    max-width: 900px;
+    max-width: 800px; /* 캔버스 폭에 맞춤 */
     min-height: 200px;
     background-color: #faf8f3;
     border-radius: 10px;

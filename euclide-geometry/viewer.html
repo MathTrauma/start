@@ -163,11 +163,11 @@
                 const problemContainer = document.getElementById('problem-container');
                 problemContainer.className = 'problem-container';
                 problemContainer.innerHTML = `
-                    <div class="problem-header">
-                        <span class="problem-tag level">Level ${config.level}</span>
+                    <div class="problem-content">
+                        <span class="problem-tag level">L${config.level}</span>
                         ${isContestMode ? '<span class="problem-tag contest">Contest</span>' : ''}
+                        <span id="problem-text"></span>
                     </div>
-                    <div class="problem-content" id="problem-text"></div>
                     ${isContestMode ? '<button id="toggle-canvas-btn" class="toggle-canvas-btn">▼ 그림 보기</button>' : ''}
                 `;
 
