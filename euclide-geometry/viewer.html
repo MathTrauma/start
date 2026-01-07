@@ -404,15 +404,23 @@
 
             // Shortcut Buttons Logic
             document.getElementById('btn-shortcut-problem').addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent drag start
-                const probBtn = document.getElementById('btn-mode-problem');
-                if (!probBtn.classList.contains('active')) {
-                    probBtn.click();
-                }
-                // Ensure it expands
+                e.stopPropagation();
                 const controls = document.getElementById('draggable-controls');
+                const probBtn = document.getElementById('btn-mode-problem');
+                
                 if (controls.classList.contains('collapsed')) {
-                     toggleControls(controls, document.getElementById('btn-collapse'));
+                    // 접혀있을 때는 무조건 펼치고 모드 설정
+                    if (!probBtn.classList.contains('active')) probBtn.click();
+                    toggleControls(controls, document.getElementById('btn-collapse'));
+                } else {
+                    // 펼쳐져 있을 때
+                    if (probBtn.classList.contains('active')) {
+                        // 이미 해당 모드면 접기
+                        toggleControls(controls, document.getElementById('btn-collapse'));
+                    } else {
+                        // 다른 모드면 모드만 변경
+                        probBtn.click();
+                    }
                 }
             });
 
@@ -420,14 +428,19 @@
             if (shortSolBtn) {
                 shortSolBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    if (!shortSolBtn.disabled) {
-                        const solBtn = document.getElementById('btn-mode-solution');
-                        if (!solBtn.classList.contains('active')) {
-                            solBtn.click();
-                        }
-                        const controls = document.getElementById('draggable-controls');
-                        if (controls.classList.contains('collapsed')) {
+                    if (shortSolBtn.disabled) return;
+                    
+                    const controls = document.getElementById('draggable-controls');
+                    const solBtn = document.getElementById('btn-mode-solution');
+                    
+                    if (controls.classList.contains('collapsed')) {
+                        if (!solBtn.classList.contains('active')) solBtn.click();
+                        toggleControls(controls, document.getElementById('btn-collapse'));
+                    } else {
+                        if (solBtn.classList.contains('active')) {
                             toggleControls(controls, document.getElementById('btn-collapse'));
+                        } else {
+                            solBtn.click();
                         }
                     }
                 });

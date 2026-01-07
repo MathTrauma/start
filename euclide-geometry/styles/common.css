@@ -342,7 +342,7 @@ select, option, input, textarea {
 }
 
 button {
-    padding: 3px 6px;
+    padding: 2px 4px;
     border: 1px solid #d4cec3;
     border-radius: 3px;
     background-color: #f9f7f1;
@@ -350,7 +350,7 @@ button {
     cursor: pointer;
     font-size: 9px;
     transition: all 0.2s;
-    flex: 1;
+    min-width: 30px; /* 폭 축소를 위해 최소폭 설정 */
 }
 
 button:hover {
@@ -374,13 +374,14 @@ button.active:hover {
 
 .phase-buttons {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(6, 1fr); /* 3개에서 6개로 늘려 버튼 폭을 절반으로 줄임 */
     gap: 2px;
 }
 
 .phase-buttons button {
-    font-size: 9px;
-    padding: 2px 3px;
+    font-size: 8px;
+    padding: 2px 0;
+    min-width: 0;
 }
 
 .control-label {
@@ -496,10 +497,12 @@ button.active:hover {
 
     .controls-collapse-btn {
         display: block !important;
-        width: 20px;
-        height: 20px;
-        line-height: 18px;
-        font-size: 14px;
+        width: 28px;
+        height: 28px;
+        line-height: 26px;
+        font-size: 16px;
+        margin: -4px; /* hit area 확장 */
+        padding: 4px !important;
     }
 
     .controls.collapsed .collapsed-view {
@@ -517,18 +520,18 @@ button.active:hover {
     }
 
     button {
-        padding: 4px 6px;
-        font-size: 10px;
+        padding: 3px 4px;
+        font-size: 9px;
     }
 
     .phase-buttons {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 3px;
+        grid-template-columns: repeat(6, 1fr); /* 모바일도 6열로 변경 */
+        gap: 2px;
     }
 
     .phase-buttons button {
-        font-size: 10px;
-        padding: 4px 2px;
+        font-size: 9px;
+        padding: 3px 0;
     }
 
     /* Restore canvas position */
