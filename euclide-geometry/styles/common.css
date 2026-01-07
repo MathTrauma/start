@@ -471,6 +471,19 @@ button.active:hover {
         padding: 12px 15px;
         gap: 10px;
         cursor: default;
+        /* Force display on mobile */
+        min-width: auto;
+        width: auto;
+    }
+
+    /* Force body display on mobile regardless of collapsed state */
+    .controls.collapsed .controls-body {
+        display: block !important;
+    }
+
+    /* Hide collapse button on mobile */
+    .controls-collapse-btn {
+        display: none !important;
     }
 
     .controls-header {
