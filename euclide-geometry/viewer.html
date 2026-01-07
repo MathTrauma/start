@@ -258,8 +258,8 @@
                 const scrollContainer = document.getElementById('solution-scroll-container');
                 if (scrollContainer) {
                     setTimeout(() => {
-                        window.scrollTo({
-                            top: document.body.scrollHeight,
+                        scrollContainer.scrollTo({
+                            top: scrollContainer.scrollHeight,
                             behavior: 'smooth'
                         });
                     }, 100);

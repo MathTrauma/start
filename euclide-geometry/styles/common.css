@@ -43,27 +43,30 @@ body {
     padding: 0;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100dvh; /* Modern viewport height */
     background-color: #f5f3ed;
     font-family: 'Noto Serif KR', serif;
     box-sizing: border-box;
-    overflow: auto; /* Changed from hidden to allow scroll if needed */
-}
-
-/* Form elements don't inherit font */
-select, option, input, textarea {
-    font-family: 'Noto Serif KR', serif;
+    overflow: hidden; /* 전체 스크롤 방지 */
 }
 
 .viewer-main {
     display: flex;
     flex-direction: column;
-    align-items: center;
     width: 100%;
-    min-height: 100vh; /* Changed from flex: 1 and height: 100vh */
-    height: auto;
-    overflow: visible; /* Changed from hidden */
+    height: 100%;
+    overflow: hidden;
     position: relative;
+}
+
+#problem-scroll-container {
+    flex: 0 1 auto;
+    width: 100%;
+    max-height: calc(66.7vh - 100vw); /* 모바일 기준: 캔버스가 100vw를 차지하므로 남은 2/3 영역 계산 */
+    min-height: 80px;
+    overflow-y: auto;
+    background-color: #f5f3ed;
+    z-index: 11;
 }
 
 .canvas-section {
@@ -71,19 +74,18 @@ select, option, input, textarea {
     width: 100%;
     display: flex;
     justify-content: center;
-    background-color: #2F4F4F; /* Chalkboard 배경색 */
+    background-color: #2F4F4F;
     padding: 0;
     z-index: 10;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.content-section {
-    flex: 0 0 auto;
+#solution-scroll-container {
+    flex: 1; /* 남은 모든 공간 차지 */
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 20px;
+    overflow-y: auto;
+    background-color: #f5f3ed;
+    padding: 0 20px 20px 20px;
     box-sizing: border-box;
 }
 
@@ -91,13 +93,15 @@ select, option, input, textarea {
 .problem-container {
     background-color: rgba(255, 255, 255, 0.9);
     padding: 15px 20px;
-    border-radius: 10px;
+    border-radius: 0 0 10px 10px; /* 상단은 평평하게 */
     margin-bottom: 0;
     width: 100%;
-    max-width: 800px; /* 캔버스 폭에 맞춤 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(139, 125, 107, 0.2);
+    max-width: 800px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(139, 125, 107, 0.1);
+    border-top: none;
     box-sizing: border-box;
+    margin: 0 auto;
 }
 
 .problem-header {
@@ -446,34 +450,43 @@ button.active:hover {
     body {
         align-items: flex-start;
         padding-top: 0;
-        padding-bottom: 220px;
+        padding-bottom: 0; /* 내부 스크롤을 위해 제거 */
     }
 
     .viewer-main {
-        padding: 0; /* 좌우 여백 제거 */
+        padding: 0;
+        height: 100dvh;
     }
 
-    .content-section {
-        padding: 10px 0; /* 좌우 패딩 제거하여 컨테이너가 화면에 꽉 차게 함 */
+    #problem-scroll-container {
+        padding: 0;
     }
 
     .problem-container {
-        padding: 15px 20px;
-        margin-bottom: 0;
+        padding: 12px 15px;
         width: 100%;
         max-width: 100%;
-        border-radius: 0; /* 화면 끝에 맞춤 */
+        border-radius: 0;
         border-left: none;
         border-right: none;
         box-shadow: none;
+    }
+
+    #solution-scroll-container {
+        padding: 0 15px 100px 15px; /* 하단 컨트롤 여유 공간 */
     }
 
     .solution-panel {
         max-width: 100%;
         margin-bottom: 20px;
         border-radius: 0;
-        border-left: none;
-        border-right: none;
+        border: none;
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    .solution-panel-content {
+        padding: 10px 0;
     }
 
     .problem-header {
