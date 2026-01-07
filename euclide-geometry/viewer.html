@@ -40,18 +40,17 @@
         </div>
     </header>
     <main class="viewer-main">
+        <div class="content-section" id="problem-scroll-container">
+            <div id="problem-container"></div>
+        </div>
+
         <div class="canvas-section">
             <div class="canvas-container" id="canvas-wrapper"></div>
         </div>
         
-        <div class="content-section" id="scroll-container">
-            <div id="problem-container"></div>
+        <div class="content-section" id="solution-scroll-container">
             <!-- Solution Panel - Below Canvas -->
             <div id="solution-panel" class="solution-panel hidden">
-                <!-- <div class="solution-panel-header">
-                    <span class="solution-panel-title">풀이</span>
-                    <button id="solution-panel-close" class="solution-panel-close-btn">×</button>
-                </div> -->
                 <div class="solution-panel-content" id="solution-text"></div>
             </div>
         </div>
@@ -256,11 +255,11 @@
                 }
 
                 // Scroll to the bottom of the content section to show the newest phase
-                const scrollContainer = document.getElementById('scroll-container');
+                const scrollContainer = document.getElementById('solution-scroll-container');
                 if (scrollContainer) {
                     setTimeout(() => {
-                        scrollContainer.scrollTo({
-                            top: scrollContainer.scrollHeight,
+                        window.scrollTo({
+                            top: document.body.scrollHeight,
                             behavior: 'smooth'
                         });
                     }, 100);
