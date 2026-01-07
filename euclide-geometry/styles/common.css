@@ -71,10 +71,10 @@ select, option, input, textarea {
     width: 100%;
     display: flex;
     justify-content: center;
-    background-color: #f5f3ed;
+    background-color: #2F4F4F; /* Chalkboard 배경색 */
     padding: 0;
     z-index: 10;
-    border-bottom: 1px solid rgba(139, 125, 107, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .content-section {
@@ -173,7 +173,7 @@ select, option, input, textarea {
 .canvas-container {
     position: relative;
     z-index: 100;
-    background-color: #f5f3ed;
+    background-color: #2F4F4F; /* Chalkboard 배경색 */
     /* 레이아웃 안정화 - 1:1 비율 공간 선점 */
     contain: layout paint;
     will-change: opacity;
@@ -445,19 +445,35 @@ button.active:hover {
 
     body {
         align-items: flex-start;
-        padding-top: 10px;
-        padding-bottom: 220px; /* Space for bottom controls */
+        padding-top: 0;
+        padding-bottom: 220px;
     }
 
-    main {
-        padding: 10px;
-        padding-bottom: 0;
+    .viewer-main {
+        padding: 0; /* 좌우 여백 제거 */
+    }
+
+    .content-section {
+        padding: 10px 0; /* 좌우 패딩 제거하여 컨테이너가 화면에 꽉 차게 함 */
     }
 
     .problem-container {
         padding: 15px 20px;
-        margin-bottom: 15px;
+        margin-bottom: 0;
+        width: 100%;
         max-width: 100%;
+        border-radius: 0; /* 화면 끝에 맞춤 */
+        border-left: none;
+        border-right: none;
+        box-shadow: none;
+    }
+
+    .solution-panel {
+        max-width: 100%;
+        margin-bottom: 20px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
     }
 
     .problem-header {

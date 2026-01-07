@@ -48,8 +48,8 @@ export const THEMES = {
  * @param {Object} p - p5 instance
  * @param {string} themeName - 'light', 'dark', 'sepia', 'chalkboard'
  */
-export function applyTheme(p, themeName = 'light') {
-    const theme = THEMES[themeName] || THEMES.light;
+export function applyTheme(p, themeName = 'chalkboard') {
+    const theme = THEMES[themeName] || THEMES.chalkboard;
     p.theme = theme;
     if (p.background) p.background(theme.background);
 }
