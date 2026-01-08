@@ -41,6 +41,14 @@ function setupControls() {
 }
 
 /**
+ * Get the current number of phases based on the mode
+ */
+function getCurrentPhaseCount() {
+    const mode = getCurrentMode();
+    return mode === 'problem' ? (window.problemPhaseCount || 0) : (window.solutionPhaseCount || 0);
+}
+
+/**
  * Attach event listeners to phase buttons
  * Clones buttons first to remove any existing listeners
  */

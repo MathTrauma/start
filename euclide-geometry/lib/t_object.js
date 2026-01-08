@@ -1,4 +1,3 @@
-import p5 from 'p5';
 
 export class TObject {
     constructor(p, options = {}) {
@@ -8,9 +7,8 @@ export class TObject {
         this.completed = false;
         this.visible = false;
         this.mode = 'default';
-        this.savedState = null; // State storage
+        this.savedState = null;
         
-        // Theme resolving logic
         const theme = p.theme || {
             stroke: [0, 0, 0],
             fillBlue: [255, 255, 255, 0],
@@ -42,7 +40,7 @@ export class TObject {
             this.mode = mode;
             this.progress = 0;
             this.completed = false;
-            this.visible = true; // Always visible on new start
+            this.visible = true;
             this.onStart(config);
         } else if (!this.started) {
             this.started = true;
@@ -60,7 +58,7 @@ export class TObject {
         this.completed = false;
         this.visible = false;
         this.mode = 'default';
-        this.savedState = null; // Reset saved state
+        this.savedState = null;
         this.onReset();
     }
     
@@ -91,19 +89,14 @@ export class TObject {
         this.onComplete();
     }
     
-    onComplete() {
-        if (this.morphTarget) {
-            this.vertices = this.morphTarget.map(v => v.copy());
-            this.isMorphing = false;
-        }
-    }
+    onComplete() {}
 
     process(dt, duration) {
         if (this.completed) return;
         if (duration === 0) {
             this.progress = 1;
             this.completed = true;
-            this.saveCurrentState(); // Save state immediately
+            this.saveCurrentState();
             return;
         }
         this.progress += dt / duration;
@@ -113,7 +106,7 @@ export class TObject {
             if (this.mode === 'fadeOut') {
                 this.visible = false;
             }
-            this.saveCurrentState(); // Save final state
+            this.saveCurrentState();
         }
     }
 
@@ -155,12 +148,10 @@ export class TObject {
 
     tx(val) { 
         if (typeof this.p.tx === 'function') return this.p.tx(val);
-        if (typeof window.tx === 'function') return window.tx(val);
         return (val.x !== undefined ? val.x : val); 
     }
     ty(val) { 
         if (typeof this.p.ty === 'function') return this.p.ty(val);
-        if (typeof window.ty === 'function') return window.ty(val);
         return (val.y !== undefined ? val.y : val); 
     }
 
@@ -295,20 +286,11 @@ export class TPolygon extends TObject {
         }
 
         p.pop();
-
-        if (this.isMorphing && this.progress >= 1) {
-            this.vertices = this.morphTarget.map(v => v.copy());
-            this.setupPerimeter();
-            this.isMorphing = false;
-            this.morphStart = null;
-            this.morphTarget = null;
-        }
     }
 
     drawTravelingCircle(x, y) {
         const p = this.p;
         p.push();
-        // Highlight color logic could also come from theme
         const highlight = (this.p.theme && this.p.theme.highlight) ? this.p.theme.highlight : '#22d3ee';
         p.drawingContext.shadowBlur = 15;
         p.drawingContext.shadowColor = highlight;
@@ -328,30 +310,22 @@ export class TPoint extends TObject {
         this.label = label;
         this.dx = options.dx || 10;
         this.dy = options.dy || 10;
-        
         const theme = p.theme || {};
         const defaultColor = theme.text || [0, 0, 0];
-        
         if (!options.color && !options.fillColor) {
             this.style.fillColor = this.parseColor(defaultColor);
         }
-        
         this.style.radius = options.radius || 6;
     }
-
     render() {
         const p = this.p;
         const style = this.getRenderStyle();
-        
         let x = this.tx(this.pos);
         let y = this.ty(this.pos);
-
         p.push();
         p.noStroke();
-        
         p.fill(style.fillColor); 
         p.circle(x, y, this.style.radius * (this.mode === 'pulse' ? (1 + 0.2 * (style.strokeWeight/this.style.strokeWeight)) : 1));
-
         if (this.label) {
             p.fill(style.fillColor);
             p.push();
@@ -369,33 +343,26 @@ export class TSegment extends TObject {
         super(p, options);
         this.startPos = startPos;
         this.endPos = endPos;
-        
         const theme = p.theme || {};
         if (options.dashed && !options.color) {
             this.style.strokeColor = this.parseColor(theme.auxiliary || [150,150,150]);
         }
-        
         this.dashed = options.dashed || false;
     }
-
     render() {
         const p = this.p;
         const style = this.getRenderStyle();
         p.push();
-        
         p.stroke(style.strokeColor);
         p.strokeWeight(style.strokeWeight);
         if (this.dashed) p.drawingContext.setLineDash([5, 5]);
-
         let sx = this.tx(this.startPos), sy = this.ty(this.startPos);
         let ex = this.tx(this.endPos), ey = this.ty(this.endPos);
-
         let currX = ex, currY = ey;
         if (this.mode === 'default') {
             currX = p.lerp(sx, ex, this.progress);
             currY = p.lerp(sy, ey, this.progress);
         }
-
         p.line(sx, sy, currX, currY);
         if (this.dashed) p.drawingContext.setLineDash([]);
         p.pop();
@@ -439,93 +406,47 @@ export class TAngleMarker extends TObject {
         this.showDot = options.showDot || false;
         this.size = options.size || (this.emoji ? 20 : 6);
     }
-
     render() {
         const p = this.p;
         const style = this.getRenderStyle();
-        
-        let v1 = p5.Vector.sub(this.p1, this.vertex);
-        let v2 = p5.Vector.sub(this.p2, this.vertex);
-        
-        // Normalize headings to [0, TWO_PI)
+        const Vector = this.p1.constructor;
+        let v1 = Vector.sub(this.p1, this.vertex);
+        let v2 = Vector.sub(this.p2, this.vertex);
         let a1 = (v1.heading() + p.TWO_PI) % p.TWO_PI;
         let a2 = (v2.heading() + p.TWO_PI) % p.TWO_PI;
-
-        // Ensure CCW sweep from a1 to a2
         if (a2 < a1) a2 += p.TWO_PI;
         let totalDiff = a2 - a1;
-
         const vx = this.tx(this.vertex);
         const vy = this.ty(this.vertex);
-        const s = p.geometryScale || 60;
-
         const hasMarker = this.emoji || this.showDot;
-
         p.push();
-        
-        let showArc = false;
-        let showMarker = false;
-        let arcProgress = 0;
-
-        // Determine what to show based on mode and completion
-        // Rule 4: During pulse/fadeOut, hide marker and show full arc
+        let showArc = false, showMarker = false, arcProgress = 0;
         if (this.mode === 'pulse' || this.mode === 'fadeOut') {
-            showArc = true;
-            arcProgress = 1;
-            showMarker = false;
-        } 
-        // Rule 1 & 3: When completed, show marker only (if exists) or arc only
-        else if (this.completed) {
-            if (hasMarker) {
-                showArc = false;
-                showMarker = true;
-            } else {
-                showArc = true;
-                arcProgress = 1;
-                showMarker = false;
-            }
-        } 
-        // During initial drawing: show arc growing
-        else {
-            showArc = true;
-            arcProgress = this.progress;
-            showMarker = false;
+            showArc = true; arcProgress = 1; showMarker = false;
+        } else if (this.completed) {
+            if (hasMarker) { showArc = false; showMarker = true; } 
+            else { showArc = true; arcProgress = 1; showMarker = false; }
+        } else {
+            showArc = true; arcProgress = this.progress; showMarker = false;
         }
-
         if (showArc) {
-            p.noFill();
-            p.stroke(style.strokeColor);
-            p.strokeWeight(style.strokeWeight);
+            p.noFill(); p.stroke(style.strokeColor); p.strokeWeight(style.strokeWeight);
             let currentA2 = a1 + totalDiff * arcProgress;
             p.arc(vx, vy, this.arcSize * 2, this.arcSize * 2, a1, currentA2);
         }
-
         if (showMarker) {
             let midA = (a1 + a2) / 2;
-            
-            // Calculate pixel position directly in local space to match p.arc
             let mx = vx + Math.cos(midA) * this.arcSize * this.distance;
             let my = vy + Math.sin(midA) * this.arcSize * this.distance;
-            
-            let markerAlpha = 255;
-            
             if (this.emoji) {
-                p.fill(style.fillColor[0], style.fillColor[1], style.fillColor[2], markerAlpha);
-                p.textSize(this.size);
-                p.textAlign(p.CENTER, p.CENTER);
-                p.push();
-                p.translate(mx, my);
-                p.scale(1, -1);
-                p.text(this.emoji, 0, 0);
-                p.pop();
+                p.fill(style.fillColor);
+                p.textSize(this.size); p.textAlign(p.CENTER, p.CENTER);
+                p.push(); p.translate(mx, my); p.scale(1, -1); p.text(this.emoji, 0, 0); p.pop();
             } else {
                 let c = style.strokeColor;
-                p.fill(c[0], c[1], c[2], markerAlpha);
-                p.noStroke();
-                p.circle(mx, my, this.size);
+                p.fill(c); p.noStroke(); p.circle(mx, my, this.size);
             }
         }
-        
         p.pop();
     }
 }
@@ -538,19 +459,17 @@ export class TRightAngle extends TObject {
         this.p2 = p2;
         this.size = size;
     }
-
     render() {
         const p = this.p;
         const style = this.getRenderStyle();
+        const Vector = this.p1.constructor;
         p.push();
-        p.stroke(style.strokeColor);
-        p.strokeWeight(1);
-        p.noFill();
-        const v1 = p5.Vector.sub(this.p1, this.vertex).normalize();
-        const v2 = p5.Vector.sub(this.p2, this.vertex).normalize();
-        const a = p5.Vector.add(this.vertex, p5.Vector.mult(v1, this.size));
-        const b = p5.Vector.add(a, p5.Vector.mult(v2, this.size));
-        const c = p5.Vector.add(this.vertex, p5.Vector.mult(v2, this.size));
+        p.stroke(style.strokeColor); p.strokeWeight(1); p.noFill();
+        const v1 = Vector.sub(this.p1, this.vertex).normalize();
+        const v2 = Vector.sub(this.p2, this.vertex).normalize();
+        const a = Vector.add(this.vertex, Vector.mult(v1, this.size));
+        const b = Vector.add(a, Vector.mult(v2, this.size));
+        const c = Vector.add(this.vertex, Vector.mult(v2, this.size));
         p.line(this.tx(a), this.ty(a), this.tx(b), this.ty(b));
         p.line(this.tx(b), this.ty(b), this.tx(c), this.ty(c));
         p.pop();
