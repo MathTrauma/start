@@ -31,7 +31,6 @@
 <body>
     <header class="top-nav">
         <a href="../" class="nav-logo">
-            <!-- <i data-lucide="zap" width="18" height="18"></i> -->
             <span>MathMore</span>
         </a>
         <div class="auth-buttons">
@@ -49,7 +48,6 @@
         </div>
         
         <div class="content-section" id="solution-scroll-container">
-            <!-- Solution Panel - Below Canvas -->
             <div id="solution-panel" class="solution-panel hidden">
                 <div class="solution-panel-content" id="solution-text"></div>
             </div>
@@ -58,10 +56,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/auth.js"></script>
     <script>
-        // Lucide 초기화
         lucide.createIcons();
 
-        // 인증 초기화
         const loginBtn = document.getElementById('login-btn');
         const logoutBtn = document.getElementById('logout-btn');
 
@@ -75,18 +71,14 @@
             }
         });
 
-        // URL 파라미터에서 문제 ID 추출
         const urlParams = new URLSearchParams(window.location.search);
         const problemId = urlParams.get('problem') || '001';
 
-        // Global variables for text update
         let globalPaddedId;
         let globalBaseUrl;
 
-        // 문제 로드
         loadProblem(problemId);
 
-        // Global state for contest mode
         let isContestMode = false;
         let canvasRevealed = false;
 
@@ -95,11 +87,9 @@
             const baseUrl = 'https://euclide-worker.painfultrauma.workers.dev';
             const configUrl = `${baseUrl}/problems/${paddedId}/config.json`;
 
-            // Set global variables for updateProblemText
             globalPaddedId = paddedId;
             globalBaseUrl = baseUrl;
 
-            // 캔버스를 초기에 숨김 (렌더링 안정화)
             const canvasWrapper = document.getElementById('canvas-wrapper');
             canvasWrapper.style.opacity = '0';
             canvasWrapper.style.visibility = 'hidden';
@@ -108,27 +98,22 @@
                 const response = await fetch(configUrl);
                 const config = await response.json();
 
-                // 문제 텍스트와 UI를 먼저 렌더링
                 await renderProblem(config, paddedId, baseUrl);
 
-                // 모든 렌더링 완료 후 스케치 로드 (ES Module)
                 const script = document.createElement('script');
                 script.type = 'module';
                 script.src = `${baseUrl}/problems/${paddedId}/sketch.js`;
 
                 script.onload = () => {
-                    // 컨트롤 생성
                     renderControls(config, paddedId, baseUrl);
 
-                    // p5가 첫 프레임을 그릴 때까지 대기 후 캔버스 표시
                     function waitForP5Ready() {
-                        if (window._p5Instance && window._p5Instance.frameCount > 0) {
+                        if (window.p5Instance && window.p5Instance.frameCount > 0) {
                             if (!isContestMode) {
                                 canvasWrapper.style.opacity = '1';
                                 canvasWrapper.style.visibility = 'visible';
                             } else {
-                                // Contest 모드: 캔버스가 열릴 때까지 애니메이션 정지
-                                window._p5Instance.noLoop();
+                                window.p5Instance.noLoop();
                             }
                         } else {
                             requestAnimationFrame(waitForP5Ready);
@@ -151,15 +136,12 @@
         }
 
         async function renderProblem(config, paddedId, baseUrl) {
-            // Pre-rendered HTML 로드
             try {
                 const response = await fetch(`${baseUrl}/problems/${paddedId}/problem.html`);
                 const html = await response.text();
 
-                // config에서 contest 여부 확인
                 isContestMode = config.contest === true;
 
-                // 문제 HTML 생성
                 const problemContainer = document.getElementById('problem-container');
                 problemContainer.className = 'problem-container';
                 problemContainer.innerHTML = `
@@ -171,45 +153,37 @@
                     ${isContestMode ? '<button id="toggle-canvas-btn" class="toggle-canvas-btn">▼ 그림 보기</button>' : ''}
                 `;
 
-                // Pre-rendered HTML 삽입 (MathJax 불필요)
                 const problemText = document.getElementById('problem-text');
                 problemText.innerHTML = html;
 
-                // Contest 문제면 캔버스 숨김 및 토글 설정
                 if (isContestMode) {
                     const canvasWrapper = document.getElementById('canvas-wrapper');
                     canvasWrapper.style.display = 'none';
 
-                    // 토글 버튼 이벤트
                     const toggleBtn = document.getElementById('toggle-canvas-btn');
                     toggleBtn.addEventListener('click', () => {
                         const isHidden = canvasWrapper.style.display === 'none';
 
                         if (isHidden) {
-                            // 캔버스 펼치기
                             canvasWrapper.style.display = 'block';
                             canvasWrapper.style.opacity = '1';
                             canvasWrapper.style.visibility = 'visible';
                             toggleBtn.textContent = '▲ 그림 숨기기';
 
-                            // 애니메이션 시작 (처음 펼칠 때만 리셋)
                             if (!canvasRevealed) {
                                 canvasRevealed = true;
                                 if (typeof resetAnimation === 'function') {
                                     resetAnimation();
                                 }
                             }
-                            // p5 루프 시작
-                            if (window._p5Instance) {
-                                window._p5Instance.loop();
+                            if (window.p5Instance) {
+                                window.p5Instance.loop();
                             }
                         } else {
-                            // 캔버스 숨기기
                             canvasWrapper.style.display = 'none';
                             toggleBtn.textContent = '▼ 그림 보기';
-                            // p5 루프 정지 (성능 최적화)
-                            if (window._p5Instance) {
-                                window._p5Instance.noLoop();
+                            if (window.p5Instance) {
+                                window.p5Instance.noLoop();
                             }
                         }
                     });
@@ -219,19 +193,13 @@
             }
         }
 
-        // Cache for loaded phase contents
         const loadedPhasesCache = {};
 
-        // Update problem text based on current mode and phase
         async function updateProblemText(mode, phase, paddedId, baseUrl) {
             if (mode === 'problem') {
-                // Hide solution panel in problem mode
                 hideSolutionPanel();
-
-                // Ensure problem text shows problem.html
                 const problemText = document.getElementById('problem-text');
                 if (!problemText) return;
-
                 try {
                     const response = await fetch(`${baseUrl}/problems/${paddedId}/problem.html`);
                     const html = await response.text();
@@ -242,19 +210,12 @@
             } else if (mode === 'solution') {
                 const solutionText = document.getElementById('solution-text');
                 if (!solutionText) return;
-
                 showSolutionPanel();
-                
-                // Clear existing content to rebuild sequentially
                 solutionText.innerHTML = '';
-                
                 const targetPhase = (phase === 'all' || !phase) ? (window.solutionPhaseCount || 1) : phase;
-                
                 for (let i = 1; i <= targetPhase; i++) {
                     await appendPhaseBlock(i, paddedId, baseUrl);
                 }
-
-                // Scroll to the bottom of the content section to show the newest phase
                 const scrollContainer = document.getElementById('solution-scroll-container');
                 if (scrollContainer) {
                     setTimeout(() => {
@@ -270,7 +231,6 @@
         async function appendPhaseBlock(phase, paddedId, baseUrl) {
             const solutionText = document.getElementById('solution-text');
             const cacheKey = `${paddedId}_${phase}`;
-            
             let html;
             if (loadedPhasesCache[cacheKey]) {
                 html = loadedPhasesCache[cacheKey];
@@ -285,7 +245,6 @@
                     return;
                 }
             }
-
             const block = document.createElement('div');
             block.className = 'phase-block';
             block.innerHTML = `
@@ -297,57 +256,34 @@
 
         function showSolutionPanel() {
             const panel = document.getElementById('solution-panel');
-            if (panel) {
-                panel.classList.remove('hidden');
-            }
+            if (panel) panel.classList.remove('hidden');
         }
 
         function hideSolutionPanel() {
             const panel = document.getElementById('solution-panel');
-            if (panel) {
-                panel.classList.add('hidden');
-            }
+            if (panel) panel.classList.add('hidden');
         }
 
         function renderControls(config, paddedId, baseUrl) {
             const hasSolution = config.solutionPhases && config.solutionPhases.length > 0;
-            // Store global solution phase count for sequential loading
             window.solutionPhaseCount = config.solutionPhases ? config.solutionPhases.length : 0;
-
-            // Create controls inside canvas-wrapper
             const canvasWrapper = document.getElementById('canvas-wrapper');
             let controlsContainer = document.getElementById('controls-container');
-            
-            // Remove existing if any (cleanup)
-            if (controlsContainer) {
-                controlsContainer.remove();
-            }
-            
+            if (controlsContainer) controlsContainer.remove();
             controlsContainer = document.createElement('div');
             controlsContainer.id = 'controls-container';
-            // Insert as first child to be behind canvas if z-index matches, 
-            // but usually controls have higher z-index. 
-            // Appending is safer for stacking context on top.
             canvasWrapper.appendChild(controlsContainer);
-
             controlsContainer.innerHTML = `
                 <div class="controls collapsed" id="draggable-controls">
-                    <!-- Header with drag handle and collapse -->
                     <div class="controls-header" id="controls-drag-handle">
-                        <!-- Collapsed View: Mode Shortcuts -->
                         <div class="collapsed-view" style="display: none;">
                             <button class="mode-shortcut-btn" id="btn-shortcut-problem">Problem</button>
                             <button class="mode-shortcut-btn" id="btn-shortcut-solution" ${!hasSolution ? 'disabled' : ''}>Solution</button>
                         </div>
-                        
-                        <!-- Expanded View: Title -->
                         <span class="controls-title expanded-view">Controls</span>
-                        
                         <button class="controls-collapse-btn" id="btn-collapse">+</button>
                     </div>
-
                     <div class="controls-body">
-                        <!-- Mode Toggle -->
                         <div class="control-section mode-section">
                             <div class="control-label">Mode</div>
                             <div class="button-group mode-toggle">
@@ -355,8 +291,6 @@
                                 <button id="btn-mode-solution" class="mode-btn" ${!hasSolution ? 'disabled' : ''}>Solution</button>
                             </div>
                         </div>
-
-                        <!-- Play Controls -->
                         <div class="control-section">
                             <div class="control-label">Play</div>
                             <div class="button-group">
@@ -364,33 +298,20 @@
                                 <button id="btn-play-pause">⏸</button>
                             </div>
                         </div>
-
-                        <!-- Phase Buttons -->
                         <div class="control-section">
                             <div class="control-label">Phase</div>
                             <div class="button-group" style="margin-bottom: 4px;">
                                 <button id="btn-all" class="active">All</button>
                             </div>
-                            <div class="phase-buttons" id="phase-buttons-container">
-                                <!-- Dynamically populated -->
-                            </div>
+                            <div class="phase-buttons" id="phase-buttons-container"></div>
                         </div>
                     </div>
                 </div>
             `;
-
-            // Setup drag functionality for desktop
             setupDraggable();
-
-            // Render initial phase buttons (problem mode)
             renderPhaseButtons('problem', config.problemPhases ? config.problemPhases.length : config.phases.length);
+            if (typeof setupControls === 'function') setupControls();
 
-            // Setup event listeners (must be called after controls are rendered)
-            if (typeof setupControls === 'function') {
-                setupControls();
-            }
-
-            // Expand when clicking mode buttons if collapsed
             const expandOnModeClick = () => {
                 const controls = document.getElementById('draggable-controls');
                 if (controls && controls.classList.contains('collapsed')) {
@@ -401,25 +322,16 @@
             const solBtn = document.getElementById('btn-mode-solution');
             if (solBtn) solBtn.addEventListener('click', expandOnModeClick);
 
-            // Shortcut Buttons Logic
             document.getElementById('btn-shortcut-problem').addEventListener('click', (e) => {
                 e.stopPropagation();
                 const controls = document.getElementById('draggable-controls');
                 const probBtn = document.getElementById('btn-mode-problem');
-                
                 if (controls.classList.contains('collapsed')) {
-                    // 접혀있을 때는 무조건 펼치고 모드 설정
                     if (!probBtn.classList.contains('active')) probBtn.click();
                     toggleControls(controls, document.getElementById('btn-collapse'));
                 } else {
-                    // 펼쳐져 있을 때
-                    if (probBtn.classList.contains('active')) {
-                        // 이미 해당 모드면 접기
-                        toggleControls(controls, document.getElementById('btn-collapse'));
-                    } else {
-                        // 다른 모드면 모드만 변경
-                        probBtn.click();
-                    }
+                    if (probBtn.classList.contains('active')) toggleControls(controls, document.getElementById('btn-collapse'));
+                    else probBtn.click();
                 }
             });
 
@@ -428,28 +340,15 @@
                 shortSolBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     if (shortSolBtn.disabled) return;
-                    
                     const controls = document.getElementById('draggable-controls');
                     const solBtn = document.getElementById('btn-mode-solution');
-                    
                     if (controls.classList.contains('collapsed')) {
                         if (!solBtn.classList.contains('active')) solBtn.click();
                         toggleControls(controls, document.getElementById('btn-collapse'));
                     } else {
-                        if (solBtn.classList.contains('active')) {
-                            toggleControls(controls, document.getElementById('btn-collapse'));
-                        } else {
-                            solBtn.click();
-                        }
+                        if (solBtn.classList.contains('active')) toggleControls(controls, document.getElementById('btn-collapse'));
+                        else solBtn.click();
                     }
-                });
-            }
-
-            // Setup solution panel close button
-            const closeBtn = document.getElementById('solution-panel-close');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', () => {
-                    hideSolutionPanel();
                 });
             }
         }
@@ -457,19 +356,12 @@
         function toggleControls(controls, collapseBtn) {
             const isCollapsed = controls.classList.toggle('collapsed');
             collapseBtn.textContent = isCollapsed ? '+' : '−';
-            
-            // If expanding, ensure it's still within boundaries
             if (!isCollapsed) {
                 const canvasWrapper = document.getElementById('canvas-wrapper');
-                
                 const currentLeft = controls.offsetLeft;
                 const currentTop = controls.offsetTop;
-                const controlWidth = controls.offsetWidth;
-                const controlHeight = controls.offsetHeight;
-                
-                const maxLeft = canvasWrapper.clientWidth - controlWidth - 10; // 10px padding
-                const maxTop = canvasWrapper.clientHeight - controlHeight - 10;
-                
+                const maxLeft = canvasWrapper.clientWidth - controls.offsetWidth - 10;
+                const maxTop = canvasWrapper.clientHeight - controls.offsetHeight - 10;
                 if (currentLeft > maxLeft) controls.style.left = Math.max(0, maxLeft) + 'px';
                 if (currentTop > maxTop) controls.style.top = Math.max(0, maxTop) + 'px';
             }
@@ -478,7 +370,6 @@
         function renderPhaseButtons(mode, count) {
             const container = document.getElementById('phase-buttons-container');
             container.innerHTML = '';
-
             for (let i = 1; i <= count; i++) {
                 const btn = document.createElement('button');
                 btn.id = `btn-phase-${i}`;
@@ -488,79 +379,56 @@
             }
         }
 
-        // Draggable controls
         function setupDraggable() {
             const controls = document.getElementById('draggable-controls');
             const handle = document.getElementById('controls-drag-handle');
             const collapseBtn = document.getElementById('btn-collapse');
-
             if (!controls || !handle) return;
-
             let isDragging = false;
             let startX, startY, initialLeft, initialTop;
-
-            // Drag handling (Desktop & Mobile)
             handle.addEventListener('mousedown', startDrag);
             handle.addEventListener('touchstart', startDrag, { passive: false });
-
             function startDrag(e) {
                 if (e.target.tagName === 'BUTTON') return;
                 isDragging = true;
-                
                 const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
                 const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
-                
                 startX = clientX;
                 startY = clientY;
                 initialLeft = controls.offsetLeft;
                 initialTop = controls.offsetTop;
-                
                 controls.style.transition = 'none';
                 if (e.type === 'touchstart') e.preventDefault();
             }
-
             const onMove = (e) => {
                 if (!isDragging) return;
-                
                 const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
                 const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
-                
                 const canvasWrapper = document.getElementById('canvas-wrapper');
                 const dx = clientX - startX;
                 const dy = clientY - startY;
-                
                 let newLeft = initialLeft + dx;
                 let newTop = initialTop + dy;
-                
-                const controlWidth = controls.offsetWidth;
-                const controlHeight = controls.offsetHeight;
                 const padding = 5;
-                const maxLeft = canvasWrapper.clientWidth - controlWidth - padding;
-                const maxTop = canvasWrapper.clientHeight - controlHeight - padding;
-                
+                const maxLeft = canvasWrapper.clientWidth - controls.offsetWidth - padding;
+                const maxTop = canvasWrapper.clientHeight - controls.offsetHeight - padding;
                 newLeft = Math.max(padding, Math.min(newLeft, maxLeft));
                 newTop = Math.max(padding, Math.min(newTop, maxTop));
-                
                 controls.style.left = newLeft + 'px';
                 controls.style.top = newTop + 'px';
                 controls.style.right = 'auto';
-
                 if (e.type === 'touchmove') e.preventDefault();
             };
-
             const endDrag = () => {
                 if (isDragging) {
                     isDragging = false;
                     controls.style.transition = '';
                 }
             };
-
             document.addEventListener('mousemove', onMove);
             document.addEventListener('touchmove', onMove, { passive: false });
             document.addEventListener('mouseup', endDrag);
             document.addEventListener('touchend', endDrag);
-
-            // Collapse/expand functionality
             collapseBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 toggleControls(controls, collapseBtn);
