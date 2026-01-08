@@ -214,10 +214,11 @@
 
             let html = `<button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>`;
             
+            const range = 1;
             for (let i = 1; i <= totalPages; i++) {
-                if (totalPages <= 7 || i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                if (i === 1 || i === totalPages || (i >= currentPage - range && i <= currentPage + range)) {
                     html += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
-                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                } else if (i === currentPage - range - 1 || i === currentPage + range + 1) {
                     html += `<span class="page-info">…</span>`;
                 }
             }
