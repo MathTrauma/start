@@ -97,7 +97,7 @@
 
         // 문제 목록 로드
         const workerUrl = 'https://euclide-worker.painfultrauma.workers.dev';
-        fetch(`${workerUrl}/problems/index.json`)
+        fetch(`${workerUrl}/problems/index.json?_t=${Date.now()}`)
             .then(res => res.json())
             .then(data => {
                 allProblems = data.problems;
@@ -159,13 +159,18 @@
                 return;
             }
 
-            grid.innerHTML = problems.map(problem => `
-                <a href="${problem.url}" class="problem-card">
-                    <div class="problem-description">
-                        <span class="problem-tag level">Level ${problem.level}</span>${problem.problemHtml || ''}
-                    </div>
-                </a>
-            `).join('');
+            grid.innerHTML = problems.map(problem => {
+                // 모든 개행 문자 제거하여 SVG 속성 정상화
+                const cleanProblemHtml = (problem.problemHtml || '').replace(/\n/g, '').replace(/\r/g, '');
+
+                return `
+                    <a href="${problem.url}" class="problem-card">
+                        <div class="problem-description">
+                            <span class="problem-tag level">Level ${problem.level}</span>${cleanProblemHtml}
+                        </div>
+                    </a>
+                `;
+            }).join('');
         }
 
         function setupFilters() {
