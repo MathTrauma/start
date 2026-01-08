@@ -69,6 +69,26 @@ export class Animator {
             this.renderList.push(obj);
         });
 
+        // 3. Process 'when: start' removals from first step
+        const steps = this.sequences.get(name);
+        if (steps && steps.length > 0) {
+            const processRemovals = (item, when) => {
+                if (item.op === 'remove' && item.when === when && item.target) {
+                    const idx = this.renderList.indexOf(item.target);
+                    if (idx > -1) {
+                        this.renderList.splice(idx, 1);
+                    }
+                }
+            };
+
+            const firstStep = steps[0];
+            if (firstStep.group) {
+                firstStep.group.forEach(item => processRemovals(item, 'start'));
+            } else {
+                processRemovals(firstStep, 'start');
+            }
+        }
+
         // 'retain' option is effectively replaced by 'precursors' in this logic.
         // If user wants to retain *everything* blindly, they must pass all previous phases in precursors.
     }
@@ -129,9 +149,11 @@ export class Animator {
         }
 
         if (stepComplete) {
-            // Handle 'op' (e.g., remove)
+            // Handle 'op' (e.g., remove) - only when: 'end' (backward compatible)
             const handleOp = (item) => {
-                if (item.op === 'remove' && item.target) {
+                if (item.op === 'remove' &&
+                    (item.when === undefined || item.when === 'end') &&
+                    item.target) {
                     const idx = this.renderList.indexOf(item.target);
                     if (idx > -1) {
                         this.renderList.splice(idx, 1);
