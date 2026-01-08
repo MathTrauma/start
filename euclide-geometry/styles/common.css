@@ -552,34 +552,7 @@ button.active:hover {
         padding: 2px 0;
     }
 
-    /* Restore canvas position */
-    .canvas-container {
-        position: relative;
-        margin-bottom: 10px;
-    }
 
-    .control-section {
-        padding-bottom: 8px;
-    }
-
-    .button-group {
-        gap: 8px;
-    }
-
-    button {
-        padding: 8px 12px;
-        font-size: 13px;
-    }
-
-    .phase-buttons {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-    }
-
-    .phase-buttons button {
-        font-size: 12px;
-        padding: 8px 10px;
-    }
 
     /* Canvas sticky on mobile */
     .canvas-container {
