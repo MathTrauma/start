@@ -62,7 +62,7 @@ body {
 .problem-list-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 15px 20px;
 }
 
 h1 {
@@ -234,6 +234,51 @@ h1 {
     font-weight: bold;
     color: #8b7d6b;
     display: block;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+    padding: 20px 0;
+}
+
+.pagination button {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #d4cec3;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #5a5247;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #f5f3ed;
+    border-color: #8b7d6b;
+}
+
+.pagination button.active {
+    background-color: #8b7d6b;
+    color: #fff;
+    border-color: #8b7d6b;
+}
+
+.pagination button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pagination .page-info {
+    color: #8b7d6b;
+    font-size: 14px;
+    margin: 0 10px;
 }
 
 @media (max-width: 768px) {
