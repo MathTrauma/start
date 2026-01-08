@@ -193,6 +193,9 @@ prob[1] = (p) => {
 7. Deploy to R2: `./scripts/deploy-changes.sh XXX`
 
 ### Critical Deployment Notes
+- **Deployment Targets**:
+    - **GitHub (Git Push)**: Static site files (`index.html`, `viewer.html`, `styles/*.css`). **NEVER** deploy these to R2.
+    - **Cloudflare R2 (deploy-changes.sh)**: Data and logic files (`problems/*`, `lib/*.js`, `index.json`).
 - **Always convert LaTeX before deployment**: `npm run convert`
 - **Always sync metadata after changes**: `./scripts/sync-metadata.sh`
 - **Validate before deployment**: `./scripts/validate-metadata.sh`

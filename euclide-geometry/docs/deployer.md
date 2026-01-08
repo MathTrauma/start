@@ -28,15 +28,21 @@ npx wrangler r2 object put "euclide-geometry/[경로]" --file="[로컬파일]" -
 
 ## 배포 대상/제외
 
-### 배포 대상
-- `viewer.html`
+### 배포 대상 (R2 - 데이터 및 로직)
 - `problems/XXX/config.json`
 - `problems/XXX/sketch.js`
 - `problems/XXX/problem.html`
 - `problems/XXX/solution-phase-*.html`
-- `lib/*.js`, `lib/styles/*.css`
+- `lib/*.js`
+- `metadata/*`
 
-### 배포 제외
+### 배포 제외 (R2 금지 - GitHub 배포 대상)
+- `index.html` (메인 페이지)
+- `viewer.html` (뷰어 페이지)
+- `styles/*.css` (CSS 스타일)
+- `lib/styles/*.css` (라이브러리 스타일)
+
+### 기타 제외
 - `.tex` 파일 (소스용)
 - `.md` 파일 (README.md 제외)
 - `node_modules/`, `package.json`
