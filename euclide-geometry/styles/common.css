@@ -25,6 +25,17 @@
     gap: 8px;
 }
 
+#bg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: all; /* OrbitControls 사용 시 all, 아니면 none */
+}
+
 .auth-buttons button {
     padding: 6px 16px;
     border-radius: 20px;
