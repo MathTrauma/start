@@ -73,7 +73,7 @@ body {
 #problem-scroll-container {
     flex: 0 1 auto;
     width: 100%;
-    max-height: calc(66.7vh - 100vw); /* 모바일 기준: 캔버스가 100vw를 차지하므로 남은 2/3 영역 계산 */
+    max-height: 25vh; /* 문제 영역이 25%를 넘어설 때만 스크롤 생성 */
     min-height: 80px;
     overflow-y: auto;
     background-color: #f5f3ed;
