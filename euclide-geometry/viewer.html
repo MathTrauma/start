@@ -27,39 +27,9 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Viewer controls (GitHub Pages) -->
-    <script type="module" src="https://mathtrauma.github.io/euclide-geometry/js/viewer-controls.js"></script>
-    <script src="https://mathtrauma.github.io/euclide-geometry/js/ui-controls.js"></script>
-</head>
-<body>
-    <div id="bg-container"></div>
-    <script type="module" src="js/background-effect.js"></script>
-    <header class="top-nav">
-        <a href="../" class="nav-logo">
-            <span>MathMore</span>
-        </a>
-        <div class="auth-buttons">
-            <button id="login-btn" onclick="signInWithGoogle()" style="display: none;">로그인</button>
-            <button id="logout-btn" onclick="signOut()" style="display: none;">로그아웃</button>
-        </div>
-    </header>
-    <main class="viewer-main">
-        <div class="content-section" id="problem-scroll-container">
-            <div id="problem-container"></div>
-        </div>
-
-        <div class="canvas-section">
-            <div class="canvas-container" id="canvas-wrapper"></div>
-        </div>
-        
-        <div class="content-section" id="solution-scroll-container">
-            <div id="solution-panel" class="solution-panel hidden">
-                <div class="solution-panel-content" id="solution-text"></div>
-            </div>
-        </div>
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../js/auth.js"></script>
-    <script type="module" src="js/viewer.js"></script>
+    <!-- Viewer controls (R2 - ES Module) -->
+    <script type="module" src="https://euclide-worker.painfultrauma.workers.dev/lib/viewer-controls.js"></script>
+    <script type="module" src="https://euclide-worker.painfultrauma.workers.dev/lib/ui-controls.js"></script>
+    <script type="module" src="https://euclide-worker.painfultrauma.workers.dev/lib/viewer.js"></script>
 </body>
 </html>

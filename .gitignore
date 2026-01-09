@@ -34,9 +34,13 @@ _*/
 
 # Euclide Geometry - R2 only (Cloudflare R2에 배포)
 euclide-geometry/problems/
-euclide-geometry/lib/
 euclide-geometry/docs/
 euclide-geometry/.claude/
+
+# R2에 올릴 viewer/module 파일들
+!euclide-geometry/lib/viewer-controls.js
+!euclide-geometry/lib/ui-controls.js
+!euclide-geometry/lib/viewer.js
 
 # md's
 LOGIN.md
