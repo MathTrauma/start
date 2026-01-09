@@ -12,11 +12,12 @@
 #   - js/ (lib 제외)         : viewer 로직 (index.js, viewer.js, ui-controls.js 등)
 #   - *.html                : HTML 페이지 (index.html, viewer.html)
 # ============================================================================
-# Usage:
-#   ./scripts/deploy.sh <problem_id>  # 특정 문제 배포
-#   ./scripts/deploy.sh all            # 전체 문제 배포
-#   ./scripts/deploy.sh lib            # 라이브러리만 배포
-#   ./scripts/deploy.sh index          # index.json만 배포
+#
+# ⚠️ 주의: 아래 파일들은 R2에 배포하지 마세요!
+#   - *.html (index.html, viewer.html)
+#   - css/, styles/
+#   - js/ (lib/*.js 제외)
+# ============================================================================
 
 cd "$(dirname "$0")/.." || exit 1
 
