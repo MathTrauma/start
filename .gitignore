@@ -32,11 +32,11 @@ wrangler.toml.bak
 # Temporary/Development folders (underscore prefix)
 _*/
 
-# Euclide Geometry - Problems folder (managed in R2 only)
-./euclide-geometry/problems/
-./euclide-geometry/lib/
-./euclide-geometry/docs/
-./euclide-geometry/euclide-worker/
+# Euclide Geometry - R2 only (Cloudflare R2에 배포)
+euclide-geometry/problems/
+euclide-geometry/lib/
+euclide-geometry/docs/
+euclide-geometry/.claude/
 
 # md's
 LOGIN.md
