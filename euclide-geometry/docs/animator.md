@@ -13,8 +13,10 @@
 **출력:**
 - `problems/XXX/config.json` - 타이밍과 메타데이터 : 각각의 그리기 단계는 앞선 단계가 완료되었는지 여부로 판단.
 - `problems/XXX/sketch.js` - 애니메이션 구현. 
-    계산(외심, 수심 등 찾기)은 lib/geometry.js 의 함수 이용.
-    p5 출력은 animation.js 의 클래스 이용 : 적당한 클래스가 없으면 반드시 질문할 것. 
+   - 계산(외심, 수심 등 찾기)은 lib/geometry.js 의 함수 이용.
+   - p5 출력은 animator.js 의 클래스 이용 : 적당한 클래스가 없으면 반드시 질문할 것. 
+   - 대표 예제 : problems/301/sketch.js 
+
 - `problems/XXX/solution-phase-N.tex` - 각 풀이 단계(Solution Phases)별 설명 파일 (N = 1, 2, 3, ...). 
     풀이 단계만큼만 생성. 
     풀이 단계가 없으면 생성하지 않음
