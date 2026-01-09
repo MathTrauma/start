@@ -7,7 +7,7 @@ Guidelines for agentic coding agents working on this Euclidean Geometry animatio
 Educational web application for visualizing geometry problems with step-by-step p5.js animations.
 - **Main Application** (`euclide-geometry/`): Frontend geometry viewer with p5.js animations
 - **Cloudflare Worker** (`euclide-worker/`): Backend API serving content from R2 storage
-- **Root Services** (`/`): Express.js app with Supabase authentication
+- **Root Services** (`/`): app with Supabase authentication
 
 ## Build & Development Commands
 
@@ -54,7 +54,6 @@ cd euclide-worker && npx wrangler deploy
 
 #### General Rules
 - **No TypeScript**: Pure JavaScript only
-- **No semicolons**: Project uses semicolon-free style
 - **Indentation**: 4 spaces (not tabs)
 - **Quotes**: Single quotes for strings
 - **Comments**: Korean and English mixed; maintain existing language style
@@ -63,7 +62,6 @@ cd euclide-worker && npx wrangler deploy
 - **Problem IDs**: 3-digit padded numbers (`001`, `002`, etc.)
 - **Functions**: 
   - camelCase for regular functions (`projectPointToLine`, `getIncenter`)
-  - `m_` prefix for drawing functions (`m_drawPoint`, `m_drawLine`)
 - **Constants**: UPPER_SNAKE_CASE (`COLORS`, `PHASES`)
 - **Variables**: camelCase for locals, UPPER_SNAKE_CASE for globals
 - **Files**: kebab-case (`draw-utils.js`, `problem-template.tex`)
@@ -109,15 +107,6 @@ const COLORS = {
     ALPHA_MEDIUM: 80
 };
 
-// Drawing function pattern (from draw-utils.js)
-function m_drawPoint(v, label, color = [0, 0, 0]) {
-    p.push();
-    p.fill(color);
-    p.noStroke();
-    p.circle(tx(v), ty(v), 8);
-    // ... label rendering
-    p.pop();
-}
 ```
 
 #### Error Handling
@@ -171,11 +160,7 @@ prob[1] = (p) => {
   - `circleLineIntersection(center, radius, p1, p2)` - Circle-line intersections
 
 - **`lib/draw-utils.js`**: Drawing utilities
-  - `m_drawPoint(v, label, color)` - Draw labeled point
-  - `m_drawLine(v1, v2, color)` - Draw line segment
-  - `m_drawCircle(center, radius, color)` - Draw circle
   - `COLORS` constant - Standard color palette
-  - `tx(v)`, `ty(v)` - Transform coordinates to canvas space
   - `calculateScaleFromPoints(points, w, h, padding)` - Auto-scale canvas
 
 - **`lib/animator.js`**: Animation framework
