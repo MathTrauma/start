@@ -2,7 +2,7 @@
 // p5 is assumed to be available globally or passed via p instance
 
 // projection of P onto line AB
-function projectPointToLine(P, A, B) {
+export function projectPointToLine(P, A, B) {
     const Vector = P.constructor;
     let AB = Vector.sub(B, A);
     let AP = Vector.sub(P, A);
@@ -12,7 +12,7 @@ function projectPointToLine(P, A, B) {
 }
 
 // intersection of line AB and CD
-function intersectLines(A, B, C, D) {
+export function intersectLines(A, B, C, D) {
     const Vector = A.constructor;
     
     const dxAB = B.x - A.x;
@@ -39,7 +39,7 @@ function intersectLines(A, B, C, D) {
 }
 
 // incenter of triangle ABC
-function getIncenter(A, B, C) {
+export function getIncenter(A, B, C) {
     const Vector = A.constructor;
     let a = Vector.dist(B, C);  // BC
     let b = Vector.dist(C, A);  // CA
@@ -53,7 +53,7 @@ function getIncenter(A, B, C) {
 }
 
 // circumcenter of triangle ABC
-function getCircumcenter(A, B, C) {
+export function getCircumcenter(A, B, C) {
     const Vector = A.constructor;
     // 수직이등분선 방법 사용
     let midAB = new Vector((A.x + B.x) / 2, (A.y + B.y) / 2);
@@ -72,7 +72,7 @@ function getCircumcenter(A, B, C) {
 }
 
 // orthocenter of triangle ABC (수심)
-function getOrthocenter(A, B, C) {
+export function getOrthocenter(A, B, C) {
     const Vector = A.constructor;
     // A에서 BC에 수직인 선과 B에서 AC에 수직인 선의 교점
     let dirBC = Vector.sub(C, B);
@@ -88,7 +88,7 @@ function getOrthocenter(A, B, C) {
 }
 
 // reflect point P over line AB
-function reflectPoint(P, A, B) {
+export function reflectPoint(P, A, B) {
     const Vector = P.constructor;
     let projection = projectPointToLine(P, A, B);
     let reflection = Vector.sub(projection, P).mult(2);
@@ -97,7 +97,7 @@ function reflectPoint(P, A, B) {
 
 // circle-line intersection
 // returns array of intersection points (0, 1, or 2 points)
-function circleLineIntersection(center, radius, p1, p2) {
+export function circleLineIntersection(center, radius, p1, p2) {
     const Vector = center.constructor;
     let d = Vector.sub(p2, p1);
     let f = Vector.sub(p1, center);
