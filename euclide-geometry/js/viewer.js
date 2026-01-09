@@ -1,3 +1,5 @@
+import { renderPhaseButtons } from './viewer-controls.js';
+
 lucide.createIcons();
 
 const loginBtn = document.getElementById('login-btn');

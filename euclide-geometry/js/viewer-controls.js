@@ -1,6 +1,6 @@
 /**
  * Shared viewer controls functions
- * Used by both ui-controls.js and viewer.js
+ * Used by both ui-controls.js and viewer.js (ES Module)
  */
 
 /**
@@ -8,7 +8,7 @@
  * @param {string} mode - 'problem' or 'solution'
  * @param {number} count - Number of phases
  */
-function renderPhaseButtons(mode, count) {
+export function renderPhaseButtons(mode, count) {
     const container = document.getElementById('phase-buttons-container');
     if (!container) return;
     container.innerHTML = '';
@@ -24,7 +24,7 @@ function renderPhaseButtons(mode, count) {
 /**
  * Get the current number of phases based on the mode
  */
-function getCurrentPhaseCount() {
+export function getCurrentPhaseCount() {
     const mode = getCurrentMode();
     return mode === 'problem' ? (window.problemPhaseCount || 0) : (window.solutionPhaseCount || 0);
 }
@@ -33,7 +33,7 @@ function getCurrentPhaseCount() {
  * Attach event listeners to phase buttons
  * Clones buttons first to remove any existing listeners
  */
-function attachPhaseButtonListeners() {
+export function attachPhaseButtonListeners() {
     const allBtn = document.getElementById('btn-all');
     if (allBtn) {
         allBtn.replaceWith(allBtn.cloneNode(true));
@@ -68,7 +68,7 @@ function attachPhaseButtonListeners() {
  * Set active state for phase buttons
  * @param {string} activeId - ID of button to activate
  */
-function setActiveButton(activeId) {
+export function setActiveButton(activeId) {
     const allBtn = document.getElementById('btn-all');
     if (allBtn) allBtn.classList.remove('active');
 
@@ -85,7 +85,7 @@ function setActiveButton(activeId) {
  * Set active state for mode buttons (Problem/Solution)
  * @param {string} activeId - ID of mode button to activate
  */
-function setActiveModeButton(activeId) {
+export function setActiveModeButton(activeId) {
     const probBtn = document.getElementById('btn-mode-problem');
     const solBtn = document.getElementById('btn-mode-solution');
     if (probBtn) probBtn.classList.remove('active');
