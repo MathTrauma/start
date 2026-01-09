@@ -132,19 +132,30 @@ function renderPagination(totalPages) {
         return;
     }
 
-    let html = `<button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>`;
+    let html = `<button data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>‹</button>`;
 
     const range = 1;
     for (let i = 1; i <= totalPages; i++) {
         if (i === 1 || i === totalPages || (i >= currentPage - range && i <= currentPage + range)) {
-            html += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+            html += `<button data-page="${i}" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
         } else if (i === currentPage - range - 1 || i === currentPage + range + 1) {
             html += `<span class="page-info">…</span>`;
         }
     }
 
-    html += `<button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>›</button>`;
+    html += `<button data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''}>›</button>`;
     pagination.innerHTML = html;
+}
+
+function setupPaginationListeners() {
+    const pagination = document.getElementById('pagination');
+    pagination.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-page]');
+        if (btn && !btn.disabled) {
+            const page = parseInt(btn.dataset.page, 10);
+            goToPage(page);
+        }
+    });
 }
 
 function goToPage(page) {
@@ -180,3 +191,6 @@ function setupFilters() {
     levelFilter.addEventListener('change', applyFilters);
     categoryFilter.addEventListener('change', applyFilters);
 }
+
+// 페이지네이션 이벤트 리스너 초기화
+setupPaginationListeners();
