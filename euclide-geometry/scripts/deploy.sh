@@ -1,6 +1,17 @@
 #!/bin/bash
 
 # Cloudflare R2 배포 스크립트
+# ============================================================================
+# R2 배포 (유료 서비스 - 비공개 콘텐츠):
+#   - lib/*.js              : 그리기 함수, 애니메이션 관련
+#   - problems/*/           : 문제별 데이터 (config, sketch, solution, thumbnail)
+#   - problems/index.json   : 문제 목록 인덱스
+#
+# GitHub Pages 배포 (공개):
+#   - css/, styles/         : 스타일시트
+#   - js/ (lib 제외)         : viewer 로직 (index.js, viewer.js, ui-controls.js 등)
+#   - *.html                : HTML 페이지 (index.html, viewer.html)
+# ============================================================================
 # Usage:
 #   ./scripts/deploy.sh <problem_id>  # 특정 문제 배포
 #   ./scripts/deploy.sh all            # 전체 문제 배포
@@ -95,7 +106,7 @@ upload_if_changed() {
 deploy_lib() {
     echo "=== 라이브러리 배포 ==="
     echo ""
-    # 그리기 관련 함수만 R2에 배포 (viewer 로직은 GitHub Pages)
+    # R2: 그리기 관련 함수만 배포 (GitHub Pages 아님)
     
     upload_if_changed \
         "lib/geometry.js" \
@@ -121,12 +132,7 @@ deploy_lib() {
         "application/javascript" \
         "public, max-age=300"
     
-    # styles/common.css도 R2에 유지 (viewer.html에서 참조)
-    upload_if_changed \
-        "styles/common.css" \
-        "styles/common.css" \
-        "text/css" \
-        "public, max-age=300"
+    # 참고: styles/common.css, js/*.js, *.html은 GitHub Pages로 배포
     
     echo "✓ 라이브러리 배포 완료"
     echo ""
