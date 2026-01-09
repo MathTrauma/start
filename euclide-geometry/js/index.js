@@ -37,7 +37,7 @@ window.addEventListener('resize', () => {
 });
 
 // 문제 목록 로드
-const workerUrl = '.';
+const workerUrl = 'https://euclide-worker.painfultrauma.workers.dev';
 fetch(`${workerUrl}/problems/index.json?_t=${Date.now()}`)
     .then(res => res.json())
     .then(data => {
