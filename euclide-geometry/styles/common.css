@@ -107,7 +107,7 @@ body {
     border-radius: 0 0 10px 10px; /* 상단은 평평하게 */
     margin-bottom: 0;
     width: 100%;
-    max-width: 800px;
+    max-width: 600px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(139, 125, 107, 0.1);
     border-top: none;
@@ -638,7 +638,7 @@ button.active:hover {
 /* Solution Panel - Below Canvas */
 .solution-panel {
     width: 100%;
-    max-width: 800px; /* 캔버스 폭에 맞춤 */
+    max-width: 600px; /* 캔버스 폭에 맞춤 */
     min-height: 200px;
     background-color: #faf8f3;
     border-radius: 10px;
