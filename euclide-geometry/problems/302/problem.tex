@@ -1,0 +1,87 @@
+% CATEGORY: 
+% level 3 : contest
+% #각이등분선 
+
+삼각형 $ABC$에서 $\overline{AC}=440$이다. 
+점 $D$는 변 $AB$ 위의 점으로 $\overline{AD}=1$이다.
+삼각형 $ABC$의 내심을 $I$라 할 때, 
+직선 $CI$가 삼각형 $ADI$의 외접원에 접한다. 
+삼각형 $ADI$의 외접원이 변 $AC$와 점 $E(\not=A)$에서 만나고, 
+중심 $I$이고 점 $E$를 지나는 원이 변 $AC$와 $F(\not=E)$에서 만난다.
+$\overline{IE}=20$일 때, $\overline{EF}$의 값을 구하여라.\\
+
+
+%\fbox{33회 KMO 중등부 1차 19번 }\\
+% \begin{center}
+%     \begin{tikzpicture}
+%         %\tkzInit[xmin=-2,xmax=24, ymin=-2,ymax=24]
+%         %\tkzClip
+
+%         \tkzDefPoints{0/0/B, 8/0/C, 2/5/A}
+%         \tkzDrawPoints(A,B,C)   \tkzDrawPolygon(A,B,C)
+
+%         \tkzDefCircle[in](A,B,C) \tkzGetPoints{I}{a}
+
+%         \tkzDrawLine(C,I)   
+%         %\tkzDefPointBy[rotation=center I angle 90](C) \tkzGetPoint{a}
+%         \tkzDefPointWith[orthogonal normed, K=2](I,C) \tkzGetPoint{a}
+
+%         \tkzDefLine[mediator](A,I)   \tkzGetPoints{b}{c}
+
+%         \tkzInterLL(I,a)(b,c)    \tkzGetPoint{O}
+%         \tkzDrawCircle(O,I)
+%         \tkzInterLC(A,B)(O,I)   \tkzGetPoints{x}{D}
+        
+%         \tkzInterLC(A,C)(O,I)   \tkzGetPoints{E}{y}
+%         \tkzDrawCircle[red, thick](I,E)     
+%         \tkzInterLC(A,C)(I,E)   \tkzGetPoints{z}{F}
+
+%         \tkzLabelPoint[left](A){$A$}
+%         \tkzLabelPoint[below left](B){$B$}
+%         \tkzLabelPoint[below](C){$C$}
+%         \tkzDrawPoint(I)     \tkzLabelPoint[below](I){$I$}
+%         \tkzDrawPoint(D)      \tkzLabelPoint[left](D){$D$}
+%         \tkzDrawPoint(E)     \tkzLabelPoint[right](E){$E$}
+%         \tkzDrawPoint(F)     \tkzLabelPoint[above](F){$F$}
+%     \end{tikzpicture}
+% \end{center}
+% $I$를 중심으로 하고 $E$를 지나는 원이 $D$ 역시 지나는 이유를 설명하라.\\
+% \vfill
+
+% \begin{center}
+%     \begin{tikzpicture}
+%         %\tkzInit[xmin=-2,xmax=24, ymin=-2,ymax=24]
+%         %\tkzClip
+
+%         \tkzDefPoints{0/0/B, 8/0/C, 2/5/A}
+%         \tkzDrawPoints(A,B,C)   \tkzDrawPolygon(A,B,C)
+
+%         \tkzDefCircle[in](A,B,C) \tkzGetPoints{I}{a}
+
+%         \tkzDrawLine(C,I)   
+%         %\tkzDefPointBy[rotation=center I angle 90](C) \tkzGetPoint{a}
+%         \tkzDefPointWith[orthogonal normed, K=2](I,C) \tkzGetPoint{a}
+
+%         \tkzDefLine[mediator](A,I)   \tkzGetPoints{b}{c}
+
+%         \tkzInterLL(I,a)(b,c)    \tkzGetPoint{O}
+%         \tkzDrawCircle(O,I)
+%         \tkzInterLC(A,B)(O,I)   \tkzGetPoints{x}{D}
+        
+%         \tkzInterLC(A,C)(O,I)   \tkzGetPoints{E}{y}
+%         \tkzDrawCircle[red, thick](I,E)     
+%         \tkzInterLC(A,C)(I,E)   \tkzGetPoints{z}{F}
+
+%         \tkzLabelPoint[left](A){$A$}
+%         \tkzLabelPoint[below left](B){$B$}
+%         \tkzLabelPoint[below](C){$C$}
+%         \tkzDrawPoint(I)     \tkzLabelPoint[below](I){$I$}
+%         \tkzDrawPoint(D)      \tkzLabelPoint[left](D){$D$}
+%         \tkzDrawPoint(E)     \tkzLabelPoint[right](E){$E$}
+%         \tkzDrawPoint(F)     \tkzLabelPoint[above](F){$F$}
+
+%         \tkzDrawSegments(I,F I,E)
+%         \tkzMarkAngles[mark=|, size=0.3cm](I,E,C A,F,I)
+%     \end{tikzpicture}
+% \end{center}
+% \vfill

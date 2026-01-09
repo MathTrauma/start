@@ -1,0 +1,96 @@
+{
+  "id": "302",
+  "title": "내심과 외접원",
+  "level": 3,
+  "tags": [
+    "내심",
+    "외접원",
+    "원의 접선"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "title": "삼각형 ABC와 내심 I",
+      "startTime": 0,
+      "duration": 2.5,
+      "endTime": 2.5,
+      "description": "삼각형 ABC, 내심 I, 직선 CI",
+      "elements": [
+        "점 A, B, C",
+        "삼각형 ABC",
+        "내심 I",
+        "직선 CI"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "삼각형 ADI의 외접원",
+      "startTime": 2.5,
+      "duration": 2.5,
+      "endTime": 5.0,
+      "description": "점 D, 삼각형 ADI의 외접원",
+      "elements": [
+        "점 D",
+        "외접원",
+        "접선 표시"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "점 E와 원 I",
+      "startTime": 5.0,
+      "duration": 2.0,
+      "endTime": 7.0,
+      "description": "점 E, F와 중심 I인 원",
+      "elements": [
+        "점 E",
+        "원 I",
+        "점 F"
+      ]
+    }
+  ],
+  "solutionPhases": [],
+  "geometry": {
+    "basePoints": {
+      "B": {
+        "x": 0,
+        "y": 0
+      },
+      "C": {
+        "x": 8,
+        "y": 0
+      },
+      "A": {
+        "x": 2,
+        "y": 5
+      }
+    },
+    "computedPoints": {
+      "I": {
+        "type": "incenter",
+        "triangle": [
+          "A",
+          "B",
+          "C"
+        ],
+        "description": "삼각형 ABC의 내심"
+      },
+      "O": {
+        "type": "circumcenter",
+        "description": "삼각형 ADI의 외접원의 중심"
+      },
+      "D": {
+        "type": "intersection",
+        "description": "직선 AB와 원 O의 교점"
+      },
+      "E": {
+        "type": "intersection",
+        "description": "직선 AC와 원 O의 교점 (A가 아닌 점)"
+      },
+      "F": {
+        "type": "intersection",
+        "description": "직선 AC와 원 I의 교점 (E가 아닌 점)"
+      }
+    }
+  }
+}

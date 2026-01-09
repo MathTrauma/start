@@ -33,10 +33,10 @@ wrangler.toml.bak
 _*/
 
 # Euclide Geometry - Problems folder (managed in R2 only)
-euclide-geometry/problems/
-euclide-geometry/lib/
-euclide-geometry/docs/
-euclide-geometry/euclide-worker/
+./euclide-geometry/problems/
+./euclide-geometry/lib/
+./euclide-geometry/docs/
+./euclide-geometry/euclide-worker/
 
 # md's
 LOGIN.md

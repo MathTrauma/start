@@ -1,0 +1,90 @@
+{
+  "id": "303",
+  "title": "수심의 성질",
+  "level": 3,
+  "tags": [
+    "수심",
+    "외접원",
+    "원의 교점",
+    "원주각"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "title": "기본 원과 점들",
+      "startTime": 0,
+      "duration": 4.1,
+      "endTime": 4.1,
+      "description": "삼각형 ABC, 점 A,B,C,O, 원 O",
+      "elements": [
+        "삼각형 ABC",
+        "점 A, B, C, O",
+        "원 O"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "외접원 Ω와 교점",
+      "startTime": 4.1,
+      "duration": 1.8,
+      "endTime": 5.9,
+      "description": "삼각형 BCO의 외접원 Ω, 교점 D, E",
+      "elements": [
+        "외접원 Ω",
+        "점 D, E"
+      ]
+    }
+  ],
+  "solutionPhases": [],
+  "geometry": {
+    "basePoints": {
+      "O": {
+        "x": 0,
+        "y": 0
+      },
+      "A": {
+        "angle": 68,
+        "radius": 3
+      },
+      "B": {
+        "angle": -128,
+        "radius": 3
+      },
+      "C": {
+        "angle": -52,
+        "radius": 3
+      }
+    },
+    "computedPoints": {
+      "X": {
+        "type": "circumcenter",
+        "triangle": [
+          "B",
+          "C",
+          "O"
+        ],
+        "description": "삼각형 BCO의 외심"
+      },
+      "D": {
+        "type": "circle_line_intersection",
+        "circle": "Ω",
+        "line": [
+          "A",
+          "B"
+        ],
+        "exclude": "B",
+        "description": "AB와 Ω의 교점 (B 제외)"
+      },
+      "E": {
+        "type": "circle_line_intersection",
+        "circle": "Ω",
+        "line": [
+          "A",
+          "C"
+        ],
+        "exclude": "C",
+        "description": "AC와 Ω의 교점 (C 제외)"
+      }
+    }
+  }
+}
