@@ -1,43 +1,24 @@
+/**
+ * Shared viewer controls functions
+ * Used by both ui-controls.js and viewer.js
+ */
 
-function setupControls() {
-    document.getElementById('btn-restart').addEventListener('click', () => {
-        resetAnimation();
-    });
-
-    const playPauseBtn = document.getElementById('btn-play-pause');
-    playPauseBtn.addEventListener('click', () => {
-        const paused = togglePause(p5Instance);
-        playPauseBtn.textContent = paused ? '▶' : '⏸';
-    });
-
-    document.getElementById('btn-mode-problem').addEventListener('click', () => {
-        if (setMode('problem')) {
-            renderPhaseButtons('problem', problemPhaseCount);
-            attachPhaseButtonListeners();
-            setActiveButton('btn-all');
-            setActiveModeButton('btn-mode-problem');
-            if (typeof updateProblemText === 'function' && typeof globalPaddedId !== 'undefined') {
-                updateProblemText('problem', 'all', globalPaddedId, globalBaseUrl);
-            }
-        }
-    });
-
-    const solutionBtn = document.getElementById('btn-mode-solution');
-    if (solutionBtn && !solutionBtn.disabled) {
-        solutionBtn.addEventListener('click', () => {
-            if (setMode('solution')) {
-                renderPhaseButtons('solution', solutionPhaseCount);
-                attachPhaseButtonListeners();
-                setActiveButton('btn-all');
-                setActiveModeButton('btn-mode-solution');
-                if (typeof updateProblemText === 'function' && typeof globalPaddedId !== 'undefined') {
-                    updateProblemText('solution', 'all', globalPaddedId, globalBaseUrl);
-                }
-            }
-        });
+/**
+ * Render phase buttons based on mode and count
+ * @param {string} mode - 'problem' or 'solution'
+ * @param {number} count - Number of phases
+ */
+function renderPhaseButtons(mode, count) {
+    const container = document.getElementById('phase-buttons-container');
+    if (!container) return;
+    container.innerHTML = '';
+    for (let i = 1; i <= count; i++) {
+        const btn = document.createElement('button');
+        btn.id = `btn-phase-${i}`;
+        btn.setAttribute('data-phase', i);
+        btn.textContent = `${i}`;
+        container.appendChild(btn);
     }
-
-    attachPhaseButtonListeners();
 }
 
 /**
@@ -88,7 +69,9 @@ function attachPhaseButtonListeners() {
  * @param {string} activeId - ID of button to activate
  */
 function setActiveButton(activeId) {
-    document.getElementById('btn-all').classList.remove('active');
+    const allBtn = document.getElementById('btn-all');
+    if (allBtn) allBtn.classList.remove('active');
+
     const count = getCurrentPhaseCount();
     for (let i = 1; i <= count; i++) {
         const btn = document.getElementById(`btn-phase-${i}`);
@@ -103,7 +86,10 @@ function setActiveButton(activeId) {
  * @param {string} activeId - ID of mode button to activate
  */
 function setActiveModeButton(activeId) {
-    document.getElementById('btn-mode-problem').classList.remove('active');
-    document.getElementById('btn-mode-solution').classList.remove('active');
-    document.getElementById(activeId).classList.add('active');
+    const probBtn = document.getElementById('btn-mode-problem');
+    const solBtn = document.getElementById('btn-mode-solution');
+    if (probBtn) probBtn.classList.remove('active');
+    if (solBtn) solBtn.classList.remove('active');
+    const activeBtn = document.getElementById(activeId);
+    if (activeBtn) activeBtn.classList.add('active');
 }

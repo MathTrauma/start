@@ -95,8 +95,8 @@ upload_if_changed() {
 deploy_lib() {
     echo "=== 라이브러리 배포 ==="
     echo ""
+    # 그리기 관련 함수만 R2에 배포 (viewer 로직은 GitHub Pages)
     
-    # JavaScript libraries
     upload_if_changed \
         "lib/geometry.js" \
         "lib/geometry.js" \
@@ -121,10 +121,11 @@ deploy_lib() {
         "application/javascript" \
         "public, max-age=300"
     
+    # styles/common.css도 R2에 유지 (viewer.html에서 참조)
     upload_if_changed \
-        "lib/ui-controls.js" \
-        "lib/ui-controls.js" \
-        "application/javascript" \
+        "styles/common.css" \
+        "styles/common.css" \
+        "text/css" \
         "public, max-age=300"
     
     echo "✓ 라이브러리 배포 완료"
@@ -165,7 +166,16 @@ deploy_problem() {
         "text/html; charset=utf-8" \
         "public, max-age=300"
     
-    # solution-phase-*.html (있는 경우)
+    # solution.html (있는 경우)
+    if [ -f "$dir/solution.html" ]; then
+        upload_if_changed \
+            "$dir/solution.html" \
+            "problems/$id/solution.html" \
+            "text/html; charset=utf-8" \
+            "public, max-age=300"
+    fi
+
+    # solution-phase-*.html (있는 경우, 하위 호환성)
     for solution_file in "$dir"/solution-phase-*.html; do
         if [ -f "$solution_file" ]; then
             filename=$(basename "$solution_file")

@@ -135,7 +135,7 @@ async function renderProblem(config, paddedId, baseUrl) {
     }
 }
 
-const loadedPhasesCache = {};
+const solutionHtmlCache = {};
 
 async function updateProblemText(mode, phase, paddedId, baseUrl) {
     if (mode === 'problem') {
@@ -153,47 +153,63 @@ async function updateProblemText(mode, phase, paddedId, baseUrl) {
         const solutionText = document.getElementById('solution-text');
         if (!solutionText) return;
         showSolutionPanel();
-        solutionText.innerHTML = '';
+
+        // 단일 solution.html 파일 fetch (캐시 사용)
+        let html;
+        if (solutionHtmlCache[paddedId]) {
+            html = solutionHtmlCache[paddedId];
+        } else {
+            try {
+                const response = await fetch(`${baseUrl}/problems/${paddedId}/solution.html`);
+                if (!response.ok) {
+                    console.warn('solution.html not found');
+                    return;
+                }
+                html = await response.text();
+                solutionHtmlCache[paddedId] = html;
+            } catch (error) {
+                console.error('Failed to load solution:', error);
+                return;
+            }
+        }
+
+        solutionText.innerHTML = html;
+
+        // 해당 phase로 스크롤
         const targetPhase = (phase === 'all' || !phase) ? (window.solutionPhaseCount || 1) : phase;
-        for (let i = 1; i <= targetPhase; i++) {
-            await appendPhaseBlock(i, paddedId, baseUrl);
-        }
-        const scrollContainer = document.getElementById('solution-scroll-container');
-        if (scrollContainer) {
-            setTimeout(() => {
-                scrollContainer.scrollTo({
-                    top: scrollContainer.scrollHeight,
-                    behavior: 'smooth'
-                });
-            }, 100);
-        }
+        scrollToPhase(targetPhase);
     }
 }
 
-async function appendPhaseBlock(phase, paddedId, baseUrl) {
-    const solutionText = document.getElementById('solution-text');
-    const cacheKey = `${paddedId}_${phase}`;
-    let html;
-    if (loadedPhasesCache[cacheKey]) {
-        html = loadedPhasesCache[cacheKey];
-    } else {
-        try {
-            const response = await fetch(`${baseUrl}/problems/${paddedId}/solution-phase-${phase}.html`);
-            if (!response.ok) return;
-            html = await response.text();
-            loadedPhasesCache[cacheKey] = html;
-        } catch (e) {
-            console.warn(`Failed to load phase ${phase}`);
-            return;
+function scrollToPhase(phase) {
+    const scrollContainer = document.getElementById('solution-scroll-container');
+    if (!scrollContainer) return;
+
+    // Find the paragraph that contains the step title (e.g., "\section*{Step 1}")
+    const paragraphs = scrollContainer.querySelectorAll('#solution-text > p');
+    let targetElement = null;
+
+    for (const p of paragraphs) {
+        if (p.textContent.includes(`Step ${phase}`)) {
+            targetElement = p;
+            break;
         }
     }
-    const block = document.createElement('div');
-    block.className = 'phase-block';
-    block.innerHTML = `
-        <div class="phase-block-title">Step ${phase}</div>
-        <div class="phase-block-content">${html}</div>
-    `;
-    solutionText.appendChild(block);
+
+    // If not found in paragraphs, check direct children
+    if (!targetElement) {
+        const allChildren = scrollContainer.querySelectorAll('#solution-text > *');
+        for (const child of allChildren) {
+            if (child.textContent.includes(`Step ${phase}`)) {
+                targetElement = child;
+                break;
+            }
+        }
+    }
+
+    if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 function showSolutionPanel() {
@@ -306,18 +322,6 @@ function toggleControls(controls, collapseBtn) {
         const maxTop = canvasWrapper.clientHeight - controls.offsetHeight - 10;
         if (currentLeft > maxLeft) controls.style.left = Math.max(0, maxLeft) + 'px';
         if (currentTop > maxTop) controls.style.top = Math.max(0, maxTop) + 'px';
-    }
-}
-
-function renderPhaseButtons(mode, count) {
-    const container = document.getElementById('phase-buttons-container');
-    container.innerHTML = '';
-    for (let i = 1; i <= count; i++) {
-        const btn = document.createElement('button');
-        btn.id = `btn-phase-${i}`;
-        btn.setAttribute('data-phase', i);
-        btn.textContent = `${i}`;
-        container.appendChild(btn);
     }
 }
 

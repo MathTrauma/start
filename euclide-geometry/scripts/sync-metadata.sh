@@ -55,7 +55,20 @@ sync_problem() {
     PROBLEM_HTML='""'
   fi
 
-  # 4. index.json 업데이트 (level과 problemHtml)
+  # 4. solution.html 생성 (solution.tex → HTML 변환)
+  local SOLUTION_TEX="$PROBLEM_DIR/solution.tex"
+  local SOLUTION_HTML="$PROBLEM_DIR/solution.html"
+  if [ -f "$SOLUTION_TEX" ]; then
+    echo "    → solution.tex 변환 중..."
+    node scripts/convert-tex.js "$id" > /dev/null 2>&1
+    if [ -f "$SOLUTION_HTML" ]; then
+      echo "    ✓ solution.html 생성됨"
+    else
+      echo "    ⚠ solution.html 생성 실패"
+    fi
+  fi
+
+  # 5. index.json 업데이트 (level과 problemHtml)
   jq "(.problems[] | select(.id == \"$id\")) |= (.level = $LEVEL | .problemHtml = $PROBLEM_HTML)" "$INDEX_FILE" > /tmp/index_$id.json && mv /tmp/index_$id.json "$INDEX_FILE"
 }
 

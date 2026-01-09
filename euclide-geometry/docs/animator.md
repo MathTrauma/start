@@ -17,8 +17,7 @@
    - p5 출력은 animator.js 의 클래스 이용 : 적당한 클래스가 없으면 반드시 질문할 것. 
    - 대표 예제 : problems/301/sketch.js 
 
-- `problems/XXX/solution-phase-N.tex` - 각 풀이 단계(Solution Phases)별 설명 파일 (N = 1, 2, 3, ...). 
-    풀이 단계만큼만 생성. 
+- `problems/XXX/solution.tex` - 모든 풀이 단계를 하나의 파일로 통합
     풀이 단계가 없으면 생성하지 않음
 
 ---
@@ -35,22 +34,24 @@
    - `drawProblemPhases()` / `drawProblemPhaseOnly(phase)` 구현
    - `drawSolutionPhases()` / `drawSolutionPhaseOnly(phase)` 구현
 
-4. **solution-phase-N.tex 파일 자동 생성 (중요!):**
-   - animation.md의 "풀이 단계" 섹션에서 각 phase별 설명 추출
+4. **solution.tex 파일 자동 생성 (중요!):**
+   - animation.md의 "풀이 단계" 섹션에서 모든 단계의 설명 추출
    - LaTeX 형식으로 변환:
      - "점 B 와 E" → `점 $B, E$`
      - "중점 F" → `중점 $F$`
      - "선분 DF" → `선분 $\overline{DF}$`
      - "삼각형 BDF" → `삼각형 $\triangle BDF$`
      - "각 BDF" → `$\angle BDF$`
-   - 각 phase에 해당하는 설명을 `solution-phase-N.tex`로 저장
+   - 모든 풀이 단계를 `solution.tex` 단일 파일로 저장
+   - 각 단계는 `\section{Step N}` 또는 `\paragraph{Step N}`으로 구분
 
 ---
 
 **중요 규칙:**
 - 색상은 항상 `COLORS.TRIANGLE_BLUE`, `COLORS.TRIANGLE_RED` 등 표준 색상 사용
 - 투명도는 `COLORS.ALPHA_LIGHT`, `COLORS.ALPHA_MEDIUM`, `COLORS.ALPHA_HEAVY` 사용
-- 각도 마커는 개별 animation.md 의 지시를 따를 것. 
-- solution-phase-N.tex 파일 생성은 필수!
+- 각도 마커는 개별 animation.md 의 지시를 따를 것.
+- solution.tex 파일 생성은 필수!
+- **sync-metadata.sh 실행 시 자동으로 solution.html 생성됨**
 
 ---

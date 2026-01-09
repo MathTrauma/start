@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * LaTeX to HTML converter using MathJax
- * Converts problem.tex and solution-phase-*.tex files to pre-rendered HTML
+ * Converts problem.tex and solution.tex files to pre-rendered HTML
  */
 
 const fs = require('fs');
