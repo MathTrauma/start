@@ -1,4 +1,4 @@
-import { renderPhaseButtons } from './viewer-controls.js';
+// Consolidated viewer module (viewer.js + viewer-controls.js + ui-controls.js)
 
 lucide.createIcons();
 
@@ -116,8 +116,8 @@ async function renderProblem(config, paddedId, baseUrl) {
 
                     if (!canvasRevealed) {
                         canvasRevealed = true;
-                        if (typeof resetAnimation === 'function') {
-                            resetAnimation();
+                        if (typeof window.resetAnimation === 'function') {
+                            window.resetAnimation();
                         }
                     }
                     if (window.p5Instance) {
@@ -156,7 +156,6 @@ async function updateProblemText(mode, phase, paddedId, baseUrl) {
         if (!solutionText) return;
         showSolutionPanel();
 
-        // 단일 solution.html 파일 fetch (캐시 사용)
         let html;
         if (solutionHtmlCache[paddedId]) {
             html = solutionHtmlCache[paddedId];
@@ -177,7 +176,6 @@ async function updateProblemText(mode, phase, paddedId, baseUrl) {
 
         solutionText.innerHTML = html;
 
-        // 해당 phase로 스크롤
         const targetPhase = (phase === 'all' || !phase) ? (window.solutionPhaseCount || 1) : phase;
         scrollToPhase(targetPhase);
     }
@@ -187,7 +185,6 @@ function scrollToPhase(phase) {
     const scrollContainer = document.getElementById('solution-scroll-container');
     if (!scrollContainer) return;
 
-    // Find the paragraph that contains the step title (e.g., "\section*{Step 1}")
     const paragraphs = scrollContainer.querySelectorAll('#solution-text > p');
     let targetElement = null;
 
@@ -198,7 +195,6 @@ function scrollToPhase(phase) {
         }
     }
 
-    // If not found in paragraphs, check direct children
     if (!targetElement) {
         const allChildren = scrollContainer.querySelectorAll('#solution-text > *');
         for (const child of allChildren) {
@@ -223,6 +219,122 @@ function hideSolutionPanel() {
     const panel = document.getElementById('solution-panel');
     if (panel) panel.classList.add('hidden');
 }
+
+// ===== From viewer-controls.js =====
+
+function renderPhaseButtons(mode, count) {
+    const container = document.getElementById('phase-buttons-container');
+    if (!container) return;
+    container.innerHTML = '';
+    for (let i = 1; i <= count; i++) {
+        const btn = document.createElement('button');
+        btn.id = `btn-phase-${i}`;
+        btn.setAttribute('data-phase', i);
+        btn.textContent = `${i}`;
+        container.appendChild(btn);
+    }
+}
+
+function getCurrentPhaseCount() {
+    const mode = getCurrentMode();
+    return mode === 'problem' ? (window.problemPhaseCount || 0) : (window.solutionPhaseCount || 0);
+}
+
+function getCurrentMode() {
+    return window.getCurrentMode ? window.getCurrentMode() : 'problem';
+}
+
+function attachPhaseButtonListeners() {
+    const allBtn = document.getElementById('btn-all');
+    if (allBtn) {
+        allBtn.replaceWith(allBtn.cloneNode(true));
+        document.getElementById('btn-all').addEventListener('click', () => {
+            if (window.setPhase) window.setPhase('all');
+            setActiveButton('btn-all');
+            const currentMode = getCurrentMode();
+            updateProblemText(currentMode, 'all', globalPaddedId, globalBaseUrl);
+        });
+    }
+
+    const count = getCurrentPhaseCount();
+    for (let i = 1; i <= count; i++) {
+        const btn = document.getElementById(`btn-phase-${i}`);
+        if (btn) {
+            btn.replaceWith(btn.cloneNode(true));
+            document.getElementById(`btn-phase-${i}`).addEventListener('click', () => {
+                if (window.setPhase) window.setPhase(i);
+                setActiveButton(`btn-phase-${i}`);
+                const currentMode = getCurrentMode();
+                updateProblemText(currentMode, i, globalPaddedId, globalBaseUrl);
+            });
+        }
+    }
+}
+
+function setActiveButton(activeId) {
+    const allBtn = document.getElementById('btn-all');
+    if (allBtn) allBtn.classList.remove('active');
+
+    const count = getCurrentPhaseCount();
+    for (let i = 1; i <= count; i++) {
+        const btn = document.getElementById(`btn-phase-${i}`);
+        if (btn) btn.classList.remove('active');
+    }
+    const activeBtn = document.getElementById(activeId);
+    if (activeBtn) activeBtn.classList.add('active');
+}
+
+function setActiveModeButton(activeId) {
+    const probBtn = document.getElementById('btn-mode-problem');
+    const solBtn = document.getElementById('btn-mode-solution');
+    if (probBtn) probBtn.classList.remove('active');
+    if (solBtn) solBtn.classList.remove('active');
+    const activeBtn = document.getElementById(activeId);
+    if (activeBtn) activeBtn.classList.add('active');
+}
+
+// ===== From ui-controls.js =====
+
+function setupControls() {
+    document.getElementById('btn-restart').addEventListener('click', () => {
+        if (window.resetAnimation) window.resetAnimation();
+    });
+
+    const playPauseBtn = document.getElementById('btn-play-pause');
+    playPauseBtn.addEventListener('click', () => {
+        if (window.togglePause) {
+            const paused = window.togglePause(window.p5Instance);
+            playPauseBtn.textContent = paused ? '▶' : '⏸';
+        }
+    });
+
+    document.getElementById('btn-mode-problem').addEventListener('click', () => {
+        if (window.setMode && window.setMode('problem')) {
+            renderPhaseButtons('problem', window.problemPhaseCount || 0);
+            attachPhaseButtonListeners();
+            setActiveButton('btn-all');
+            setActiveModeButton('btn-mode-problem');
+            updateProblemText('problem', 'all', globalPaddedId, globalBaseUrl);
+        }
+    });
+
+    const solutionBtn = document.getElementById('btn-mode-solution');
+    if (solutionBtn && !solutionBtn.disabled) {
+        solutionBtn.addEventListener('click', () => {
+            if (window.setMode && window.setMode('solution')) {
+                renderPhaseButtons('solution', window.solutionPhaseCount || 0);
+                attachPhaseButtonListeners();
+                setActiveButton('btn-all');
+                setActiveModeButton('btn-mode-solution');
+                updateProblemText('solution', 'all', globalPaddedId, globalBaseUrl);
+            }
+        });
+    }
+
+    attachPhaseButtonListeners();
+}
+
+// ===== Controls rendering =====
 
 function renderControls(config, paddedId, baseUrl) {
     const hasSolution = config.solutionPhases && config.solutionPhases.length > 0;
@@ -269,8 +381,8 @@ function renderControls(config, paddedId, baseUrl) {
         </div>
     `;
     setupDraggable();
-    renderPhaseButtons('problem', config.problemPhases ? config.problemPhases.length : config.phases.length);
-    if (typeof setupControls === 'function') setupControls();
+    renderPhaseButtons('problem', config.problemPhases ? config.problemPhases.length : (config.phases ? config.phases.length : 0));
+    setupControls();
 
     const expandOnModeClick = () => {
         const controls = document.getElementById('draggable-controls');
