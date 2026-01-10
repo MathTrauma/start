@@ -32,10 +32,17 @@ wrangler.toml.bak
 # Temporary/Development folders (underscore prefix)
 _*/
 
+# Local development files
+*_local.*
+*_local/
+euclide-geometry/lib_new/
+
 # Euclide Geometry - R2 only (Cloudflare R2에 배포)
 euclide-geometry/problems/
 euclide-geometry/docs/
 euclide-geometry/.claude/
+euclide-geometry/scripts/
+euclide-geometry/euclide-worker/
 
 # R2에 올릴 viewer/module 파일들
 !euclide-geometry/lib/viewer-controls.js

@@ -22,6 +22,14 @@
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- 로컬 개발 환경 감지 및 리다이렉트 -->
+    <script>
+        // localhost나 127.0.0.1에서 실행 시 index_local.html로 리다이렉트
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            window.location.href = 'index_local.html';
+        }
+    </script>
 </head>
 <body>
     <div id="bg-container"></div>

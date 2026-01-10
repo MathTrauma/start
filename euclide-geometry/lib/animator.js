@@ -113,6 +113,19 @@ export class Animator {
         // Initialize step
         if (!this.currentStepStarted) {
             this.currentStepTime = 0; // Initialize time tracker
+
+            // Handle delay with pause mechanism
+            if (!currentStep.group && currentStep.target === null) {
+                const duration = currentStep.duration !== undefined ? currentStep.duration : 1.0;
+                this.isPaused = true;
+                setTimeout(() => {
+                    this.isPaused = false;
+                }, duration * 1000);
+                this.currentStepIndex++;
+                this.currentStepStarted = false;
+                return;
+            }
+
             if (currentStep.group) {
                 currentStep.group.forEach(item => {
                     if (item.target) item.target.start(item);
@@ -139,12 +152,6 @@ export class Animator {
             if (target) {
                 target.process(dt, duration);
                 stepComplete = target.isCompleted();
-            } else {
-                // Delay logic
-                this.currentStepTime += dt;
-                if (this.currentStepTime >= duration) {
-                    stepComplete = true;
-                }
             }
         }
 

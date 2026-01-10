@@ -30,6 +30,14 @@
     <!-- Supabase & Auth -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/auth.js"></script>
+
+    <!-- 로컬 개발 환경 감지 및 리다이렉트 -->
+    <script>
+        // localhost나 127.0.0.1에서 실행 시 viewer_local.html로 리다이렉트 (쿼리 파라미터 유지)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            window.location.href = 'viewer_local.html' + window.location.search;
+        }
+    </script>
 </head>
 <body>
     <!-- Top Navigation -->
