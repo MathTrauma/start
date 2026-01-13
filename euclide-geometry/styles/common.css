@@ -66,6 +66,7 @@ body {
     flex-direction: column;
     width: 100%;
     height: 100%;
+    min-height: 0; /* flex 자식이 줄어들 수 있도록 허용 */
     overflow: hidden;
     position: relative;
 }
@@ -95,6 +96,7 @@ body {
 
 #solution-scroll-container {
     flex: 1; /* 남은 모든 공간 차지 */
+    min-height: 0; /* flex item이 콘텐츠보다 작아질 수 있도록 허용 → 스크롤 작동 */
     width: 100%;
     overflow-y: auto;
     background-color: #f5f3ed;
@@ -250,7 +252,7 @@ body {
 }
 
 .controls.collapsed {
-    min-width: 90px;
+    min-width: auto;
     width: auto;
     padding: 4px 6px;
 }
@@ -281,8 +283,9 @@ body {
 /* Shortcuts in collapsed view */
 .collapsed-view {
     display: flex;
-    gap: 5px;
+    gap: 4px;
     align-items: center;
+    overflow: hidden;
 }
 
 .controls.collapsed .collapsed-view {
@@ -295,6 +298,15 @@ body {
 
 .controls:not(.collapsed) .expanded-view {
     display: block;
+}
+
+.drag-handle-icon {
+    cursor: move;
+    color: #9a9488;
+    font-size: 10px;
+    padding: 1px 2px;
+    user-select: none;
+    letter-spacing: -3px;
 }
 
 .mode-shortcut-btn {
@@ -610,7 +622,7 @@ button.active:hover {
     }
 
     .phase-buttons {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(6, 1fr);
     }
 }
 
@@ -634,6 +646,7 @@ button.active:hover {
     width: calc(100% - 40px); /* 좌우 20px 여백 확보 */
     max-width: 600px; /* 캔버스 폭에 맞춤 */
     min-height: 200px;
+    flex-shrink: 0; /* 줄어들지 않음 → 부모에서 스크롤 발생 */
     background-color: #faf8f3;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -684,7 +697,7 @@ button.active:hover {
 }
 
 .solution-panel-content {
-    padding: 15px 20px;
+    padding: 10px 15px;
     color: #2a2520;
     font-size: 15px;
     line-height: 1.8;

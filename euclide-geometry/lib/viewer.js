@@ -338,7 +338,9 @@ function setupControls() {
 
 function renderControls(config, paddedId, baseUrl) {
     const hasSolution = config.solutionPhases && config.solutionPhases.length > 0;
+    window.problemPhaseCount = config.problemPhases ? config.problemPhases.length : (config.phases ? config.phases.length : 0);
     window.solutionPhaseCount = config.solutionPhases ? config.solutionPhases.length : 0;
+
     const canvasWrapper = document.getElementById('canvas-wrapper');
     let controlsContainer = document.getElementById('controls-container');
     if (controlsContainer) controlsContainer.remove();
@@ -349,18 +351,18 @@ function renderControls(config, paddedId, baseUrl) {
         <div class="controls collapsed" id="draggable-controls">
             <div class="controls-header" id="controls-drag-handle">
                 <div class="collapsed-view" style="display: none;">
-                    <button class="mode-shortcut-btn" id="btn-shortcut-problem">Problem</button>
-                    <button class="mode-shortcut-btn" id="btn-shortcut-solution" ${!hasSolution ? 'disabled' : ''}>Solution</button>
+                    <span class="drag-handle-icon">⋮⋮</span>
+                    <button class="mode-shortcut-btn" id="btn-shortcut-problem">Prob</button>
+                    <button class="mode-shortcut-btn" id="btn-shortcut-solution" ${!hasSolution ? 'disabled' : ''}>Sol</button>
                 </div>
                 <span class="controls-title expanded-view">Controls</span>
                 <button class="controls-collapse-btn" id="btn-collapse">+</button>
             </div>
             <div class="controls-body">
                 <div class="control-section mode-section">
-                    <div class="control-label">Mode</div>
                     <div class="button-group mode-toggle">
-                        <button id="btn-mode-problem" class="active mode-btn">Problem</button>
-                        <button id="btn-mode-solution" class="mode-btn" ${!hasSolution ? 'disabled' : ''}>Solution</button>
+                        <button id="btn-mode-problem" class="active mode-btn">Prob</button>
+                        <button id="btn-mode-solution" class="mode-btn" ${!hasSolution ? 'disabled' : ''}>Sol</button>
                     </div>
                 </div>
                 <div class="control-section">
@@ -494,3 +496,122 @@ function setupDraggable() {
         toggleControls(controls, collapseBtn);
     });
 }
+
+window.setPhase = function(phase) {
+    if (!window.animator || !window.phaseMap) return;
+
+    const mode = window.currentMode || 'problem';
+    const phaseMap = mode === 'problem' ? window.phaseMap.problem : window.phaseMap.solution;
+    if (!phaseMap) return;
+
+    // problem phase 배열
+    const problemPhases = window.phaseMap.problem
+        ? Object.keys(window.phaseMap.problem)
+            .sort((a, b) => parseInt(a) - parseInt(b))
+            .map(key => window.phaseMap.problem[key])
+        : [];
+
+    // 현재 모드 phase 배열
+    const currentPhases = Object.keys(phaseMap)
+        .sort((a, b) => parseInt(a) - parseInt(b))
+        .map(key => phaseMap[key]);
+
+    if (phase === 'all') {
+        // solution 모드: problem 완료 상태에서 solution 전체 시퀀스
+        // problem 모드: problem 전체 시퀀스
+        window.animator.reset();
+        if (mode === 'solution') {
+            problemPhases.forEach(phaseName => {
+                window.animator.applyPhaseObjects(phaseName);
+            });
+            window.animator.playSequence(currentPhases);
+        } else {
+            window.animator.playSequence(currentPhases);
+        }
+    } else {
+        // solution 모드: problem 완료 + solution[phase]부터
+        // problem 모드: problem[phase]부터
+        const allPhases = mode === 'solution'
+            ? [...problemPhases, ...currentPhases]
+            : currentPhases;
+        const startIndex = mode === 'solution'
+            ? problemPhases.length + (phase - 1)
+            : phase - 1;
+        window.animator.playFrom(allPhases, startIndex);
+    }
+};
+
+window.togglePause = function() {
+    if (!window.animator) return false;
+    window.animator.isPaused = !window.animator.isPaused;
+    return window.animator.isPaused;
+};
+
+window.resetAnimation = function() {
+    if (!window.animator || !window.phaseMap) return;
+
+    const mode = window.currentMode || 'problem';
+    const phaseMap = mode === 'problem' ? window.phaseMap.problem : window.phaseMap.solution;
+    if (!phaseMap) return;
+
+    // problem phase 배열
+    const problemPhases = window.phaseMap.problem
+        ? Object.keys(window.phaseMap.problem)
+            .sort((a, b) => parseInt(a) - parseInt(b))
+            .map(key => window.phaseMap.problem[key])
+        : [];
+
+    // 현재 모드 phase 배열
+    const currentPhases = Object.keys(phaseMap)
+        .sort((a, b) => parseInt(a) - parseInt(b))
+        .map(key => phaseMap[key]);
+
+    // solution 모드: problem + solution 전체
+    // problem 모드: problem 전체
+    const allPhases = mode === 'solution'
+        ? [...problemPhases, ...currentPhases]
+        : currentPhases;
+
+    window.animator.reset();
+    window.animator.playSequence(allPhases);
+};
+
+window.setMode = function(mode) {
+    if (!window.animator || !window.phaseMap) return false;
+
+    const phaseMap = mode === 'problem' ? window.phaseMap.problem : window.phaseMap.solution;
+    if (!phaseMap || Object.keys(phaseMap).length === 0) {
+        return false;
+    }
+
+    window.currentMode = mode;
+
+    // problem phase 배열
+    const problemPhases = window.phaseMap.problem
+        ? Object.keys(window.phaseMap.problem)
+            .sort((a, b) => parseInt(a) - parseInt(b))
+            .map(key => window.phaseMap.problem[key])
+        : [];
+
+    // 현재 모드 phase 배열
+    const currentPhases = Object.keys(phaseMap)
+        .sort((a, b) => parseInt(a) - parseInt(b))
+        .map(key => phaseMap[key]);
+
+    window.animator.reset();
+
+    if (mode === 'problem') {
+        // problem 전체 시퀀스 처음부터
+        window.animator.playSequence(currentPhases);
+    } else {
+        // solution: problem 완료 상태에서 solution 전체 시퀀스
+        problemPhases.forEach(phaseName => {
+            window.animator.applyPhaseObjects(phaseName);
+        });
+        window.animator.playSequence(currentPhases);
+    }
+
+    return true;
+};
+
+window.getCurrentMode = function() { return window.currentMode || 'problem'; };
