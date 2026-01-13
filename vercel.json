@@ -1,0 +1,5 @@
+{
+  "redirects": [
+    { "source": "/start/:path*", "destination": "/:path*" }
+  ]
+}
