@@ -58,3 +58,4 @@ app.js
 
 # Payment test
 test-payment.html
+.vercel
