@@ -11,8 +11,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: ${{ github.run_id }} # 실행마다 고유 ID를 부여해서 서로 간섭하지 않게 함
-  cancel-in-progress: false
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   deploy:
