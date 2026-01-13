@@ -1,5 +1,7 @@
 {
   "redirects": [
+    { "source": "/start", "destination": "/" },
+    { "source": "/start/", "destination": "/" },
     { "source": "/start/:path*", "destination": "/:path*" }
   ]
 }
