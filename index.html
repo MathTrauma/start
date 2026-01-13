@@ -67,7 +67,7 @@
                 </div>
 
                 <button onclick="location.href='euclide-geometry/'" class="btn-cta group">
-                    <span>바로 보기</span>
+                    <span>사용하기</span>
                     <i data-lucide="arrow-right"></i>
                 </button>
             </div>
@@ -77,18 +77,17 @@
         <section id="pricing" class="pricing-section">
             <div class="container">
                 <div class="pricing-header">
-                    <h2>요금제 선택</h2>
-                    <p>복잡한 고민 없이, 심플하게 선택하세요.</p>
+                    <h2>도형문제 풀이 보기도 힘들죠.</h2>
+                    <p>풀이를 단계별 애니메이션으로 만들었어요. 도움이 될 거예요. </p>
                 </div>
 
                 <div class="pricing-grid">
                     <!-- Paid Tier -->
                     <div class="pricing-card card-paid">
-                        <div class="badge-best">BEST</div>
 
                         <div class="card-title-group">
-                            <h3 class="card-title">프리미엄</h3>
-                            <p class="card-desc">무제한 이용</p>
+                            <h3 class="card-title">결제</h3>
+                            <!-- <p class="card-desc">무제한 이용</p> -->
                         </div>
 
                         <div class="price-group">
@@ -99,7 +98,7 @@
                             <span class="price-period">/ 3개월</span>
                         </div>
 
-                        <ul class="feature-list">
+                        <!-- <ul class="feature-list">
                             <li class="feature-item text-active">
                                 <i data-lucide="check" class="feature-icon icon-check"></i>
                                 <span class="feature-text">모든 애니메이션 열람 가능</span>
@@ -108,9 +107,9 @@
                                 <i data-lucide="check" class="feature-icon icon-check"></i>
                                 <span class="feature-text">푼 문제 데이터 베이스 제공</span>
                             </li>
-                        </ul>
+                        </ul> -->
 
-                        <button class="btn-card">구매하기</button>
+                        <button class="btn-card" onclick="requestPayment()">구매하기</button>
                     </div>
                 </div>
             </div>
@@ -157,9 +156,11 @@
         </div>
     </footer>
 
-    <!-- Initialize Lucide Icons and Supabase Auth -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="js/auth.js" defer></script>
+    <!-- Initialize Lucide Icons, Supabase Auth, and PortOne -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/payment.js"></script>
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             // Lucide 아이콘 초기화
