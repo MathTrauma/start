@@ -34,10 +34,8 @@
         <section class="hero-section">
             <!-- Background Video -->
             <div class="hero-bg-video-container">
-                <video class="hero-bg-video" autoplay loop muted playsinline
-                    poster="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2426&q=80">
-                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-                        type="video/mp4" />
+                <video id="hero-video" class="hero-bg-video" autoplay muted playsinline>
+                    <source src="video1.mp4" type="video/mp4" />
                 </video>
                 <div class="hero-overlay"></div>
             </div>
@@ -166,7 +164,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             // Lucide 아이콘 초기화
             lucide.createIcons();
-            
+
             // UI 요소 가져오기
             const loginBtn = document.getElementById('login-btn');
             const logoutBtn = document.getElementById('logout-btn');
@@ -182,6 +180,19 @@
                         loginBtn.style.display = 'flex';
                         logoutBtn.style.display = 'none';
                     }
+                });
+            }
+
+            // 비디오 교대 재생
+            const videos = ['video1.mp4', 'video2.mp4'];
+            let currentIndex = 0;
+            const heroVideo = document.getElementById('hero-video');
+
+            if (heroVideo) {
+                heroVideo.addEventListener('ended', () => {
+                    currentIndex = (currentIndex + 1) % videos.length;
+                    heroVideo.src = videos[currentIndex];
+                    heroVideo.play();
                 });
             }
         });
