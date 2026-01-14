@@ -193,21 +193,45 @@
                 });
             }  
 
-            // 비디오 교대 재생 (crossfade)
+            // 비디오 교대 재생 (crossfade with overlap)
             const video1 = document.getElementById('hero-video-1');
             const video2 = document.getElementById('hero-video-2');
+            const CROSSFADE_TIME = 0.5; // 전환 시작 시점 (종료 n초 전)
+            let v1Switching = false;
+            let v2Switching = false;
 
             if (video1 && video2) {
+                // video2 미리 로드
+                video2.load();
+
+                // video1 → video2 전환 (종료 직전 시작)
+                video1.addEventListener('timeupdate', () => {
+                    if (!v1Switching && video1.duration - video1.currentTime <= CROSSFADE_TIME) {
+                        v1Switching = true;
+                        video2.currentTime = 0;
+                        video2.play();
+                        video2.classList.add('active');
+                        video1.classList.remove('active');
+                    }
+                });
+
                 video1.addEventListener('ended', () => {
-                    video1.classList.remove('active');
-                    video2.classList.add('active');
-                    video2.play();
+                    v1Switching = false;
+                });
+
+                // video2 → video1 전환 (종료 직전 시작)
+                video2.addEventListener('timeupdate', () => {
+                    if (!v2Switching && video2.duration - video2.currentTime <= CROSSFADE_TIME) {
+                        v2Switching = true;
+                        video1.currentTime = 0;
+                        video1.play();
+                        video1.classList.add('active');
+                        video2.classList.remove('active');
+                    }
                 });
 
                 video2.addEventListener('ended', () => {
-                    video2.classList.remove('active');
-                    video1.classList.add('active');
-                    video1.play();
+                    v2Switching = false;
                 });
             }
 
