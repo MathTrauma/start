@@ -81,7 +81,8 @@ main {
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding-top: 5vh;
     background: linear-gradient(-45deg, #0f172a, #1e3a5f, #1a1a2e, #2d1b4e);
     background-size: 400% 400%;
     animation: gradientFlow 15s ease infinite;
@@ -151,7 +152,7 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    padding-bottom: 3rem; /* pb-12 */
+    padding-bottom: 1.5rem;
     z-index: 20;
     padding-left: 1rem;
     padding-right: 1rem;
