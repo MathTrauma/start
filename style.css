@@ -157,8 +157,8 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
-    padding-bottom: 1.5rem;
+    justify-content: flex-start;
+    padding-top: 52vh;
     z-index: 20;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -168,37 +168,57 @@ main {
 }
 
 .hero-text-group {
-    margin-bottom: 3rem; /* mb-12 */
+    margin-bottom: 2rem;
     text-align: center;
     /* Re-enable pointer events for text if selection is needed */
-    pointer-events: auto; 
+    pointer-events: auto;
 }
 
-.hero-title {
-    font-size: 2.25rem; /* text-4xl */
-    font-weight: 900;
+.hero-line {
     color: var(--white);
-    margin-bottom: 1rem;
-    letter-spacing: -0.025em;
-    text-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    font-weight: 700;
+    line-height: 1.3;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.hero-line-1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+}
+
+.hero-line-2 {
+    font-size: 1.5rem;
+}
+
+.hero-line-3 {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.hero-line-4 {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 @media (min-width: 768px) {
-    .hero-title {
-        font-size: 3.75rem; /* text-6xl */
+    .hero-content-wrapper {
+        padding-top: 55vh;
     }
-}
 
-.hero-subtitle {
-    font-size: 1.125rem; /* text-lg */
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
-    text-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
+    .hero-line-1 {
+        font-size: 3.5rem;
+    }
 
-@media (min-width: 768px) {
-    .hero-subtitle {
-        font-size: 1.25rem; /* text-xl */
+    .hero-line-2 {
+        font-size: 2rem;
+    }
+
+    .hero-line-3 {
+        font-size: 1.5rem;
+    }
+
+    .hero-line-4 {
+        font-size: 1.25rem;
     }
 }
 
