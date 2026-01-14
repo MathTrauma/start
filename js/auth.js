@@ -53,3 +53,148 @@ async function signOut() {
         alert('로그아웃 중 오류가 발생했습니다.');
     }
 }
+
+/**
+ * 이메일/비밀번호 로그인
+ */
+async function signInWithEmail(email, password) {
+    console.log('이메일 로그인 시도 중...');
+    try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password,
+        });
+        if (error) throw error;
+        closeLoginModal();
+        return { success: true, data };
+    } catch (err) {
+        console.error('로그인 에러:', err.message);
+        return { success: false, error: err.message };
+    }
+}
+
+/**
+ * 이메일/비밀번호 회원가입
+ */
+async function signUpWithEmail(email, password) {
+    console.log('회원가입 시도 중...');
+    try {
+        const { data, error } = await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+        });
+        if (error) throw error;
+        return { success: true, data, message: '회원가입 완료! 이메일을 확인해주세요.' };
+    } catch (err) {
+        console.error('회원가입 에러:', err.message);
+        return { success: false, error: err.message };
+    }
+}
+
+/**
+ * 로그인 모달 로드
+ */
+async function loadLoginModal() {
+    if (document.getElementById('login-modal')) return;
+
+    try {
+        const response = await fetch('components/login-modal.html');
+        const html = await response.text();
+        document.body.insertAdjacentHTML('beforeend', html);
+        lucide.createIcons();
+    } catch (err) {
+        console.error('모달 로드 실패:', err);
+    }
+}
+
+/**
+ * 로그인 모달 열기
+ */
+async function openLoginModal() {
+    await loadLoginModal();
+    const modal = document.getElementById('login-modal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+/**
+ * 로그인 모달 닫기
+ */
+function closeLoginModal() {
+    const modal = document.getElementById('login-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+/**
+ * 로그인 폼 제출 처리
+ */
+async function handleLoginSubmit(e) {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    const errorEl = document.getElementById('login-error');
+
+    const result = await signInWithEmail(email, password);
+    if (!result.success) {
+        errorEl.textContent = result.error;
+        errorEl.style.display = 'block';
+    }
+}
+
+/**
+ * 회원가입 폼 제출 처리
+ */
+async function handleSignupSubmit(e) {
+    e.preventDefault();
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+    const passwordConfirm = document.getElementById('signup-password-confirm').value;
+    const errorEl = document.getElementById('signup-error');
+
+    if (password !== passwordConfirm) {
+        errorEl.textContent = '비밀번호가 일치하지 않습니다.';
+        errorEl.style.display = 'block';
+        return;
+    }
+
+    if (password.length < 6) {
+        errorEl.textContent = '비밀번호는 6자 이상이어야 합니다.';
+        errorEl.style.display = 'block';
+        return;
+    }
+
+    const result = await signUpWithEmail(email, password);
+    if (result.success) {
+        errorEl.style.display = 'none';
+        alert(result.message);
+        switchToLogin();
+    } else {
+        errorEl.textContent = result.error;
+        errorEl.style.display = 'block';
+    }
+}
+
+/**
+ * 로그인 탭으로 전환
+ */
+function switchToLogin() {
+    document.getElementById('login-form').classList.add('active');
+    document.getElementById('signup-form').classList.remove('active');
+    document.getElementById('tab-login').classList.add('active');
+    document.getElementById('tab-signup').classList.remove('active');
+}
+
+/**
+ * 회원가입 탭으로 전환
+ */
+function switchToSignup() {
+    document.getElementById('login-form').classList.remove('active');
+    document.getElementById('signup-form').classList.add('active');
+    document.getElementById('tab-login').classList.remove('active');
+    document.getElementById('tab-signup').classList.add('active');
+}

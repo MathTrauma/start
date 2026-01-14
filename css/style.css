@@ -81,8 +81,8 @@ main {
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding-bottom: 12vh;
+    align-items: flex-start;
+    padding-top: 12vh;
     background: linear-gradient(-45deg, #0f172a, #1e3a5f, #1a1a2e, #2d1b4e);
     background-size: 400% 400%;
     animation: gradientFlow 15s ease infinite;
@@ -168,7 +168,7 @@ main {
 }
 
 .hero-text-group {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
     text-align: center;
     /* Re-enable pointer events for text if selection is needed */
     pointer-events: auto;
@@ -177,7 +177,7 @@ main {
 .hero-line {
     color: var(--white);
     font-weight: 700;
-    line-height: 1.4;
+    line-height: 1.8;
     text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -201,8 +201,23 @@ main {
 }
 
 @media (min-width: 768px) {
+    .hero-bg-video-container {
+        align-items: center;
+        padding-top: 0;
+        padding-bottom: 12vh;
+    }
+
     .hero-content-wrapper {
-        padding-top: 60vh;
+        padding-top: 64vh;
+    }
+
+    .hero-text-group {
+        margin-bottom: 2.5rem;
+        text-align: left;
+    }
+
+    .hero-line {
+        line-height: 1.8;
     }
 
     .hero-line-1 {
@@ -224,6 +239,11 @@ main {
 
 /* Typewriter Animation */
 .typewriter-container {
+    position: relative;
+    display: inline-block;
+}
+
+.typewriter-container-inline {
     position: relative;
     display: inline-block;
 }
@@ -457,6 +477,7 @@ main {
 .card-desc {
     font-size: 0.75rem;
     word-break: keep-all;
+    margin-bottom: 0.35rem;
 }
 
 @media (min-width: 768px) {
