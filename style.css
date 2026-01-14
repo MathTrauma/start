@@ -151,13 +151,13 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    padding-bottom: 6rem; /* pb-24 */
+    padding-bottom: 3rem; /* pb-12 */
     z-index: 20;
     padding-left: 1rem;
     padding-right: 1rem;
-    
+
     /* Key fix for clicking issues: Allow clicks to pass through empty space */
-    pointer-events: none; 
+    pointer-events: none;
 }
 
 .hero-text-group {
@@ -193,6 +193,24 @@ main {
     .hero-subtitle {
         font-size: 1.25rem; /* text-xl */
     }
+}
+
+/* Typewriter Animation */
+.typewriter {
+    overflow: hidden;
+    border-right: 2px solid rgba(255, 255, 255, 0.8);
+    white-space: nowrap;
+    animation: blink-caret 0.75s step-end infinite;
+}
+
+.typewriter.done {
+    border-right: none;
+    animation: none;
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: rgba(255, 255, 255, 0.8); }
 }
 
 /* CTA Button */

@@ -58,12 +58,8 @@
             <!-- Main Content (Centered/Bottom) -->
             <div class="hero-content-wrapper">
                 <div class="hero-text-group">
-                    <h1 class="hero-title">
-                        풀이 애니메이션이
-                    </h1>
-                    <p class="hero-subtitle">
-                        도움이 될 거야. 조금은... 아마도...
-                    </p>
+                    <h1 id="hero-title" class="hero-title typewriter" data-text="애니메이션이"></h1>
+                    <p id="hero-subtitle" class="hero-subtitle typewriter" data-text="도형 공부에 도움이 될 거야. 조금은... 아마도..." style="visibility: hidden;"></p>
                 </div>
 
                 <button onclick="location.href='euclide-geometry/'" class="btn-cta group">
@@ -197,6 +193,36 @@
                     currentIndex = (currentIndex + 1) % videos.length;
                     heroVideo.src = videos[currentIndex];
                     heroVideo.play();
+                });
+            }
+
+            // 타이프라이터 애니메이션
+            function typeWriter(element, text, speed, callback) {
+                let i = 0;
+                element.textContent = '';
+                function type() {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(type, speed);
+                    } else {
+                        element.classList.add('done');
+                        if (callback) callback();
+                    }
+                }
+                type();
+            }
+
+            const heroTitle = document.getElementById('hero-title');
+            const heroSubtitle = document.getElementById('hero-subtitle');
+
+            if (heroTitle && heroSubtitle) {
+                const titleText = heroTitle.dataset.text;
+                const subtitleText = heroSubtitle.dataset.text;
+
+                typeWriter(heroTitle, titleText, 100, () => {
+                    heroSubtitle.style.visibility = 'visible';
+                    typeWriter(heroSubtitle, subtitleText, 50);
                 });
             }
         });
