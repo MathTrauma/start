@@ -34,8 +34,11 @@
         <section class="hero-section">
             <!-- Background Video -->
             <div class="hero-bg-video-container">
-                <video id="hero-video" class="hero-bg-video" autoplay muted playsinline>
+                <video id="hero-video-1" class="hero-bg-video active" autoplay muted playsinline preload="auto">
                     <source src="video1.mp4" type="video/mp4" />
+                </video>
+                <video id="hero-video-2" class="hero-bg-video" muted playsinline preload="auto">
+                    <source src="video2.mp4" type="video/mp4" />
                 </video>
                 <div class="hero-overlay"></div>
             </div>
@@ -189,16 +192,21 @@
                 });
             }  
 
-            // 비디오 교대 재생 - 왜 이래...
-            const videos = ['video1.mp4', 'video2.mp4'];
-            let currentIndex = 0;
-            const heroVideo = document.getElementById('hero-video');
+            // 비디오 교대 재생 (crossfade)
+            const video1 = document.getElementById('hero-video-1');
+            const video2 = document.getElementById('hero-video-2');
 
-            if (heroVideo) {
-                heroVideo.addEventListener('ended', () => {
-                    currentIndex = (currentIndex + 1) % videos.length;
-                    heroVideo.src = videos[currentIndex];
-                    heroVideo.play();
+            if (video1 && video2) {
+                video1.addEventListener('ended', () => {
+                    video1.classList.remove('active');
+                    video2.classList.add('active');
+                    video2.play();
+                });
+
+                video2.addEventListener('ended', () => {
+                    video2.classList.remove('active');
+                    video1.classList.add('active');
+                    video1.play();
                 });
             }
 
