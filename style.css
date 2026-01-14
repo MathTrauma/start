@@ -81,8 +81,8 @@ main {
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    padding-top: 5vh;
+    align-items: center;
+    padding-bottom: 12vh;
     background: linear-gradient(-45deg, #0f172a, #1e3a5f, #1a1a2e, #2d1b4e);
     background-size: 400% 400%;
     animation: gradientFlow 15s ease infinite;
@@ -158,7 +158,7 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding-top: 52vh;
+    padding-top: 58vh;
     z-index: 20;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -177,7 +177,7 @@ main {
 .hero-line {
     color: var(--white);
     font-weight: 700;
-    line-height: 1.3;
+    line-height: 1.4;
     text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -195,14 +195,14 @@ main {
     color: rgba(255, 255, 255, 0.85);
 }
 
-.hero-line-4 {
-    font-size: 0.95rem;
+.hero-line-small {
+    font-size: 0.5625rem;
     color: rgba(255, 255, 255, 0.7);
 }
 
 @media (min-width: 768px) {
     .hero-content-wrapper {
-        padding-top: 55vh;
+        padding-top: 60vh;
     }
 
     .hero-line-1 {
@@ -217,8 +217,8 @@ main {
         font-size: 1.5rem;
     }
 
-    .hero-line-4 {
-        font-size: 1.25rem;
+    .hero-line-small {
+        font-size: 0.75rem;
     }
 }
 

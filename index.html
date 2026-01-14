@@ -61,10 +61,12 @@
             <!-- Main Content (Centered/Bottom) -->
             <div class="hero-content-wrapper">
                 <div class="hero-text-group">
-                    <p class="hero-line hero-line-1">애니메이션이</p>
-                    <p class="hero-line hero-line-2">공부에 도움이 될거야.</p>
-                    <p class="hero-line hero-line-3">조금쯤...</p>
-                    <p class="hero-line hero-line-4">아마...</p>
+                    <p class="hero-line hero-line-1" id="hero-line-1" data-text="애니메이션이"></p>
+                    <p class="hero-line hero-line-2" id="hero-line-2" data-text="공부에 도움이 될거야."></p>
+                    <p class="hero-line hero-line-3" id="hero-line-3">
+                        <span id="hero-line-3a" data-text="조금쯤..."></span>
+                        <span id="hero-line-3b" class="hero-line-small" data-text=" 아마도..."></span>
+                    </p>
                 </div>
 
                 <button onclick="location.href='euclide-geometry/'" class="btn-cta group">
@@ -249,18 +251,22 @@
                 type();
             }
 
-            const heroTitle = document.getElementById('hero-title');
-            const heroSubtitle = document.getElementById('hero-subtitle');
+            const line1 = document.getElementById('hero-line-1');
+            const line2 = document.getElementById('hero-line-2');
+            const line3a = document.getElementById('hero-line-3a');
+            const line3b = document.getElementById('hero-line-3b');
 
-            if (heroTitle && heroSubtitle) {
-                const titleText = heroTitle.dataset.text;
-                const subtitleText = heroSubtitle.dataset.text;
-
-                typeWriter(heroTitle, titleText, 200, () => {
+            if (line1 && line2 && line3a && line3b) {
+                typeWriter(line1, line1.dataset.text, 150, () => {
                     setTimeout(() => {
-                        heroSubtitle.style.visibility = 'visible';
-                        typeWriter(heroSubtitle, subtitleText, 100);
-                    }, 600);
+                        typeWriter(line2, line2.dataset.text, 80, () => {
+                            setTimeout(() => {
+                                typeWriter(line3a, line3a.dataset.text, 100, () => {
+                                    typeWriter(line3b, line3b.dataset.text, 100);
+                                });
+                            }, 300);
+                        });
+                    }, 400);
                 });
             }
         });
