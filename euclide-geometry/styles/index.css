@@ -128,7 +128,7 @@ h1 {
     background-color: #fff;
     border: 1px solid #e8e3d8;
     border-radius: 10px;
-    padding: 20px;
+    padding: 20px 20px 8px 20px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     text-decoration: none;
@@ -172,12 +172,15 @@ h1 {
 .problem-card .problem-description {
     color: #5a5247;
     font-size: 14px;
-    line-height: 1.8;
+    line-height: 2;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
+}
+
+.problem-card .problem-description.truncated::after {
+    content: "…";
 }
 
 .problem-card .problem-description::after {
@@ -196,12 +199,13 @@ h1 {
 /* MathJax SVG를 inline으로 */
 .problem-card .problem-description mjx-container {
     display: inline;
-    vertical-align: middle;
+    vertical-align: baseline;
+    margin-right: 2px;
 }
 
 .problem-card .problem-description mjx-container svg {
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: baseline;
 }
 
 .stats-container {

@@ -122,6 +122,15 @@ function renderProblemList(problems) {
         `;
     }).join('');
 
+    // 잘린 텍스트에만 말줄임표 추가
+    requestAnimationFrame(() => {
+        document.querySelectorAll('.problem-description').forEach(el => {
+            if (el.scrollHeight > el.clientHeight) {
+                el.classList.add('truncated');
+            }
+        });
+    });
+
     renderPagination(totalPages);
 }
 
