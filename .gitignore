@@ -50,7 +50,10 @@ euclide-geometry/euclide-worker/
 !euclide-geometry/lib/viewer.js
 
 # md's
-LOGIN.md
+*.md
+
+# docs
+docs/
 
 # tool's
 app.js
