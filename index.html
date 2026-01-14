@@ -58,8 +58,14 @@
             <!-- Main Content (Centered/Bottom) -->
             <div class="hero-content-wrapper">
                 <div class="hero-text-group">
-                    <h1 id="hero-title" class="hero-title typewriter" data-text="애니메이션이"></h1>
-                    <p id="hero-subtitle" class="hero-subtitle typewriter" data-text="도형 공부에 도움이 될 거야. 조금은... 아마도..." style="visibility: hidden;"></p>
+                    <h1 class="hero-title typewriter-container">
+                        <span class="typewriter-placeholder">애니메이션이</span>
+                        <span id="hero-title" class="typewriter-text" data-text="애니메이션이"></span>
+                    </h1>
+                    <p class="hero-subtitle typewriter-container">
+                        <span class="typewriter-placeholder">도형 공부에 도움이 될 거야. 조금은... 아마도...</span>
+                        <span id="hero-subtitle" class="typewriter-text" data-text="도형 공부에 도움이 될 거야. 조금은... 아마도..." style="visibility: hidden;"></span>
+                    </p>
                 </div>
 
                 <button onclick="location.href='euclide-geometry/'" class="btn-cta group">
@@ -220,11 +226,11 @@
                 const titleText = heroTitle.dataset.text;
                 const subtitleText = heroSubtitle.dataset.text;
 
-                typeWriter(heroTitle, titleText, 300, () => {
+                typeWriter(heroTitle, titleText, 200, () => {
                     setTimeout(() => {
                         heroSubtitle.style.visibility = 'visible';
-                        typeWriter(heroSubtitle, subtitleText, 150);
-                    }, 800);
+                        typeWriter(heroSubtitle, subtitleText, 100);
+                    }, 600);
                 });
             }
         });

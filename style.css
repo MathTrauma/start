@@ -197,14 +197,25 @@ main {
 }
 
 /* Typewriter Animation */
-.typewriter {
-    overflow: hidden;
-    border-right: 2px solid rgba(255, 255, 255, 0.8);
+.typewriter-container {
+    position: relative;
+    display: inline-block;
+}
+
+.typewriter-placeholder {
+    visibility: hidden;
+}
+
+.typewriter-text {
+    position: absolute;
+    left: 0;
+    top: 0;
     white-space: nowrap;
+    border-right: 2px solid rgba(255, 255, 255, 0.8);
     animation: blink-caret 0.75s step-end infinite;
 }
 
-.typewriter.done {
+.typewriter-text.done {
     border-right: none;
     animation: none;
 }
