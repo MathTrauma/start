@@ -211,12 +211,12 @@ function scrollToPhase(phase) {
 }
 
 function showSolutionPanel() {
-    const panel = document.getElementById('solution-panel');
+    const panel = document.getElementById('solution-container');
     if (panel) panel.classList.remove('hidden');
 }
 
 function hideSolutionPanel() {
-    const panel = document.getElementById('solution-panel');
+    const panel = document.getElementById('solution-container');
     if (panel) panel.classList.add('hidden');
 }
 

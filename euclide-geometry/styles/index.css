@@ -174,13 +174,6 @@ h1 {
     font-size: 14px;
     line-height: 2;
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-}
-
-.problem-card .problem-description.truncated::after {
-    content: "…";
 }
 
 .problem-card .problem-description::after {

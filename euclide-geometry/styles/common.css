@@ -76,11 +76,18 @@ body {
     width: 100%;
     max-height: 25vh; /* 문제 영역이 25%를 넘어설 때만 스크롤 생성 */
     min-height: 80px;
+    overflow-x: hidden;
     overflow-y: auto;
+    overflow-y: overlay; /* 오버레이 스크롤바 (Chrome/Safari) - auto 폴백 */
     background-color: #f5f3ed;
+    padding: 0;
+    box-sizing: border-box;
     z-index: 11;
     display: flex;
     justify-content: center; /* 수평 중앙 정렬 */
+    /* 오버레이 스크롤바 - 레이아웃에 영향 없음 */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(139, 125, 107, 0.3) transparent;
 }
 
 .canvas-section {
@@ -98,13 +105,40 @@ body {
     flex: 1; /* 남은 모든 공간 차지 */
     min-height: 0; /* flex item이 콘텐츠보다 작아질 수 있도록 허용 → 스크롤 작동 */
     width: 100%;
+    overflow-x: hidden;
     overflow-y: auto;
+    overflow-y: overlay; /* 오버레이 스크롤바 (Chrome/Safari) - auto 폴백 */
     background-color: #f5f3ed;
-    padding: 0; /* 중앙 정렬을 위해 padding 제거 */
+    padding: 0;
     box-sizing: border-box;
     display: flex;
-    flex-direction: column;
-    align-items: center; /* 수평 중앙 정렬 */
+    justify-content: center; /* problem-scroll-container와 동일 */
+    /* 오버레이 스크롤바 - 레이아웃에 영향 없음 */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(139, 125, 107, 0.3) transparent;
+}
+
+/* WebKit 오버레이 스크롤바 (Chrome/Safari) */
+#problem-scroll-container::-webkit-scrollbar,
+#solution-scroll-container::-webkit-scrollbar {
+    width: 6px;
+    background: transparent;
+}
+
+#problem-scroll-container::-webkit-scrollbar-track,
+#solution-scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#problem-scroll-container::-webkit-scrollbar-thumb,
+#solution-scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(139, 125, 107, 0.3);
+    border-radius: 3px;
+}
+
+#problem-scroll-container::-webkit-scrollbar-thumb:hover,
+#solution-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 125, 107, 0.5);
 }
 
 /* Problem Display */
@@ -154,6 +188,69 @@ body {
     margin: 0;
 }
 
+/* Solution Panel - Below Canvas (Base Styles) */
+.solution-container {
+    width: 100%;
+    max-width: 600px;
+    min-height: 200px;
+    flex-shrink: 0;
+    background-color: #faf8f3;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(139, 125, 107, 0.2);
+    overflow: hidden;
+    transition: opacity 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+    contain: layout paint;
+    box-sizing: border-box;
+}
+
+.solution-container.hidden {
+    display: none;
+}
+
+.solution-container-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: #e8e3d8;
+    border-bottom: 1px solid #d4cec3;
+}
+
+.solution-container-title {
+    color: #5a5247;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.solution-container-close-btn {
+    background: none;
+    border: none;
+    color: #5a5247;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    line-height: 20px;
+    transition: color 0.2s;
+}
+
+.solution-container-close-btn:hover {
+    color: #8b7d6b;
+}
+
+.solution-container-content {
+    padding: 10px 15px;
+    color: #2a2520;
+    font-size: 15px;
+    line-height: 1.8;
+    flex: 1;
+}
+
 /* Toggle Canvas Button */
 .toggle-canvas-btn {
     width: auto;
@@ -200,8 +297,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 12px solid #5d4037;
+    border: 6px solid #5d4037;
     border-radius: 4px;
+    box-sizing: border-box;
     box-shadow:
         inset 0 0 20px rgba(0,0,0,0.5),
         0 10px 20px rgba(0,0,0,0.3),
@@ -522,17 +620,18 @@ button.active:hover {
         padding-bottom: 100px; /* 하단 컨트롤 여유 공간만 유지 */
     }
 
-    .solution-panel {
-        width: calc(100% - 30px); /* 모바일 좌우 15px 여백 */
+    .solution-container {
+        width: 100%;
         max-width: 100%;
         margin: 20px 0;
         border-radius: 0;
-        border: none;
+        border-left: none;
+        border-right: none;
         background-color: transparent;
         box-shadow: none;
     }
 
-    .solution-panel-content {
+    .solution-container-content {
         padding: 10px 0;
     }
 
@@ -638,80 +737,5 @@ button.active:hover {
 
     .problem-container {
         padding: 20px 25px;
-    }
-}
-
-/* Solution Panel - Below Canvas */
-.solution-panel {
-    width: calc(100% - 40px); /* 좌우 20px 여백 확보 */
-    max-width: 600px; /* 캔버스 폭에 맞춤 */
-    min-height: 200px;
-    flex-shrink: 0; /* 줄어들지 않음 → 부모에서 스크롤 발생 */
-    background-color: #faf8f3;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(139, 125, 107, 0.2);
-    overflow: hidden;
-    transition: opacity 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    margin: 20px 0;
-    /* 레이아웃 안정화 */
-    contain: layout paint;
-}
-
-.solution-panel.hidden {
-    display: none;
-}
-
-.solution-panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 15px;
-    background-color: #e8e3d8;
-    border-bottom: 1px solid #d4cec3;
-}
-
-.solution-panel-title {
-    color: #5a5247;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.solution-panel-close-btn {
-    background: none;
-    border: none;
-    color: #5a5247;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    line-height: 20px;
-    transition: color 0.2s;
-}
-
-.solution-panel-close-btn:hover {
-    color: #8b7d6b;
-}
-
-.solution-panel-content {
-    padding: 10px 15px;
-    color: #2a2520;
-    font-size: 15px;
-    line-height: 1.8;
-    flex: 1;
-}
-
-/* Mobile Responsive for Solution Panel */
-@media (max-width: 768px) {
-    .solution-panel {
-        max-width: 100%;
-        margin-bottom: 20px;
-    }
-
-    .solution-panel-content {
-        max-height: none;
     }
 }
