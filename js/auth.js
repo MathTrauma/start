@@ -98,7 +98,7 @@ async function loadLoginModal() {
     if (document.getElementById('login-modal')) return;
 
     try {
-        const response = await fetch('components/login-modal.html');
+        const response = await fetch('/components/login-modal.html');
         const html = await response.text();
         document.body.insertAdjacentHTML('beforeend', html);
         lucide.createIcons();

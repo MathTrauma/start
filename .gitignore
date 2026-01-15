@@ -43,7 +43,7 @@ euclide-geometry/docs/
 euclide-geometry/.claude/
 euclide-geometry/scripts/
 euclide-geometry/euclide-worker/
-euclide-geometry/lib/
+euclide-geometry/lib*
 
 # md's
 *.md

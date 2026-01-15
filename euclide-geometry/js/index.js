@@ -1,19 +1,99 @@
 // Lucide 초기화
 lucide.createIcons();
 
+// 유료 사용자 여부
+let isPaidUser = false;
+let currentUserId = null;
+
 // 인증 초기화
 const loginBtn = document.getElementById('login-btn');
 const logoutBtn = document.getElementById('logout-btn');
 
-initAuth((session) => {
+initAuth(async (session) => {
     if (session) {
         loginBtn.style.display = 'none';
         logoutBtn.style.display = 'block';
+        currentUserId = session.user.id;
+        // 유료 사용자 여부 확인
+        await checkPaidStatus(currentUserId);
     } else {
         loginBtn.style.display = 'block';
         logoutBtn.style.display = 'none';
+        currentUserId = null;
+        isPaidUser = false;
+    }
+    // 상태 변경 시 문제 목록 다시 렌더링
+    if (filteredProblems.length > 0) {
+        renderProblemList(filteredProblems);
     }
 });
+
+// 유료 사용자 여부 확인
+async function checkPaidStatus(userId) {
+    try {
+        const response = await fetch(
+            `https://payment-worker.painfultrauma.workers.dev/check-access?userId=${userId}`
+        );
+        const data = await response.json();
+        isPaidUser = data.hasAccess === true;
+    } catch (error) {
+        console.error('구독 상태 확인 실패:', error);
+        isPaidUser = false;
+    }
+}
+
+// 각 레벨별 첫 번째 문제인지 확인
+function isFirstProblemOfLevel(problem, problems) {
+    const sameLevel = problems.filter(p => p.level === problem.level);
+    sameLevel.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+    return sameLevel.length > 0 && sameLevel[0].id === problem.id;
+}
+
+// 문제 접근 가능 여부 확인
+function canAccessProblem(problem) {
+    if (isPaidUser) return true;
+    return isFirstProblemOfLevel(problem, allProblems);
+}
+
+// 무료 문제 목록
+const FREE_PROBLEMS = ['100', '200', '300', '400', '900'];
+
+// 인증 토큰 가져오기
+async function getAuthToken() {
+    if (typeof supabaseClient === 'undefined') return null;
+    try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        return session?.access_token || null;
+    } catch {
+        return null;
+    }
+}
+
+// 인증된 fetch (유료 문제용)
+async function authFetch(url, problemId) {
+    const isFree = FREE_PROBLEMS.includes(problemId);
+    const headers = {};
+
+    if (!isFree) {
+        const token = await getAuthToken();
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+    }
+
+    return fetch(url, { headers });
+}
+
+// 잠금 문제 클릭 시 처리
+window.handleLockedProblemClick = function() {
+    if (!currentUserId) {
+        // 로그인 안 됨 → 로그인 모달
+        openLoginModal();
+    } else {
+        // 로그인 됨 → 결제 진행
+        requestPayment();
+    }
+};
 
 let allProblems = [];
 let filteredProblems = [];
@@ -135,8 +215,19 @@ function renderProblemList(problems) {
     // 먼저 skeleton 카드 렌더링
     grid.innerHTML = pageProblems.map(problem => {
         const levelLabel = problem.level == 9 ? '영재고' : `Level ${problem.level}`;
+        const isLocked = !canAccessProblem(problem);
+        const lockedClass = isLocked ? 'locked' : '';
+        const lockIcon = isLocked ? `
+            <div class="lock-overlay">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+            </div>
+        ` : '';
         return `
-            <a href="${problem.url}" class="problem-card" data-problem-id="${problem.id}">
+            <a href="${isLocked ? '#' : problem.url}" class="problem-card ${lockedClass}" data-problem-id="${problem.id}" ${isLocked ? 'onclick="event.preventDefault(); handleLockedProblemClick();"' : ''}>
+                ${lockIcon}
                 <div class="problem-description">
                     <span class="problem-tag level">${levelLabel}</span>
                     <span class="problem-text skeleton">로딩 중...</span>
@@ -148,7 +239,7 @@ function renderProblemList(problems) {
     // 각 카드의 problem.html을 비동기로 로드
     pageProblems.forEach(problem => {
         const paddedId = problem.id.padStart(3, '0');
-        fetch(`${workerUrl}/problems/${paddedId}/problem.html`)
+        authFetch(`${workerUrl}/problems/${paddedId}/problem.html`, paddedId)
             .then(res => res.ok ? res.text() : Promise.reject('Not found'))
             .then(html => {
                 const card = grid.querySelector(`[data-problem-id="${problem.id}"]`);
@@ -166,7 +257,7 @@ function renderProblemList(problems) {
                     const textEl = card.querySelector('.problem-text');
                     if (textEl) {
                         textEl.classList.remove('skeleton');
-                        textEl.textContent = problem.title || '문제 로드 실패';
+                        textEl.textContent = problem.title || '유료 회원 전용';
                     }
                 }
             });

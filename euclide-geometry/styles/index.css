@@ -138,6 +138,40 @@ h1 {
     display: flex;
     flex-direction: column;
     height: 145px;
+    position: relative;
+}
+
+/* 잠금 문제 스타일 */
+.problem-card.locked {
+    cursor: not-allowed;
+}
+
+.problem-card.locked .problem-description {
+    opacity: 0.5;
+}
+
+.problem-card.locked:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: #e8e3d8;
+}
+
+.lock-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.lock-overlay svg {
+    color: #8b7d6b;
+    opacity: 0.3;
 }
 
 .problem-card:hover {

@@ -15,6 +15,19 @@
     --border-light: #e8e3d8;
     --border-medium: #d4cec3;
     --scrollbar-color: rgba(139, 125, 107, 0.3);
+
+    /* 로그인 모달용 변수 */
+    --white: #ffffff;
+    --primary-500: #6366f1;
+    --primary-600: #4f46e5;
+    --slate-50: #f8fafc;
+    --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1;
+    --slate-400: #94a3b8;
+    --slate-500: #64748b;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-900: #0f172a;
 }
 
 /* Reset */
