@@ -49,8 +49,9 @@ window.addEventListener('resize', () => {
     }
 });
 
-// 문제 목록 로드
-const workerUrl = 'https://euclide-worker.painfultrauma.workers.dev';
+// 환경 감지 및 URL 설정
+const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+const workerUrl = isLocal ? '.' : 'https://euclide-worker.painfultrauma.workers.dev';
 fetch(`${workerUrl}/problems/index.json?_t=${Date.now()}`)
     .then(res => res.json())
     .then(data => {
@@ -89,6 +90,10 @@ function renderStats(stats) {
                 <span class="stat-number">${stats.byLevel['3'] || 0}</span>
                 <span>Level 3</span>
             </div>
+            <div class="stat-item">
+                <span class="stat-number">${stats.byLevel['9'] || 0}</span>
+                <span>영재고</span>
+            </div>
         </div>
     `;
 }
@@ -124,14 +129,17 @@ function renderProblemList(problems) {
     const pageProblems = problems.slice(startIndex, endIndex);
 
     // 먼저 skeleton 카드 렌더링
-    grid.innerHTML = pageProblems.map(problem => `
-        <a href="${problem.url}" class="problem-card" data-problem-id="${problem.id}">
-            <div class="problem-description">
-                <span class="problem-tag level">Level ${problem.level}</span>
-                <span class="problem-text skeleton">로딩 중...</span>
-            </div>
-        </a>
-    `).join('');
+    grid.innerHTML = pageProblems.map(problem => {
+        const levelLabel = problem.level == 9 ? '영재고' : `Level ${problem.level}`;
+        return `
+            <a href="${problem.url}" class="problem-card" data-problem-id="${problem.id}">
+                <div class="problem-description">
+                    <span class="problem-tag level">${levelLabel}</span>
+                    <span class="problem-text skeleton">로딩 중...</span>
+                </div>
+            </a>
+        `;
+    }).join('');
 
     // 각 카드의 problem.html을 비동기로 로드
     pageProblems.forEach(problem => {
