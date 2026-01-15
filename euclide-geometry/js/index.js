@@ -22,9 +22,22 @@ let itemsPerPage = 9;
 
 function getItemsPerPage() {
     const width = window.innerWidth;
-    if (width < 640) return 4;
-    if (width < 1024) return 6;
-    return 9;
+    const height = window.innerHeight;
+
+    // 컬럼 수 계산 (너비 기준)
+    let cols;
+    if (width < 640) cols = 1;
+    else if (width < 1024) cols = 2;
+    else cols = 3;
+
+    // 행 수 계산 (높이 기준)
+    const navHeight = 60;
+    const paginationHeight = 80;
+    const cardHeight = 145 + 20; // 카드 높이 + gap
+    const availableHeight = height - navHeight - paginationHeight - 40; // 여유 공간
+    const rows = Math.max(1, Math.floor(availableHeight / cardHeight));
+
+    return cols * rows;
 }
 
 window.addEventListener('resize', () => {

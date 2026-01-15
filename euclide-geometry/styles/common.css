@@ -69,6 +69,7 @@ body {
     z-index: -1;
     overflow: hidden;
     pointer-events: none;
+    /* display: none; */ /* 테스트용 - 문제 원인 파악 후 제거 */
 }
 
 .auth-buttons button {

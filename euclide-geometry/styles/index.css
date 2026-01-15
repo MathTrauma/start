@@ -64,7 +64,7 @@ body {
 .problem-list-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 15px 20px;
+    padding: 15px 20px 80px 20px; /* 하단에 페이지네이션 공간 확보 */
 }
 
 h1 {
@@ -259,8 +259,14 @@ h1 {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-top: 30px;
-    padding: 20px 0;
+    padding: 15px 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-top: 1px solid #e8e3d8;
+    z-index: 100;
 }
 
 .pagination button {
