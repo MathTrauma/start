@@ -43,11 +43,7 @@ euclide-geometry/docs/
 euclide-geometry/.claude/
 euclide-geometry/scripts/
 euclide-geometry/euclide-worker/
-
-# R2에 올릴 viewer/module 파일들
-!euclide-geometry/lib/viewer-controls.js
-!euclide-geometry/lib/ui-controls.js
-!euclide-geometry/lib/viewer.js
+euclide-geometry/lib/
 
 # md's
 *.md
