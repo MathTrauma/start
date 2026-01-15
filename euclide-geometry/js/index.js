@@ -91,6 +91,10 @@ function renderStats(stats) {
                 <span>Level 3</span>
             </div>
             <div class="stat-item">
+                <span class="stat-number">${stats.byLevel['4'] || 0}</span>
+                <span>Level 4</span>
+            </div>
+            <div class="stat-item">
                 <span class="stat-number">${stats.byLevel['9'] || 0}</span>
                 <span>영재고</span>
             </div>
