@@ -42,7 +42,6 @@ fetch(`${workerUrl}/problems/index.json?_t=${Date.now()}`)
     .then(res => res.json())
     .then(data => {
         allProblems = data.problems;
-        renderStats(data.stats);
         renderCategories(data.categories);
         renderProblemList(allProblems);
         setupFilters();
@@ -111,16 +110,42 @@ function renderProblemList(problems) {
     const endIndex = startIndex + itemsPerPage;
     const pageProblems = problems.slice(startIndex, endIndex);
 
-    grid.innerHTML = pageProblems.map(problem => {
-        const cleanProblemHtml = (problem.problemHtml || '').replace(/\n/g, '').replace(/\r/g, '');
-        return `
-            <a href="${problem.url}" class="problem-card">
-                <div class="problem-description">
-                    <span class="problem-tag level">Level ${problem.level}</span>${cleanProblemHtml}
-                </div>
-            </a>
-        `;
-    }).join('');
+    // 먼저 skeleton 카드 렌더링
+    grid.innerHTML = pageProblems.map(problem => `
+        <a href="${problem.url}" class="problem-card" data-problem-id="${problem.id}">
+            <div class="problem-description">
+                <span class="problem-tag level">Level ${problem.level}</span>
+                <span class="problem-text skeleton">로딩 중...</span>
+            </div>
+        </a>
+    `).join('');
+
+    // 각 카드의 problem.html을 비동기로 로드
+    pageProblems.forEach(problem => {
+        const paddedId = problem.id.padStart(3, '0');
+        fetch(`${workerUrl}/problems/${paddedId}/problem.html`)
+            .then(res => res.ok ? res.text() : Promise.reject('Not found'))
+            .then(html => {
+                const card = grid.querySelector(`[data-problem-id="${problem.id}"]`);
+                if (card) {
+                    const textEl = card.querySelector('.problem-text');
+                    if (textEl) {
+                        textEl.classList.remove('skeleton');
+                        textEl.innerHTML = html.replace(/\n/g, '').replace(/\r/g, '');
+                    }
+                }
+            })
+            .catch(() => {
+                const card = grid.querySelector(`[data-problem-id="${problem.id}"]`);
+                if (card) {
+                    const textEl = card.querySelector('.problem-text');
+                    if (textEl) {
+                        textEl.classList.remove('skeleton');
+                        textEl.textContent = problem.title || '문제 로드 실패';
+                    }
+                }
+            });
+    });
 
     renderPagination(totalPages);
 }

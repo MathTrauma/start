@@ -416,7 +416,7 @@ export const XArc = (p, center, radius, startAngle, endAngle, options = {}) => {
 // 미리 정의된 마커 이모지
 const MARKER_EMOJIS = {
     dot: '●',        // 채워진 원
-    triangle: '▲',   // 채워진 삼각형
+    triangle: '△',   // 속이 빈 삼각형
     star: '★',       // 별표
     circle: '○'      // 속이 빈 원
 };

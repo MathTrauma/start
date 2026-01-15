@@ -115,14 +115,18 @@ export class XAnimator {
                 return;
             }
 
-            // addToBounds 처리 (viewport 즉시 업데이트)
-            if (action.action === 'addToBounds') {
-                const { points } = action;
-                points.forEach(pt => {
-                    if (!this.boundingPoints.includes(pt)) {
-                        this.boundingPoints.push(pt);
-                    }
-                });
+            // setBounds 처리 (viewport 즉시 업데이트)
+            if (action.action === 'setBounds') {
+                const { points, replace = false } = action;
+                if (replace) {
+                    this.boundingPoints = [...points];
+                } else {
+                    points.forEach(pt => {
+                        if (!this.boundingPoints.includes(pt)) {
+                            this.boundingPoints.push(pt);
+                        }
+                    });
+                }
                 const params = this._calculateViewportParams(
                     this.boundingPoints,
                     this.p.width,
@@ -231,15 +235,29 @@ export class XAnimator {
             return allComplete;
         }
 
+        // 순차 그룹 (parallel이 없거나 false인 경우)
+        if (action.group && !action.parallel) {
+            if (action._groupIndex === undefined) action._groupIndex = 0;
+            while (action._groupIndex < action.group.length) {
+                const complete = this.processAction(action.group[action._groupIndex], dt);
+                if (complete) {
+                    action._groupIndex++;
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         // object 필드가 있으면 자동 등록 (reset으로 초기 상태 복원)
         if (action.object && !this.objects.has(action.id)) {
             if (action.object.reset) action.object.reset();
             this.add(action.id, action.object);
         }
 
-        // addToBounds 액션 (id가 필요 없음)
-        if (action.action === 'addToBounds') {
-            const { points, duration = 1.0 } = action;
+        // setBounds 액션 (id가 필요 없음)
+        if (action.action === 'setBounds') {
+            const { points, duration = 1.0, replace = false } = action;
 
             if (!this.actionTimers.has(action)) {
                 // 초기화
@@ -250,12 +268,16 @@ export class XAnimator {
                 action._fromCenterX = this.viewport.centerX;
                 action._fromCenterY = this.viewport.centerY;
 
-                // 새 점들을 boundingPoints에 추가
-                points.forEach(pt => {
-                    if (!this.boundingPoints.includes(pt)) {
-                        this.boundingPoints.push(pt);
-                    }
-                });
+                // replace: true면 교체, false면 추가
+                if (replace) {
+                    this.boundingPoints = [...points];
+                } else {
+                    points.forEach(pt => {
+                        if (!this.boundingPoints.includes(pt)) {
+                            this.boundingPoints.push(pt);
+                        }
+                    });
+                }
 
                 // 목표 viewport 계산
                 const params = this._calculateViewportParams(
@@ -350,6 +372,11 @@ export class XAnimator {
 
             if (progress >= 1) {
                 obj.progress = to;
+                // pulse, travel 등 일시적 효과는 완료 후 default로 복원
+                // fadeOut은 유지 (반투명 상태 지속)
+                if (mode === 'pulse' || mode === 'travel') {
+                    obj.mode = 'default';
+                }
                 return true;
             }
             return false;
