@@ -1,0 +1,95 @@
+/* =========================================
+   Tablet Styles (769px - 1024px)
+   ========================================= */
+
+/* Problem Container */
+.problem-container {
+    padding: 20px 25px;
+}
+
+.problem-tag {
+    padding: 2px 6px;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.problem-content {
+    font-size: 15px;
+    line-height: 2.0;
+}
+
+/* Solution Container */
+.solution-container-content {
+    padding: 10px 20px;
+    font-size: 15px;
+    line-height: 2.0;
+}
+
+/* Controls */
+.controls {
+    top: 10px;
+    right: 10px;
+    padding: 8px 10px;
+    gap: 4px;
+    min-width: 140px;
+    max-width: 160px;
+}
+
+.controls.collapsed {
+    padding: 4px 6px;
+}
+
+.controls-header {
+    padding-bottom: 4px;
+}
+
+.controls.collapsed .controls-header {
+    margin-bottom: 4px;
+}
+
+.controls-title {
+    font-size: 9px;
+}
+
+.controls-collapse-btn {
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    line-height: 18px;
+}
+
+.drag-handle-icon {
+    font-size: 10px;
+}
+
+.mode-shortcut-btn {
+    padding: 3px 8px;
+    font-size: 10px;
+}
+
+.control-label {
+    font-size: 9px;
+    margin-bottom: 3px;
+}
+
+.control-section {
+    padding-bottom: 5px;
+}
+
+/* Buttons */
+button {
+    padding: 3px 6px;
+    font-size: 10px;
+    min-width: 32px;
+}
+
+.phase-buttons {
+    gap: 2px;
+}
+
+.phase-buttons button {
+    font-size: 9px;
+    padding: 3px 0;
+    min-width: 0;
+}

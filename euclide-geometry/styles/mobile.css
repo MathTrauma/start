@@ -1,0 +1,169 @@
+/* =========================================
+   Mobile Styles (max-width: 768px)
+   ========================================= */
+
+/* Top Nav on Mobile */
+.top-nav {
+    padding: 8px 12px;
+}
+
+#theme-select {
+    font-size: 14px;
+    padding: 6px 10px;
+    -webkit-appearance: menulist;
+    appearance: menulist;
+}
+
+body {
+    align-items: flex-start;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.viewer-main {
+    padding: 0;
+    height: 100dvh;
+}
+
+/* Problem Container */
+.problem-container {
+    padding: 12px 15px;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
+}
+
+.problem-tag {
+    font-size: 10px;
+    padding: 3px 8px;
+}
+
+.problem-content {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Solution Scroll Container */
+#solution-scroll-container {
+    padding-bottom: 100px;
+}
+
+/* Solution Container */
+.solution-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 20px 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.solution-container-content {
+    padding: 10px 15px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Canvas */
+.canvas-container {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100vw;
+    position: sticky;
+    top: 0;
+    margin-bottom: 10px;
+}
+
+/* Controls */
+.controls {
+    top: 6px;
+    right: 6px;
+    max-width: 160px;
+    min-width: 100px;
+    padding: 4px;
+    gap: 2px;
+}
+
+/* Collapsed - 폭 넓게, 높이 납작하게 */
+.controls.collapsed {
+    min-width: 100px;
+    padding: 2px 4px;
+}
+
+.controls.collapsed .controls-header {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.controls-header {
+    padding-bottom: 2px;
+}
+
+.controls-title {
+    font-size: 8px;
+}
+
+.controls-collapse-btn {
+    width: 18px;
+    height: 18px;
+    line-height: 16px;
+    font-size: 12px;
+}
+
+/* 드래그 핸들 작게 */
+.drag-handle-icon {
+    font-size: 8px;
+    padding: 0 1px;
+}
+
+.mode-shortcut-btn {
+    padding: 2px 4px;
+    font-size: 8.5px;
+}
+
+.control-label {
+    font-size: 7px;
+}
+
+/* Buttons */
+button {
+    padding: 2px 3px;
+    font-size: 8.5px;
+}
+
+.phase-buttons {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1.5px;
+}
+
+.phase-buttons button {
+    font-size: 8px;
+    padding: 2px 0;
+}
+
+/* =========================================
+   Small Mobile (max-width: 480px)
+   ========================================= */
+@media (max-width: 480px) {
+    .problem-container {
+        padding: 12px 15px;
+    }
+
+    .problem-content {
+        font-size: 13px;
+    }
+
+    .controls {
+        padding: 10px 12px;
+    }
+
+    .phase-buttons {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}

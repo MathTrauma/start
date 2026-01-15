@@ -206,7 +206,15 @@ function scrollToPhase(phase) {
     }
 
     if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Calculate offset relative to scroll container
+        const containerRect = scrollContainer.getBoundingClientRect();
+        const targetRect = targetElement.getBoundingClientRect();
+        const offsetTop = targetRect.top - containerRect.top + scrollContainer.scrollTop;
+
+        scrollContainer.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+        });
     }
 }
 

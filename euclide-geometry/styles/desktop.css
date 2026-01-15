@@ -1,0 +1,91 @@
+/* =========================================
+   Desktop Styles (min-width: 1025px)
+   ========================================= */
+
+/* Problem Container */
+.problem-container {
+    padding: 15px 20px;
+}
+
+.problem-tag {
+    padding: 2px 6px;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.problem-content {
+    font-size: 16px;
+    line-height: 2.2;
+}
+
+/* Solution Container */
+.solution-container-content {
+    padding: 10px 15px;
+    font-size: 16px;
+    line-height: 2.2;
+}
+
+/* Controls */
+.controls {
+    top: 15px;
+    right: 15px;
+    padding: 6px 8px;
+    gap: 4px;
+    min-width: 110px;
+    max-width: 130px;
+}
+
+.controls.collapsed {
+    padding: 4px 6px;
+}
+
+.controls-header {
+    padding-bottom: 4px;
+}
+
+.controls.collapsed .controls-header {
+    margin-bottom: 4px;
+}
+
+.controls-title {
+    font-size: 9px;
+}
+
+.controls-collapse-btn {
+    font-size: 12px;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    line-height: 14px;
+}
+
+.drag-handle-icon {
+    font-size: 10px;
+}
+
+.mode-shortcut-btn {
+    padding: 2px 6px;
+    font-size: 10px;
+}
+
+.control-label {
+    font-size: 8px;
+    margin-bottom: 2px;
+}
+
+.control-section {
+    padding-bottom: 4px;
+}
+
+/* Buttons */
+button {
+    padding: 2px 4px;
+    font-size: 9px;
+    min-width: 30px;
+}
+
+.phase-buttons button {
+    font-size: 8px;
+    padding: 2px 0;
+    min-width: 0;
+}

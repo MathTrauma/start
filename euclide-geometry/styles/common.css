@@ -1,5 +1,40 @@
-/* Base Styles */
+/* =========================================
+   Common Styles - Variables, Reset, Base
+   ========================================= */
+
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Creepster&family=Cormorant+Garamond:wght@400;600&family=Noto+Serif+KR:wght@400;600;700&display=swap');
+
+/* CSS Variables */
+:root {
+    --bg-primary: #ffffff;
+    --bg-card: #ffffff;
+    --bg-solution: #ffffff;
+    --text-primary: #2a2520;
+    --text-secondary: #5a5247;
+    --text-muted: #8b7d6b;
+    --border-light: #e8e3d8;
+    --border-medium: #d4cec3;
+    --scrollbar-color: rgba(139, 125, 107, 0.3);
+}
+
+/* Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    background-color: var(--bg-primary);
+    font-family: 'Noto Serif KR', serif;
+    box-sizing: border-box;
+    overflow: hidden;
+}
 
 /* Top Navigation Bar */
 .top-nav {
@@ -33,7 +68,7 @@
     height: 100%;
     z-index: -1;
     overflow: hidden;
-    pointer-events: all; /* OrbitControls 사용 시 all, 아니면 none */
+    pointer-events: all;
 }
 
 .auth-buttons button {
@@ -49,45 +84,67 @@
     background: #e9ecef;
 }
 
-body {
-    margin: 0;
-    padding: 0;
+/* Theme Buttons */
+.theme-buttons {
     display: flex;
-    flex-direction: column;
-    height: 100dvh; /* Modern viewport height */
-    background-color: #f5f3ed;
-    font-family: 'Noto Serif KR', serif;
-    box-sizing: border-box;
-    overflow: hidden; /* 전체 스크롤 방지 */
+    gap: 4px;
 }
 
+.theme-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
+    cursor: pointer;
+}
+
+.theme-btn.active {
+    background: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+/* Main Layout */
 .viewer-main {
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
-    min-height: 0; /* flex 자식이 줄어들 수 있도록 허용 */
+    min-height: 0;
     overflow: hidden;
     position: relative;
 }
 
-#problem-scroll-container {
-    flex: 0 1 auto;
+/* Scroll Containers - Common */
+#problem-scroll-container,
+#solution-scroll-container {
     width: 100%;
-    max-height: 25vh; /* 문제 영역이 25%를 넘어설 때만 스크롤 생성 */
-    min-height: 80px;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-gutter: stable;
-    background-color: #f5f3ed;
+    background-color: var(--bg-primary);
     padding: 0;
     box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-color) transparent;
+}
+
+#problem-scroll-container {
+    flex: 0 1 auto;
+    max-height: 25vh;
+    min-height: 80px;
     z-index: 11;
     display: flex;
-    justify-content: center; /* 수평 중앙 정렬 */
-    /* 오버레이 스크롤바 - 레이아웃에 영향 없음 */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(139, 125, 107, 0.3) transparent;
+    justify-content: center;
+}
+
+#solution-scroll-container {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .canvas-section {
@@ -103,24 +160,7 @@ body {
     scrollbar-gutter: stable;
 }
 
-#solution-scroll-container {
-    flex: 1; /* 남은 모든 공간 차지 */
-    min-height: 0; /* flex item이 콘텐츠보다 작아질 수 있도록 허용 → 스크롤 작동 */
-    width: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    scrollbar-gutter: stable;
-    background-color: #f5f3ed;
-    padding: 0;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center; /* problem-scroll-container와 동일 */
-    /* 오버레이 스크롤바 - 레이아웃에 영향 없음 */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(139, 125, 107, 0.3) transparent;
-}
-
-/* WebKit 오버레이 스크롤바 (Chrome/Safari) */
+/* WebKit Scrollbar */
 #problem-scroll-container::-webkit-scrollbar,
 #solution-scroll-container::-webkit-scrollbar {
     width: 6px;
@@ -134,7 +174,7 @@ body {
 
 #problem-scroll-container::-webkit-scrollbar-thumb,
 #solution-scroll-container::-webkit-scrollbar-thumb {
-    background: rgba(139, 125, 107, 0.3);
+    background: var(--scrollbar-color);
     border-radius: 3px;
 }
 
@@ -143,11 +183,10 @@ body {
     background: rgba(139, 125, 107, 0.5);
 }
 
-/* Problem Display */
+/* Problem Container - Base */
 .problem-container {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 15px 20px;
-    border-radius: 0 0 10px 10px; /* 상단은 평평하게 */
+    background-color: var(--bg-card);
+    border-radius: 0 0 10px 10px;
     width: 100%;
     max-width: 600px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -155,49 +194,42 @@ body {
 }
 
 .problem-tag {
-    background-color: #e8e3d8;
-    padding: 2px 6px; /* 패딩 축소 */
+    background-color: var(--border-light);
     border-radius: 4px;
-    font-size: 11px;
-    color: #5a5247;
+    color: var(--text-secondary);
     display: inline-block;
     vertical-align: middle;
     margin-right: 8px;
-    line-height: 1.4;
 }
 
 .problem-tag.level {
-    background-color: #8b7d6b;
+    background-color: var(--text-muted);
     color: #fff;
     font-weight: bold;
 }
 
 .problem-content {
-    color: #2a2520;
-    font-size: 16px;
-    line-height: 2.2; /* 행간 대폭 확대 */
+    color: var(--text-primary);
 }
 
 .problem-content #problem-text {
     display: inline;
 }
 
-/* problem.html 내부의 p 태그가 줄바꿈을 일으키지 않도록 */
 .problem-content p {
     display: inline;
     margin: 0;
 }
 
-/* Solution Panel - Below Canvas (Base Styles) */
+/* Solution Container - Base */
 .solution-container {
     width: 100%;
     max-width: 600px;
     min-height: 200px;
     flex-shrink: 0;
-    background-color: #faf8f3;
+    background-color: var(--bg-solution);
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
     transition: opacity 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -215,12 +247,12 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 12px 15px;
-    background-color: #e8e3d8;
-    border-bottom: 1px solid #d4cec3;
+    background-color: var(--border-light);
+    border-bottom: 1px solid var(--border-medium);
 }
 
 .solution-container-title {
-    color: #5a5247;
+    color: var(--text-secondary);
     font-weight: bold;
     font-size: 14px;
 }
@@ -228,7 +260,7 @@ body {
 .solution-container-close-btn {
     background: none;
     border: none;
-    color: #5a5247;
+    color: var(--text-secondary);
     font-size: 24px;
     cursor: pointer;
     padding: 0;
@@ -239,15 +271,26 @@ body {
 }
 
 .solution-container-close-btn:hover {
-    color: #8b7d6b;
+    color: var(--text-muted);
 }
 
 .solution-container-content {
-    padding: 10px 15px;
-    color: #2a2520;
-    font-size: 15px;
-    line-height: 1.8;
+    color: var(--text-primary);
     flex: 1;
+}
+
+/* Solution Text - Step Titles (h2) */
+#solution-text h2 {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--text-muted);
+    margin: 8px 0 4px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed rgba(139, 125, 107, 0.3);
+}
+
+#solution-text > p {
+    padding: 4px 0;
 }
 
 /* Toggle Canvas Button */
@@ -256,7 +299,7 @@ body {
     max-width: 600px;
     margin-top: 15px;
     padding: 10px 20px;
-    background-color: #8b7d6b;
+    background-color: var(--text-muted);
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -281,6 +324,7 @@ body {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Canvas Container - Base */
 .canvas-container {
     position: relative;
     z-index: 100;
@@ -303,7 +347,6 @@ body {
         inset 0 0 20px rgba(0,0,0,0.5),
         0 10px 20px rgba(0,0,0,0.3),
         0 0 0 1px #3e2723;
-    box-sizing: border-box;
 }
 
 .canvas-container canvas {
@@ -314,19 +357,13 @@ body {
     object-fit: contain;
 }
 
-/* Controls - Desktop */
+/* Controls - Base */
 .controls {
     position: absolute;
-    top: 15px;
-    right: 15px;
     background-color: rgba(255, 255, 255, 0.95);
-    padding: 6px 8px;
     border-radius: 6px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    min-width: 110px;
-    max-width: 130px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     border: 1px solid rgba(139, 125, 107, 0.2);
     z-index: 1000;
@@ -351,25 +388,18 @@ body {
 .controls.collapsed {
     min-width: auto;
     width: auto;
-    padding: 4px 6px;
 }
 
 .controls-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #e8e3d8;
+    border-bottom: 1px solid var(--border-light);
     cursor: move;
 }
 
-.controls.collapsed .controls-header {
-    margin-bottom: 4px;
-}
-
 .controls-title {
-    font-size: 9px;
-    color: #8b7d6b;
+    color: var(--text-muted);
     font-weight: 600;
 }
 
@@ -377,7 +407,7 @@ body {
     display: none;
 }
 
-/* Shortcuts in collapsed view */
+/* Collapsed View */
 .collapsed-view {
     display: flex;
     gap: 4px;
@@ -386,7 +416,7 @@ body {
 }
 
 .controls.collapsed .collapsed-view {
-    display: flex !important; /* Force display when collapsed */
+    display: flex !important;
 }
 
 .controls:not(.collapsed) .collapsed-view {
@@ -400,28 +430,25 @@ body {
 .drag-handle-icon {
     cursor: move;
     color: #9a9488;
-    font-size: 10px;
     padding: 1px 2px;
     user-select: none;
     letter-spacing: -3px;
 }
 
 .mode-shortcut-btn {
-    padding: 2px 6px;
-    font-size: 10px;
     background-color: #f0ece6;
-    border: 1px solid #d4cec3;
+    border: 1px solid var(--border-medium);
     border-radius: 4px;
     cursor: pointer;
     font-family: inherit;
-    color: #5a5247;
+    color: var(--text-secondary);
     transition: all 0.2s;
     white-space: nowrap;
 }
 
 .mode-shortcut-btn:hover {
-    background-color: #e8e3d8;
-    border-color: #8b7d6b;
+    background-color: var(--border-light);
+    border-color: var(--text-muted);
 }
 
 .mode-shortcut-btn:disabled {
@@ -433,14 +460,9 @@ body {
 .controls-collapse-btn {
     background: none !important;
     border: none !important;
-    color: #8b7d6b;
-    font-size: 12px;
+    color: var(--text-muted);
     cursor: pointer;
     padding: 0 !important;
-    width: 16px;
-    height: 16px;
-    min-width: 16px;
-    line-height: 14px;
     flex: none !important;
 }
 
@@ -448,7 +470,7 @@ body {
     display: none;
 }
 
-/* Phase Block Stacking */
+/* Phase Block */
 .phase-block {
     padding: 10px 0;
     border-bottom: 1px dashed rgba(139, 125, 107, 0.3);
@@ -462,7 +484,7 @@ body {
 .phase-block-title {
     font-size: 11px;
     font-weight: bold;
-    color: #8b7d6b;
+    color: var(--text-muted);
     margin-bottom: 6px;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -473,23 +495,7 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Step section padding for scrolling target */
-#solution-text > p {
-    padding: 4px 0;
-}
-
-/* Step title styling - paragraphs containing step markers */
-#solution-text > p:has(mjx-container) {
-    font-size: 11px;
-    font-weight: bold;
-    color: #8b7d6b;
-    margin: 10px 0 4px 0;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding-bottom: 4px;
-    border-bottom: 1px dashed rgba(139, 125, 107, 0.3);
-}
-
+/* Buttons - Base */
 .button-group {
     display: flex;
     gap: 3px;
@@ -497,30 +503,27 @@ body {
 }
 
 button {
-    padding: 2px 4px;
-    border: 1px solid #d4cec3;
+    border: 1px solid var(--border-medium);
     border-radius: 3px;
     background-color: #f9f7f1;
     color: #3a3530;
     cursor: pointer;
-    font-size: 9px;
     transition: all 0.2s;
-    min-width: 30px; /* 폭 축소를 위해 최소폭 설정 */
 }
 
 button:hover {
-    background-color: #e8e3d8;
-    border-color: #8b7d6b;
+    background-color: var(--border-light);
+    border-color: var(--text-muted);
 }
 
 button:active {
-    background-color: #d4cec3;
+    background-color: var(--border-medium);
 }
 
 button.active {
-    background-color: #8b7d6b;
+    background-color: var(--text-muted);
     color: #fff;
-    border-color: #8b7d6b;
+    border-color: var(--text-muted);
 }
 
 button.active:hover {
@@ -529,26 +532,17 @@ button.active:hover {
 
 .phase-buttons {
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* 3개에서 6개로 늘려 버튼 폭을 절반으로 줄임 */
+    grid-template-columns: repeat(6, 1fr);
     gap: 2px;
 }
 
-.phase-buttons button {
-    font-size: 8px;
-    padding: 2px 0;
-    min-width: 0;
-}
-
 .control-label {
-    color: #5a5247;
-    font-size: 8px;
-    margin-bottom: 2px;
+    color: var(--text-secondary);
     font-weight: 500;
 }
 
 .control-section {
-    border-bottom: 1px solid #e8e3d8;
-    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border-light);
 }
 
 .control-section:last-child {
@@ -568,9 +562,9 @@ button.active:hover {
 }
 
 .mode-btn.active {
-    background-color: #8b7d6b;
+    background-color: var(--text-muted);
     color: #fff;
-    border-color: #8b7d6b;
+    border-color: var(--text-muted);
 }
 
 .mode-btn.active:hover {
@@ -582,159 +576,4 @@ button.active:hover {
     color: #666;
     cursor: not-allowed;
     opacity: 0.5;
-}
-
-/* Mobile Styles */
-@media (max-width: 768px) {
-    .top-nav {
-        display: none !important;
-    }
-
-    body {
-        align-items: flex-start;
-        padding-top: 0;
-        padding-bottom: 0; /* 내부 스크롤을 위해 제거 */
-    }
-
-    .viewer-main {
-        padding: 0;
-        height: 100dvh;
-    }
-
-    #problem-scroll-container {
-        /* 모바일에서도 중앙 정렬 유지 */
-    }
-
-    .problem-container {
-        padding: 12px 15px;
-        width: 100%;
-        max-width: 100%;
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-        box-shadow: none;
-    }
-
-    #solution-scroll-container {
-        padding-bottom: 100px; /* 하단 컨트롤 여유 공간만 유지 */
-    }
-
-    .solution-container {
-        width: 100%;
-        max-width: 100%;
-        margin: 20px 0;
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-        background-color: transparent;
-        box-shadow: none;
-    }
-
-    .solution-container-content {
-        padding: 10px 0;
-    }
-
-    .problem-tag {
-        font-size: 10px;
-        padding: 3px 8px;
-    }
-
-    .problem-content {
-        font-size: 14px;
-        line-height: 1.6;
-    }
-
-    /* Mobile Controls - Floating Top Right */
-    .controls {
-        top: 6px;
-        right: 6px;
-        max-width: 120px;
-        min-width: 80px;
-        padding: 4px;
-        gap: 2px;
-    }
-
-    .controls-header {
-        padding-bottom: 2px;
-    }
-
-    .controls-title {
-        font-size: 8px;
-    }
-
-    .controls-collapse-btn {
-        width: 22px;
-        height: 22px;
-        line-height: 20px;
-        font-size: 14px;
-    }
-
-    .mode-shortcut-btn {
-        padding: 2px 4px;
-        font-size: 8.5px;
-    }
-
-    .control-label {
-        font-size: 7px;
-    }
-
-    button {
-        padding: 2px 3px;
-        font-size: 8.5px;
-    }
-
-    .phase-buttons {
-        grid-template-columns: repeat(6, 1fr);
-        gap: 1.5px;
-    }
-
-    .phase-buttons button {
-        font-size: 8px;
-        padding: 2px 0;
-    }
-
-
-
-    .canvas-container {
-        width: 100%;
-        max-width: 100%;
-        max-height: 100vw;
-        position: sticky;
-        top: 0;
-        margin-bottom: 10px;
-    }
-}
-
-/* Small Mobile */
-@media (max-width: 480px) {
-    .problem-container {
-        padding: 12px 15px;
-    }
-
-    .problem-content {
-        font-size: 13px;
-    }
-
-    .controls {
-        padding: 10px 12px;
-    }
-
-    .phase-buttons {
-        grid-template-columns: repeat(6, 1fr);
-    }
-}
-
-/* Tablet Landscape */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .controls {
-        top: 10px;
-        right: 10px;
-        min-width: 180px;
-        max-width: 200px;
-        padding: 12px;
-    }
-
-    .problem-container {
-        padding: 20px 25px;
-    }
 }
