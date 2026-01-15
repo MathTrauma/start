@@ -41,12 +41,11 @@
         <a href="./" class="nav-logo">
             <span>MathMore</span>
         </a>
-        <div class="theme-buttons">
-            <button class="theme-btn active" data-theme="chalkboard" onclick="changeTheme('chalkboard')">칠판</button>
-            <button class="theme-btn" data-theme="light" onclick="changeTheme('light')">밝은</button>
-            <button class="theme-btn" data-theme="dark" onclick="changeTheme('dark')">어두운</button>
-            <button class="theme-btn" data-theme="sepia" onclick="changeTheme('sepia')">세피아</button>
-        </div>
+        <select id="theme-select" class="theme-select" onchange="changeTheme(this.value)">
+            <option value="chalkboard" selected>칠판</option>
+            <option value="dark">어두운</option>
+            <option value="sepia">세피아</option>
+        </select>
         <div class="auth-buttons">
             <button id="login-btn" onclick="signInWithGoogle()" style="display: none;">로그인</button>
             <button id="logout-btn" onclick="signOut()" style="display: none;">로그아웃</button>
