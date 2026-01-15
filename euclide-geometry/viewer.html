@@ -34,13 +34,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/auth.js"></script>
 
-    <!-- 로컬 개발 환경 감지 및 리다이렉트 -->
-    <script>
-        // localhost나 127.0.0.1에서 실행 시 viewer_local.html로 리다이렉트 (쿼리 파라미터 유지)
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            window.location.href = 'viewer_local.html' + window.location.search;
-        }
-    </script>
 </head>
 <body>
     <!-- Top Navigation -->
@@ -48,6 +41,12 @@
         <a href="./" class="nav-logo">
             <span>MathMore</span>
         </a>
+        <div class="theme-buttons">
+            <button class="theme-btn active" data-theme="chalkboard" onclick="changeTheme('chalkboard')">칠판</button>
+            <button class="theme-btn" data-theme="light" onclick="changeTheme('light')">밝은</button>
+            <button class="theme-btn" data-theme="dark" onclick="changeTheme('dark')">어두운</button>
+            <button class="theme-btn" data-theme="sepia" onclick="changeTheme('sepia')">세피아</button>
+        </div>
         <div class="auth-buttons">
             <button id="login-btn" onclick="signInWithGoogle()" style="display: none;">로그인</button>
             <button id="logout-btn" onclick="signOut()" style="display: none;">로그아웃</button>
@@ -80,7 +79,18 @@
         </div>
     </main>
 
-    <!-- Viewer (R2 - ES Module) -->
-    <script type="module" src="https://euclide-worker.painfultrauma.workers.dev/lib/viewer-app.js"></script>
+    <!-- Viewer (Dynamic - Local or R2) -->
+    <script>
+        (function() {
+            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+            const src = isLocal
+                ? 'lib/viewer-app.js'
+                : 'https://euclide-worker.painfultrauma.workers.dev/lib/viewer-app.js';
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = src;
+            document.body.appendChild(script);
+        })();
+    </script>
 </body>
 </html>
