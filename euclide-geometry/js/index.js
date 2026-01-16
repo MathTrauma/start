@@ -31,6 +31,19 @@ initAuth(async (session) => {
 // 유료 사용자 여부 확인
 async function checkPaidStatus(userId) {
     try {
+        // admin 역할은 자동 허용
+        const { data: profile } = await supabaseClient
+            .from('profiles')
+            .select('role')
+            .eq('id', userId)
+            .single();
+
+        if (profile?.role === 'admin') {
+            isPaidUser = true;
+            return;
+        }
+
+        // 일반 사용자는 결제 상태 확인
         const response = await fetch(
             `https://payment-worker.painfultrauma.workers.dev/check-access?userId=${userId}`
         );
