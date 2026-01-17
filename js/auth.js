@@ -28,10 +28,13 @@ function initAuth(callback) {
 async function signInWithGoogle() {
     console.log('로그인 시도 중...');
     try {
+        // 현재 페이지 URL 저장 (로그인 후 복귀용)
+        localStorage.setItem('authRedirect', window.location.href);
+
         const { error } = await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: window.location.origin + window.location.pathname // 해시나 쿼리 스트링을 제외한 순수 경로로 복귀
+                redirectTo: window.location.origin + '/auth/callback.html'
             },
         });
         if (error) throw error;
