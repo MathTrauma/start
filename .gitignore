@@ -38,7 +38,15 @@ _*/
 euclide-geometry/lib_new/
 
 # Euclide Geometry - R2 only (Cloudflare R2에 배포)
-euclide-geometry/problems/
+# problem.html만 git에 포함, 나머지는 R2로 배포
+euclide-geometry/problems/*/solution.html
+euclide-geometry/problems/*/sketch.js
+euclide-geometry/problems/*/config.json
+euclide-geometry/problems/*/*.png
+euclide-geometry/problems/*/*.md
+euclide-geometry/problems/*/*.tex
+euclide-geometry/problems/*/animation.md
+euclide-geometry/problems/index.json
 euclide-geometry/docs/
 euclide-geometry/.claude/
 euclide-geometry/scripts/

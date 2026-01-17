@@ -249,10 +249,10 @@ function renderProblemList(problems) {
         `;
     }).join('');
 
-    // 각 카드의 problem.html을 비동기로 로드
+    // 각 카드의 problem.html을 비동기로 로드 (Vercel에서 직접 서빙)
     pageProblems.forEach(problem => {
         const paddedId = problem.id.padStart(3, '0');
-        authFetch(`${workerUrl}/problems/${paddedId}/problem.html`, paddedId)
+        fetch(`./problems/${paddedId}/problem.html`)
             .then(res => res.ok ? res.text() : Promise.reject('Not found'))
             .then(html => {
                 const card = grid.querySelector(`[data-problem-id="${problem.id}"]`);
