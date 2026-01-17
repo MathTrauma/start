@@ -114,9 +114,7 @@
 <body>
     <div class="container">
         <h1>학생 관리</h1>
-
         <div id="message"></div>
-
         <div id="content">
             <div class="loading">로딩 중...</div>
         </div>
@@ -135,7 +133,6 @@
         // 초기화
         async function init() {
             const { data: { session } } = await supabaseClient.auth.getSession();
-
             if (!session) {
                 showLoginRequired();
                 return;
