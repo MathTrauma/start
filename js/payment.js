@@ -49,7 +49,7 @@ async function requestPayment() {
             storeId: PORTONE_STORE_ID,
             channelKey: PORTONE_CHANNEL_KEY,
             paymentId: orderId,
-            orderName: '매쓰모어 3개월 이용권',
+            orderName: 'MathMore Basic',
             totalAmount: 9900,
             currency: 'KRW',
             payMethod: 'CARD',
