@@ -148,7 +148,13 @@ const workerUrl = isLocal ? '.' : 'https://euclide-worker.painfultrauma.workers.
 fetch(`${workerUrl}/problems/index.json?_t=${Date.now()}`)
     .then(res => res.json())
     .then(data => {
-        allProblems = data.problems;
+        // level 0은 마지막으로 정렬 (흥미로운 문제)
+        allProblems = data.problems.sort((a, b) => {
+            const levelA = a.level === 0 ? 999 : a.level;
+            const levelB = b.level === 0 ? 999 : b.level;
+            if (levelA !== levelB) return levelA - levelB;
+            return parseInt(a.id) - parseInt(b.id);
+        });
         renderCategories(data.categories);
         renderProblemList(allProblems);
         setupFilters();
@@ -227,7 +233,7 @@ function renderProblemList(problems) {
 
     // 먼저 skeleton 카드 렌더링
     grid.innerHTML = pageProblems.map(problem => {
-        const levelLabel = problem.level == 9 ? '영재고' : `Level ${problem.level}`;
+        const levelLabel = problem.level == 9 ? '영재고' : problem.level == 0 ? '흥미로운' : `Level ${problem.level}`;
         const isLocked = !canAccessProblem(problem);
         const lockedClass = isLocked ? 'locked' : '';
         const lockIcon = isLocked ? `

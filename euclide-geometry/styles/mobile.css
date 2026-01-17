@@ -116,10 +116,18 @@ body {
     font-size: 12px;
 }
 
-/* 드래그 핸들 작게 */
+/* 드래그 핸들 - 시각적으로 작게 */
 .drag-handle-icon {
     font-size: 8px;
     padding: 0 1px;
+}
+
+/* 터치 영역 확장 */
+.drag-handle-icon::before {
+    top: -12px;
+    left: -12px;
+    right: -12px;
+    bottom: -12px;
 }
 
 .mode-shortcut-btn {
