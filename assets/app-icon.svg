@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 배경 -->
+  <rect width="512" height="512" rx="80" fill="#3b82f6"/>
+
+  <!-- M 글자 (미니멀) -->
+  <path d="M128 380V132h40l88 160 88-160h40v248h-36V200l-76 136h-32l-76-136v180h-36z" fill="#ffffff"/>
+
+  <!-- 작은 + 심볼 -->
+  <circle cx="400" cy="112" r="40" fill="#ffffff" opacity="0.3"/>
+  <path d="M400 92v40M380 112h40" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+</svg>
