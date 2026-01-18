@@ -212,3 +212,10 @@
 .btn-kakao:hover {
     background-color: #F5DC00;
 }
+
+/* Turnstile CAPTCHA */
+.cf-turnstile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}

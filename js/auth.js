@@ -6,6 +6,13 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 window.supabaseClient = supabaseClient;
 
+// CAPTCHA 토큰 저장
+let captchaToken = null;
+
+function onCaptchaSuccess(token) {
+    captchaToken = token;
+}
+
 /**
  * 로그인 상태 변화를 감지하고 UI를 업데이트하는 공통 함수
  * @param {Function} callback 세션 상태에 따라 호출될 콜백 함수
@@ -116,6 +123,23 @@ async function signUpWithEmail(email, password) {
 }
 
 /**
+ * Turnstile 스크립트 로드
+ */
+function loadTurnstileScript() {
+    return new Promise((resolve) => {
+        if (window.turnstile) {
+            resolve();
+            return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
+        script.async = true;
+        window.onTurnstileLoad = () => resolve();
+        document.head.appendChild(script);
+    });
+}
+
+/**
  * 로그인 모달 로드
  */
 async function loadLoginModal() {
@@ -126,6 +150,7 @@ async function loadLoginModal() {
         const html = await response.text();
         document.body.insertAdjacentHTML('beforeend', html);
         lucide.createIcons();
+        await loadTurnstileScript();
     } catch (err) {
         console.error('모달 로드 실패:', err);
     }
@@ -140,6 +165,16 @@ async function openLoginModal() {
     if (modal) {
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+        // Turnstile 위젯 수동 렌더링 (Invisible 모드)
+        if (window.turnstile) {
+            const container = document.getElementById('captcha-container');
+            if (container && !container.hasChildNodes()) {
+                turnstile.render(container, {
+                    sitekey: '0x4AAAAAACNSRA27Qc3oVZa6',
+                    callback: onCaptchaSuccess
+                });
+            }
+        }
     }
 }
 

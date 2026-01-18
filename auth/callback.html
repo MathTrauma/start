@@ -54,14 +54,14 @@
                     console.error('Auth error:', error);
                 }
 
-                // 저장된 원래 URL로 리다이렉트
+                // 저장된 원래 URL로 리다이렉트 (같은 origin만 허용)
                 const redirectUrl = localStorage.getItem('authRedirect');
                 localStorage.removeItem('authRedirect');
 
-                if (redirectUrl) {
+                if (redirectUrl && redirectUrl.startsWith(window.location.origin)) {
                     window.location.href = redirectUrl;
                 } else {
-                    // 저장된 URL이 없으면 홈으로
+                    // 저장된 URL이 없거나 외부 URL이면 홈으로
                     window.location.href = '/';
                 }
             } catch (err) {
