@@ -45,6 +45,26 @@ async function signInWithGoogle() {
 }
 
 /**
+ * 카카오 로그인 실행
+ */
+async function signInWithKakao() {
+    console.log('카카오 로그인 시도 중...');
+    try {
+        localStorage.setItem('authRedirect', window.location.href);
+        const { error } = await supabaseClient.auth.signInWithOAuth({
+            provider: 'kakao',
+            options: {
+                redirectTo: window.location.origin + '/auth/callback.html'
+            },
+        });
+        if (error) throw error;
+    } catch (err) {
+        console.error('카카오 로그인 에러:', err.message);
+        alert('로그인 중 오류가 발생했습니다.');
+    }
+}
+
+/**
  * 로그아웃 실행
  */
 async function signOut() {

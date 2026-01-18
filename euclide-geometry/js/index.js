@@ -113,6 +113,27 @@ let filteredProblems = [];
 let currentPage = 1;
 let itemsPerPage = 9;
 
+// URL에서 상태 읽기
+function getStateFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+        page: parseInt(params.get('page')) || 1,
+        level: params.get('level') || '',
+        category: params.get('category') || ''
+    };
+}
+
+// URL에 상태 저장 (history.replaceState 사용)
+function saveStateToURL(page, level, category) {
+    const params = new URLSearchParams();
+    if (page > 1) params.set('page', page);
+    if (level) params.set('level', level);
+    if (category) params.set('category', category);
+
+    const newURL = params.toString() ? `?${params.toString()}` : window.location.pathname;
+    history.replaceState({ page, level, category }, '', newURL);
+}
+
 function getItemsPerPage() {
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -148,7 +169,7 @@ const workerUrl = isLocal ? '.' : 'https://euclide-worker.painfultrauma.workers.
 fetch(`${workerUrl}/problems/index.json?_t=${Date.now()}`)
     .then(res => res.json())
     .then(data => {
-        // level 0은 마지막으로 정렬 (흥미로운 문제)
+        // level 0은 마지막으로 정렬 (기본정리)
         allProblems = data.problems.sort((a, b) => {
             const levelA = a.level === 0 ? 999 : a.level;
             const levelB = b.level === 0 ? 999 : b.level;
@@ -156,8 +177,26 @@ fetch(`${workerUrl}/problems/index.json?_t=${Date.now()}`)
             return parseInt(a.id) - parseInt(b.id);
         });
         renderCategories(data.categories);
-        renderProblemList(allProblems);
         setupFilters();
+
+        // URL에서 상태 복원
+        const state = getStateFromURL();
+        const levelFilter = document.getElementById('level-filter');
+        const categoryFilter = document.getElementById('category-filter');
+
+        if (state.level) levelFilter.value = state.level;
+        if (state.category) categoryFilter.value = state.category;
+
+        // 필터 적용 (페이지는 아래서 설정)
+        let filtered = allProblems;
+        if (state.level) filtered = filtered.filter(p => p.level == state.level);
+        if (state.category) filtered = filtered.filter(p => p.categories && p.categories.includes(state.category));
+
+        currentPage = state.page;
+        renderProblemList(filtered);
+
+        // 초기 상태를 history에 저장 (뒤로가기 시 복원용)
+        history.replaceState({ page: state.page, level: state.level, category: state.category }, '');
     })
     .catch(error => {
         console.error('Failed to load problems:', error);
@@ -233,7 +272,7 @@ function renderProblemList(problems) {
 
     // 먼저 skeleton 카드 렌더링
     grid.innerHTML = pageProblems.map(problem => {
-        const levelLabel = problem.level == 9 ? '영재고' : problem.level == 0 ? '흥미로운' : `Level ${problem.level}`;
+        const levelLabel = problem.level == 9 ? '영재고' : problem.level == 0 ? '기본정리' : `Level ${problem.level}`;
         const isLocked = !canAccessProblem(problem);
         const lockedClass = isLocked ? 'locked' : '';
         const lockIcon = isLocked ? `
@@ -318,19 +357,25 @@ function setupPaginationListeners() {
     });
 }
 
-function goToPage(page) {
+function goToPage(page, saveToHistory = true) {
     const totalPages = Math.ceil(filteredProblems.length / itemsPerPage);
     if (page < 1 || page > totalPages) return;
     currentPage = page;
     renderProblemList(filteredProblems);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (saveToHistory) {
+        const levelFilter = document.getElementById('level-filter');
+        const categoryFilter = document.getElementById('category-filter');
+        saveStateToURL(page, levelFilter?.value || '', categoryFilter?.value || '');
+    }
 }
 
 function setupFilters() {
     const levelFilter = document.getElementById('level-filter');
     const categoryFilter = document.getElementById('category-filter');
 
-    function applyFilters() {
+    function applyFilters(saveToHistory = true) {
         const level = levelFilter.value;
         const category = categoryFilter.value;
 
@@ -346,11 +391,35 @@ function setupFilters() {
 
         currentPage = 1;
         renderProblemList(filtered);
+
+        if (saveToHistory) {
+            saveStateToURL(1, level, category);
+        }
     }
 
-    levelFilter.addEventListener('change', applyFilters);
-    categoryFilter.addEventListener('change', applyFilters);
+    levelFilter.addEventListener('change', () => applyFilters(true));
+    categoryFilter.addEventListener('change', () => applyFilters(true));
+
+    // 외부에서 호출할 수 있도록 window에 등록
+    window.applyFiltersFromState = applyFilters;
 }
 
 // 페이지네이션 이벤트 리스너 초기화
 setupPaginationListeners();
+
+// 브라우저 뒤로가기/앞으로가기 처리
+window.addEventListener('popstate', (event) => {
+    const state = event.state || getStateFromURL();
+    const levelFilter = document.getElementById('level-filter');
+    const categoryFilter = document.getElementById('category-filter');
+
+    if (levelFilter) levelFilter.value = state.level || '';
+    if (categoryFilter) categoryFilter.value = state.category || '';
+
+    let filtered = allProblems;
+    if (state.level) filtered = filtered.filter(p => p.level == state.level);
+    if (state.category) filtered = filtered.filter(p => p.categories && p.categories.includes(state.category));
+
+    currentPage = state.page || 1;
+    renderProblemList(filtered);
+});

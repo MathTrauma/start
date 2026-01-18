@@ -190,3 +190,25 @@
     background-color: var(--slate-50);
     border-color: var(--slate-400);
 }
+
+.btn-kakao {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.875rem;
+    background-color: #FEE500;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #191919;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 0.75rem;
+}
+
+.btn-kakao:hover {
+    background-color: #F5DC00;
+}
