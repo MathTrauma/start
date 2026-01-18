@@ -193,6 +193,7 @@ main {
 .hero-line-3 {
     font-size: 1.125rem;
     color: rgba(255, 255, 255, 0.85);
+    text-align: center;
 }
 
 .hero-line-small {
