@@ -219,3 +219,77 @@
     justify-content: center;
     margin-bottom: 1rem;
 }
+
+/* =========================================
+   Premium Modal
+   ========================================= */
+.premium-modal-content {
+    text-align: center;
+}
+
+.premium-icon {
+    color: var(--slate-400);
+    margin-bottom: 1rem;
+}
+
+.premium-description {
+    color: var(--slate-600);
+    font-size: 0.9375rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.premium-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    text-align: left;
+}
+
+.premium-features li {
+    color: var(--slate-600);
+    font-size: 0.875rem;
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.premium-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--primary-600);
+    font-weight: 600;
+}
+
+.premium-price {
+    margin-bottom: 1.5rem;
+}
+
+.price-amount {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--slate-900);
+}
+
+.price-period {
+    font-size: 0.875rem;
+    color: var(--slate-500);
+}
+
+.btn-premium {
+    width: 100%;
+    padding: 0.875rem;
+    background-color: var(--primary-600);
+    color: var(--white);
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-premium:hover {
+    background-color: var(--primary-500);
+}

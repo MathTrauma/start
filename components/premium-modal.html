@@ -1,0 +1,35 @@
+<div id="premium-modal" class="modal-overlay">
+    <div class="modal-content premium-modal-content">
+        <button class="modal-close" onclick="closePremiumModal()">
+            <i data-lucide="x" width="20" height="20"></i>
+        </button>
+
+        <div class="premium-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+        </div>
+
+        <h2 class="modal-title">유료 콘텐츠</h2>
+
+        <p class="premium-description">
+            이 문제는 <strong>MathMore Basic</strong> 이용권이 필요합니다.
+        </p>
+
+        <ul class="premium-features">
+            <li>모든 문제 풀이 애니메이션</li>
+            <li>단계별 상세 해설</li>
+            <li>3개월 무제한 이용</li>
+        </ul>
+
+        <div class="premium-price">
+            <span class="price-amount">9,900원</span>
+            <span class="price-period">/ 3개월</span>
+        </div>
+
+        <button class="btn-premium" onclick="closePremiumModal(); requestPayment();">
+            구매하기
+        </button>
+    </div>
+</div>

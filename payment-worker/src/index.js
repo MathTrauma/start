@@ -2,29 +2,82 @@
  * 결제 검증 Cloudflare Worker
  *
  * 포트원 V2 결제 검증 및 Supabase 저장
+ * JWT 인증 필수
  */
 
-// CORS 헤더
-const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-};
+// 허용된 도메인 목록
+const ALLOWED_ORIGINS = [
+    'https://www.mathtrauma.com',
+    'https://mathtrauma.com',
+    'http://localhost:8000',
+];
+
+// Origin 검증
+function isAllowedOrigin(origin) {
+    if (!origin) return false;
+    return ALLOWED_ORIGINS.includes(origin);
+}
+
+// CORS 헤더 생성 (동적)
+function getCorsHeaders(origin) {
+    const allowedOrigin = isAllowedOrigin(origin) ? origin : ALLOWED_ORIGINS[0];
+    return {
+        'Access-Control-Allow-Origin': allowedOrigin,
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Credentials': 'true',
+    };
+}
 
 // JSON 응답 헬퍼
-function jsonResponse(data, status = 200) {
+function jsonResponse(data, status = 200, origin = null) {
     return new Response(JSON.stringify(data), {
         status,
         headers: {
             'Content-Type': 'application/json',
-            ...corsHeaders,
+            ...getCorsHeaders(origin),
         },
     });
 }
 
 // 에러 응답 헬퍼
-function errorResponse(message, status = 400) {
-    return jsonResponse({ success: false, error: message }, status);
+function errorResponse(message, status = 400, origin = null) {
+    return jsonResponse({ success: false, error: message }, status, origin);
+}
+
+// Supabase JWT 토큰 검증
+async function verifySupabaseToken(token, env) {
+    try {
+        const response = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'apikey': env.SUPABASE_ANON_KEY
+            }
+        });
+
+        if (!response.ok) return null;
+        return response.json();
+    } catch (error) {
+        console.error('Token verification error:', error);
+        return null;
+    }
+}
+
+// Authorization 헤더에서 토큰 추출 및 검증
+async function authenticateRequest(request, env) {
+    const authHeader = request.headers.get('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return { error: '인증 토큰이 필요합니다', status: 401 };
+    }
+
+    const token = authHeader.slice(7);
+    const user = await verifySupabaseToken(token, env);
+
+    if (!user) {
+        return { error: '유효하지 않은 토큰입니다', status: 401 };
+    }
+
+    return { user };
 }
 
 // 포트원 결제 조회 API
@@ -117,38 +170,43 @@ async function savePaymentToSupabase(paymentData, userId, env) {
     return paymentRecord;
 }
 
-// 결제 검증 핸들러
-async function handleVerifyPayment(request, env) {
+// 결제 검증 핸들러 (JWT 인증 필수)
+async function handleVerifyPayment(request, env, origin) {
     try {
+        // 1. JWT 인증 필수
+        const auth = await authenticateRequest(request, env);
+        if (auth.error) {
+            return errorResponse(auth.error, auth.status, origin);
+        }
+        const user = auth.user;
+
         const body = await request.json();
-        const { paymentId, userId } = body;
+        const { paymentId } = body;  // userId는 JWT에서 추출
 
         if (!paymentId) {
-            return errorResponse('paymentId가 필요합니다');
+            return errorResponse('paymentId가 필요합니다', 400, origin);
         }
 
-        if (!userId) {
-            return errorResponse('userId가 필요합니다');
-        }
-
-        // 1. 포트원에서 결제 정보 조회
+        // 2. 포트원에서 결제 정보 조회
         const paymentData = await getPortOnePayment(paymentId, env);
         console.log('포트원 결제 정보:', JSON.stringify(paymentData));
 
-        // 2. 결제 금액 검증
+        // 3. 결제 금액 검증
         const expectedAmount = 9900;
         if (paymentData.amount.total !== expectedAmount) {
             return errorResponse(
-                `결제 금액 불일치: 예상 ${expectedAmount}원, 실제 ${paymentData.amount.total}원`
+                `결제 금액 불일치: 예상 ${expectedAmount}원, 실제 ${paymentData.amount.total}원`,
+                400,
+                origin
             );
         }
 
-        // 3. 결제 상태 확인
+        // 4. 결제 상태 확인
         if (paymentData.status !== 'PAID') {
-            return errorResponse(`결제 미완료: ${paymentData.status}`);
+            return errorResponse(`결제 미완료: ${paymentData.status}`, 400, origin);
         }
 
-        // 4. Supabase에 저장
+        // 5. Supabase에 저장 (JWT에서 추출한 user.id 사용)
         const savedPayment = await savePaymentToSupabase(
             {
                 id: paymentData.id,
@@ -157,7 +215,7 @@ async function handleVerifyPayment(request, env) {
                 paidAt: paymentData.paidAt,
                 status: paymentData.status,
             },
-            userId,
+            user.id,  // JWT에서 추출한 userId
             env
         );
 
@@ -165,26 +223,27 @@ async function handleVerifyPayment(request, env) {
             success: true,
             message: '결제가 확인되었습니다',
             payment: savedPayment,
-        });
+        }, 200, origin);
 
     } catch (error) {
         console.error('결제 검증 오류:', error);
-        return errorResponse(error.message, 500);
+        return errorResponse(error.message, 500, origin);
     }
 }
 
-// 사용자 구매 상태 확인
-async function handleCheckAccess(request, env) {
+// 사용자 구매 상태 확인 (JWT 인증 필수, POST로 변경)
+async function handleCheckAccess(request, env, origin) {
     try {
-        const url = new URL(request.url);
-        const userId = url.searchParams.get('userId');
-
-        if (!userId) {
-            return errorResponse('userId가 필요합니다');
+        // 1. JWT 인증 필수
+        const auth = await authenticateRequest(request, env);
+        if (auth.error) {
+            return errorResponse(auth.error, auth.status, origin);
         }
+        const user = auth.user;
 
+        // 2. JWT에서 추출한 userId로 구매 정보 조회
         const response = await fetch(
-            `${env.SUPABASE_URL}/rest/v1/user_purchases?user_id=eq.${userId}&select=*`,
+            `${env.SUPABASE_URL}/rest/v1/user_purchases?user_id=eq.${user.id}&select=*`,
             {
                 headers: {
                     'apikey': env.SUPABASE_SERVICE_KEY,
@@ -203,7 +262,7 @@ async function handleCheckAccess(request, env) {
             return jsonResponse({
                 hasAccess: false,
                 message: '구매 내역이 없습니다',
-            });
+            }, 200, origin);
         }
 
         const purchase = purchases[0];
@@ -215,11 +274,11 @@ async function handleCheckAccess(request, env) {
             hasAccess,
             expiresAt: purchase.expires_at,
             message: hasAccess ? '이용권이 유효합니다' : '이용권이 만료되었습니다',
-        });
+        }, 200, origin);
 
     } catch (error) {
         console.error('접근 권한 확인 오류:', error);
-        return errorResponse(error.message, 500);
+        return errorResponse(error.message, 500, origin);
     }
 }
 
@@ -228,25 +287,32 @@ export default {
     async fetch(request, env, ctx) {
         const url = new URL(request.url);
         const path = url.pathname;
+        const origin = request.headers.get('Origin');
 
         // CORS preflight
         if (request.method === 'OPTIONS') {
-            return new Response(null, { headers: corsHeaders });
+            return new Response(null, { headers: getCorsHeaders(origin) });
+        }
+
+        // Origin 검증 (health 제외)
+        if (path !== '/health' && !isAllowedOrigin(origin)) {
+            return jsonResponse({ error: 'Forbidden' }, 403, origin);
         }
 
         // 라우팅
         if (path === '/verify' && request.method === 'POST') {
-            return handleVerifyPayment(request, env);
+            return handleVerifyPayment(request, env, origin);
         }
 
-        if (path === '/check-access' && request.method === 'GET') {
-            return handleCheckAccess(request, env);
+        // check-access를 POST로 변경
+        if (path === '/check-access' && request.method === 'POST') {
+            return handleCheckAccess(request, env, origin);
         }
 
         if (path === '/health') {
-            return jsonResponse({ status: 'ok', timestamp: new Date().toISOString() });
+            return jsonResponse({ status: 'ok', timestamp: new Date().toISOString() }, 200, origin);
         }
 
-        return jsonResponse({ error: 'Not Found' }, 404);
+        return jsonResponse({ error: 'Not Found' }, 404, origin);
     },
 };

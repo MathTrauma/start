@@ -1,6 +1,14 @@
 // PortOne V2 결제 설정
 const PORTONE_STORE_ID = 'store-c5f2423a-b1d3-4c1e-8ea3-7faa53da830e';
-const PORTONE_CHANNEL_KEY = 'channel-key-adf6c40d-e1ce-478e-9098-530294eae1de';
+
+// 결제 채널 키
+const CHANNEL_KEYS = {
+    KCP: 'channel-key-b612f825-8eef-4f9d-92f1-e71ec778d162',      // KCP 실연동
+    // KAKAO: '',  // 카카오페이 (추후 연동)
+};
+
+// 기본 결제 채널
+const DEFAULT_CHANNEL_KEY = CHANNEL_KEYS.KCP;
 const PAYMENT_WORKER_URL = 'https://payment-worker.painfultrauma.workers.dev';
 
 /**
@@ -14,14 +22,21 @@ function generateOrderId() {
 
 /**
  * 결제 검증 요청 (Cloudflare Worker)
+ * Authorization 헤더에 JWT 토큰 포함
  */
-async function verifyPayment(paymentId, userId) {
+async function verifyPayment(paymentId) {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) {
+        throw new Error('로그인이 필요합니다');
+    }
+
     const response = await fetch(`${PAYMENT_WORKER_URL}/verify`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({ paymentId, userId }),
+        body: JSON.stringify({ paymentId }),  // userId 제거 - JWT에서 추출
     });
 
     return response.json();
@@ -47,7 +62,7 @@ async function requestPayment() {
         // PortOne V2 결제 요청
         const response = await PortOne.requestPayment({
             storeId: PORTONE_STORE_ID,
-            channelKey: PORTONE_CHANNEL_KEY,
+            channelKey: DEFAULT_CHANNEL_KEY,
             paymentId: orderId,
             orderName: 'MathMore Basic',
             totalAmount: 9900,
@@ -56,6 +71,21 @@ async function requestPayment() {
             customer: {
                 email: userEmail,
             },
+            offerPeriod: (() => {
+                const from = new Date();
+                const to = new Date(from);
+                to.setMonth(to.getMonth() + 3);
+                // 월말 오버플로우 보정 (예: 1/31 + 3개월 → 4/30)
+                if (to.getDate() !== from.getDate()) {
+                    to.setDate(0); // 이전 달의 마지막 날로 설정
+                }
+                return {
+                    range: {
+                        from: from.toISOString(),
+                        to: to.toISOString(),
+                    }
+                };
+            })(),
         });
 
         // 결제 실패 처리
@@ -68,8 +98,8 @@ async function requestPayment() {
             return;
         }
 
-        // 결제 성공 - 서버 검증
-        const verifyResult = await verifyPayment(response.paymentId, userId);
+        // 결제 성공 - 서버 검증 (userId는 JWT에서 추출)
+        const verifyResult = await verifyPayment(response.paymentId);
 
         if (verifyResult.success) {
             alert('결제가 완료되었습니다! 이용권이 활성화되었습니다.');

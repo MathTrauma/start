@@ -28,7 +28,7 @@ initAuth(async (session) => {
     }
 });
 
-// 유료 사용자 여부 확인
+// 유료 사용자 여부 확인 (JWT 인증 사용)
 async function checkPaidStatus(userId) {
     try {
         // admin 역할은 자동 허용
@@ -43,9 +43,23 @@ async function checkPaidStatus(userId) {
             return;
         }
 
-        // 일반 사용자는 결제 상태 확인
+        // 세션에서 토큰 가져오기
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) {
+            isPaidUser = false;
+            return;
+        }
+
+        // POST로 변경, Authorization 헤더 추가
         const response = await fetch(
-            `https://payment-worker.painfultrauma.workers.dev/check-access?userId=${userId}`
+            'https://payment-worker.painfultrauma.workers.dev/check-access',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.access_token}`,
+                },
+            }
         );
         const data = await response.json();
         isPaidUser = data.hasAccess === true;
@@ -97,14 +111,40 @@ async function authFetch(url, problemId) {
     return fetch(url, { headers });
 }
 
+// 프리미엄 모달 로드
+let premiumModalLoaded = false;
+async function loadPremiumModal() {
+    if (premiumModalLoaded) return;
+    try {
+        const response = await fetch('/components/premium-modal.html');
+        const html = await response.text();
+        document.body.insertAdjacentHTML('beforeend', html);
+        premiumModalLoaded = true;
+        lucide.createIcons();
+    } catch (error) {
+        console.error('프리미엄 모달 로드 실패:', error);
+    }
+}
+
+window.openPremiumModal = async function() {
+    await loadPremiumModal();
+    const modal = document.getElementById('premium-modal');
+    if (modal) modal.classList.add('active');
+};
+
+window.closePremiumModal = function() {
+    const modal = document.getElementById('premium-modal');
+    if (modal) modal.classList.remove('active');
+};
+
 // 잠금 문제 클릭 시 처리
 window.handleLockedProblemClick = function() {
     if (!currentUserId) {
         // 로그인 안 됨 → 로그인 모달
         openLoginModal();
     } else {
-        // 로그인 됨 → 결제 진행
-        requestPayment();
+        // 로그인 됨 → 프리미엄 안내 모달
+        openPremiumModal();
     }
 };
 
@@ -277,10 +317,12 @@ function renderProblemList(problems) {
         const lockedClass = isLocked ? 'locked' : '';
         const lockIcon = isLocked ? `
             <div class="lock-overlay">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                </svg>
+                <div class="lock-glass">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                </div>
             </div>
         ` : '';
         return `

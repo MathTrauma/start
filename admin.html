@@ -301,27 +301,9 @@
 
                 const userId = users[0].id;
 
-                // student 역할 확인
-                const { data: profile } = await supabaseClient
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', userId)
-                    .single();
-
-                if (profile?.role !== 'student') {
-                    showMessage('student 역할의 사용자만 등록할 수 있습니다.', 'error');
-                    return;
-                }
-
-                // 무료 이용 권한 부여 (무제한)
+                // role을 student로 설정 + 이용권한 부여 (RPC 함수로 한번에 처리)
                 const { error } = await supabaseClient
-                    .from('user_purchases')
-                    .upsert({
-                        user_id: userId,
-                        has_full_access: true,
-                        expires_at: '2099-12-31T23:59:59.999Z',
-                        purchased_at: new Date().toISOString()
-                    }, { onConflict: 'user_id' });
+                    .rpc('grant_student_access', { target_user_id: userId });
 
                 if (error) throw error;
 
