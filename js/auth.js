@@ -150,7 +150,7 @@ async function loadLoginModal() {
         const html = await response.text();
         document.body.insertAdjacentHTML('beforeend', html);
         lucide.createIcons();
-        await loadTurnstileScript();
+        //await loadTurnstileScript();
     } catch (err) {
         console.error('모달 로드 실패:', err);
     }

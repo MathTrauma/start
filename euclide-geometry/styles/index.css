@@ -131,7 +131,7 @@ h1 {
     border-radius: 10px;
     padding: 8px 20px;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
     text-decoration: none;
     color: inherit;
     display: flex;
@@ -140,83 +140,28 @@ h1 {
     position: relative;
     z-index: 1;
     overflow: hidden;
+    border: 2px solid #e8e3d8;
 }
 
-/* LED 회전 테두리 효과 */
-.problem-card::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 150%;
-    height: 150%;
-    background: conic-gradient(
-        transparent 0deg,
-        #00ff88 60deg,
-        #00cc66 120deg,
-        #00ff88 180deg,
-        #88ffbb 240deg,
-        #00ff88 300deg,
-        transparent 360deg
-    );
-    transform: translate(-50%, -50%);
-    z-index: -2;
-    animation: led-spin 6s linear infinite;
-    opacity: 0.5;
-}
-
-/* 미시청 문제 (보라색) - 추후 .unwatched 클래스로 적용 */
-.problem-card.unwatched::before {
-    background: conic-gradient(
-        transparent 0deg,
-        #a855f7 60deg,
-        #7c3aed 120deg,
-        #a855f7 180deg,
-        #c084fc 240deg,
-        #a855f7 300deg,
-        transparent 360deg
-    );
-}
-
-.problem-card::after {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    right: 3px;
-    bottom: 3px;
-    border-radius: 7px;
-    background: #fff;
-    z-index: -1;
-}
-
-@keyframes led-spin {
-    100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
+/* 시청 완료 문제 - 밝은 녹색 테두리 */
+.problem-card.viewed {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 1px #22c55e;
 }
 
 /* 잠금 문제 스타일 */
 .problem-card.locked {
     cursor: not-allowed;
+    border-color: #d4cec3;
 }
 
 .problem-card.locked .problem-description {
     opacity: 0.5;
 }
 
-.problem-card.locked::before {
-    background: conic-gradient(#ccc, #999, #ccc);
-    opacity: 0.3;
-}
-
 .problem-card.locked:hover {
     transform: none;
     box-shadow: none;
-}
-
-.problem-card.locked:hover::before {
-    animation-duration: 3s;
 }
 
 .lock-overlay {
@@ -254,9 +199,9 @@ h1 {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.problem-card:hover::before {
-    animation-duration: 4s;
-    opacity: 0.9;
+/* 시청 완료 문제 hover */
+.problem-card.viewed:hover {
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.25);
 }
 
 .problem-card h3 {

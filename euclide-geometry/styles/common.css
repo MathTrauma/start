@@ -597,6 +597,17 @@ button.active:hover {
     background-color: #a0927e;
 }
 
+/* Play/Pause Button */
+.play-pause-btn {
+    width: 32px;
+    height: 24px;
+    font-size: 12px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .mode-btn:disabled {
     background-color: #3a3a3a;
     color: #666;

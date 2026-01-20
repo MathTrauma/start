@@ -4,7 +4,7 @@ const PORTONE_STORE_ID = 'store-c5f2423a-b1d3-4c1e-8ea3-7faa53da830e';
 // 결제 채널 키
 const CHANNEL_KEYS = {
     KCP: 'channel-key-b612f825-8eef-4f9d-92f1-e71ec778d162',      // KCP 실연동
-    // KAKAO: '',  // 카카오페이 (추후 연동)
+    KAKAO: 'channel-key-585c9fea-065d-4320-977f-c4f87b96a3e5',    // 카카오페이 테스트
 };
 
 // 기본 결제 채널
@@ -110,6 +110,72 @@ async function requestPayment() {
 
     } catch (error) {
         console.error('결제 오류:', error);
+        alert('결제 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+}
+
+/**
+ * 카카오페이 결제
+ */
+async function requestKakaoPayment() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if (!session) {
+        alert('결제를 진행하려면 먼저 로그인해주세요.');
+        return;
+    }
+
+    const userEmail = session.user.email;
+    const orderId = generateOrderId();
+
+    try {
+        const response = await PortOne.requestPayment({
+            storeId: PORTONE_STORE_ID,
+            channelKey: CHANNEL_KEYS.KAKAO,
+            paymentId: orderId,
+            orderName: 'MathMore Basic',
+            totalAmount: 9900,
+            currency: 'KRW',
+            payMethod: 'EASY_PAY',
+            customer: {
+                email: userEmail,
+            },
+            offerPeriod: (() => {
+                const from = new Date();
+                const to = new Date(from);
+                to.setMonth(to.getMonth() + 3);
+                if (to.getDate() !== from.getDate()) {
+                    to.setDate(0);
+                }
+                return {
+                    range: {
+                        from: from.toISOString(),
+                        to: to.toISOString(),
+                    }
+                };
+            })(),
+        });
+
+        if (response.code) {
+            if (response.code === 'FAILURE_TYPE_PG') {
+                alert(`결제 실패: ${response.message}`);
+            } else if (response.code !== 'USER_CANCEL') {
+                alert(`결제 오류: ${response.message}`);
+            }
+            return;
+        }
+
+        const verifyResult = await verifyPayment(response.paymentId);
+
+        if (verifyResult.success) {
+            alert('결제가 완료되었습니다! 이용권이 활성화되었습니다.');
+            window.location.reload();
+        } else {
+            alert(`결제 검증 실패: ${verifyResult.error}`);
+        }
+
+    } catch (error) {
+        console.error('카카오페이 결제 오류:', error);
         alert('결제 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
 }

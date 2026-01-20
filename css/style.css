@@ -662,6 +662,107 @@ main {
     background-color: var(--primary-500);
 }
 
+/* Payment Buttons (Card + KakaoPay) */
+.payment-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+@media (min-width: 768px) {
+    .payment-buttons {
+        gap: 0.75rem;
+    }
+}
+
+.btn-payment {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.5rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+    .btn-payment {
+        padding: 1rem;
+        font-size: 0.875rem;
+        gap: 0.5rem;
+    }
+}
+
+.btn-card-pay {
+    background-color: #2563eb;
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-card-pay:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.btn-kakao-pay {
+    background-color: #fee500;
+    color: #3c1e1e;
+    position: relative;
+}
+
+.btn-kakao-pay:hover:not(:disabled) {
+    background-color: #fdd800;
+    transform: translateY(-1px);
+}
+
+.btn-kakao-pay:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-kakao-pay .coming-soon {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background-color: #ef4444;
+    color: white;
+    font-size: 0.5rem;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+@media (min-width: 768px) {
+    .btn-kakao-pay .coming-soon {
+        font-size: 0.6rem;
+        padding: 2px 6px;
+    }
+}
+
+.payment-warning {
+    margin-top: 0.75rem;
+    padding: 0.5rem;
+    background-color: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 0.5rem;
+    color: #fca5a5;
+    font-size: 0.7rem;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .payment-warning {
+        font-size: 0.75rem;
+        padding: 0.625rem;
+    }
+}
+
 
 /* =========================================
    Footer

@@ -4,6 +4,7 @@ lucide.createIcons();
 // 유료 사용자 여부
 let isPaidUser = false;
 let currentUserId = null;
+let viewedProblems = new Set();  // 시청 완료 문제
 
 // 인증 초기화
 const loginBtn = document.getElementById('login-btn');
@@ -14,13 +15,17 @@ initAuth(async (session) => {
         loginBtn.style.display = 'none';
         logoutBtn.style.display = 'block';
         currentUserId = session.user.id;
-        // 유료 사용자 여부 확인
-        await checkPaidStatus(currentUserId);
+        // 유료 사용자 여부 확인 및 시청 기록 조회
+        await Promise.all([
+            checkPaidStatus(currentUserId),
+            loadViewedProblems(currentUserId)
+        ]);
     } else {
         loginBtn.style.display = 'block';
         logoutBtn.style.display = 'none';
         currentUserId = null;
         isPaidUser = false;
+        viewedProblems.clear();
     }
     // 상태 변경 시 문제 목록 다시 렌더링
     if (filteredProblems.length > 0) {
@@ -66,6 +71,26 @@ async function checkPaidStatus(userId) {
     } catch (error) {
         console.error('구독 상태 확인 실패:', error);
         isPaidUser = false;
+    }
+}
+
+// 시청 완료 문제 조회
+async function loadViewedProblems(userId) {
+    try {
+        const { data, error } = await supabaseClient
+            .from('problem_views')
+            .select('problem_id')
+            .eq('user_id', userId);
+
+        if (error) throw error;
+
+        viewedProblems.clear();
+        if (data) {
+            data.forEach(row => viewedProblems.add(String(row.problem_id).padStart(3, '0')));
+        }
+    } catch (error) {
+        console.error('시청 기록 조회 실패:', error);
+        viewedProblems.clear();
     }
 }
 
@@ -314,7 +339,10 @@ function renderProblemList(problems) {
     grid.innerHTML = pageProblems.map(problem => {
         const levelLabel = problem.level == 9 ? '영재고' : problem.level == 0 ? '기본정리' : `Level ${problem.level}`;
         const isLocked = !canAccessProblem(problem);
-        const lockedClass = isLocked ? 'locked' : '';
+        const isViewed = viewedProblems.has(problem.id);
+        const cardClasses = ['problem-card'];
+        if (isLocked) cardClasses.push('locked');
+        if (isViewed) cardClasses.push('viewed');
         const lockIcon = isLocked ? `
             <div class="lock-overlay">
                 <div class="lock-glass">
@@ -326,7 +354,7 @@ function renderProblemList(problems) {
             </div>
         ` : '';
         return `
-            <a href="${isLocked ? '#' : problem.url}" class="problem-card ${lockedClass}" data-problem-id="${problem.id}" ${isLocked ? 'onclick="event.preventDefault(); handleLockedProblemClick();"' : ''}>
+            <a href="${isLocked ? '#' : problem.url}" class="${cardClasses.join(' ')}" data-problem-id="${problem.id}" ${isLocked ? 'onclick="event.preventDefault(); handleLockedProblemClick();"' : ''}>
                 ${lockIcon}
                 <div class="problem-description">
                     <span class="problem-tag level">${levelLabel}</span>
