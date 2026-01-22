@@ -98,6 +98,23 @@ body {
     background: #e9ecef;
 }
 
+/* Rotate Button */
+.rotate-btn {
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+    padding: 4px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: background 0.2s;
+}
+
+.rotate-btn:hover {
+    background: #e9ecef;
+}
+
 /* Theme Buttons */
 .theme-buttons {
     display: flex;
