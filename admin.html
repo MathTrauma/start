@@ -227,14 +227,12 @@
         async function loadStudents() {
             try {
                 const { data, error } = await supabaseClient
-                    .from('user_purchases_with_email')
-                    .select('*')
-                    .eq('role', 'student')
-                    .order('purchased_at', { ascending: false });
+                    .rpc('get_students_with_email');
 
                 if (error) throw error;
 
-                allStudents = data || [];
+                // 클라이언트에서 student 필터링 (서버에서 이미 정렬됨)
+                allStudents = (data || []).filter(s => s.role === 'student');
                 renderStudents(allStudents);
             } catch (error) {
                 console.error('Students load error:', error);
