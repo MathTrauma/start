@@ -262,9 +262,8 @@
                 const purchasedAt = student.purchased_at
                     ? new Date(student.purchased_at).toLocaleDateString('ko-KR')
                     : '-';
-                const nameCell = student.name
-                    ? student.name
-                    : `<input type="text" placeholder="이름 입력" style="width: 80px; padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;" onchange="updateName('${student.user_id}', this.value)">`;
+                const currentName = (student.name && student.name !== 'User') ? student.name : '';
+                const nameCell = `<input type="text" value="${currentName}" placeholder="이름 입력" style="width: 80px; padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;" onchange="updateName('${student.user_id}', this.value)">`;
 
                 return `
                     <tr>
