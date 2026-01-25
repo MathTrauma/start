@@ -225,6 +225,7 @@
    ========================================= */
 .premium-modal-content {
     text-align: center;
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .premium-icon {
@@ -277,19 +278,41 @@
     color: var(--slate-500);
 }
 
+.premium-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
 .btn-premium {
     width: 100%;
     padding: 0.875rem;
-    background-color: var(--primary-600);
-    color: var(--white);
     border: none;
     border-radius: 0.5rem;
     font-size: 0.9375rem;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
-.btn-premium:hover {
+.btn-premium.btn-card {
+    background-color: var(--primary-600);
+    color: var(--white);
+}
+
+.btn-premium.btn-card:hover {
     background-color: var(--primary-500);
+}
+
+.btn-premium.btn-kakao {
+    background-color: #FEE500;
+    color: #191919;
+}
+
+.btn-premium.btn-kakao:hover {
+    background-color: #F5DC00;
 }
