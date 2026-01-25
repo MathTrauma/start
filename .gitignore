@@ -66,3 +66,6 @@ app.js
 # Payment test
 test-payment.html
 .vercel
+
+# Cloudflare Workers (deployed separately via wrangler)
+payment-worker/
