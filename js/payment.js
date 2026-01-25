@@ -12,6 +12,20 @@ const DEFAULT_CHANNEL_KEY = CHANNEL_KEYS.KCP;
 const PAYMENT_WORKER_URL = 'https://payment-worker.painfultrauma.workers.dev';
 
 /**
+ * PortOne SDK 동적 로드
+ */
+async function loadPortOneSDK() {
+    if (window.PortOne) return;
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.portone.io/v2/browser-sdk.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+}
+
+/**
  * 고유 주문 ID 생성
  */
 function generateOrderId() {
@@ -59,6 +73,9 @@ async function requestPayment() {
     const orderId = generateOrderId();
 
     try {
+        // PortOne SDK 동적 로드
+        await loadPortOneSDK();
+
         // PortOne V2 결제 요청
         const response = await PortOne.requestPayment({
             storeId: PORTONE_STORE_ID,
@@ -129,6 +146,9 @@ async function requestKakaoPayment() {
     const orderId = generateOrderId();
 
     try {
+        // PortOne SDK 동적 로드
+        await loadPortOneSDK();
+
         const response = await PortOne.requestPayment({
             storeId: PORTONE_STORE_ID,
             channelKey: CHANNEL_KEYS.KAKAO,

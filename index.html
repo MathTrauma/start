@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
         rel="stylesheet">
     <!-- Lucide Icons (Vanilla JS version) -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.469.0"></script>
     
     <script type="importmap">
     {
@@ -35,10 +35,10 @@
         <section class="hero-section">
             <!-- Background Video -->
             <div class="hero-bg-video-container">
-                <video id="hero-video-1" class="hero-bg-video active" autoplay muted playsinline preload="auto">
+                <video id="hero-video-1" class="hero-bg-video active" autoplay muted playsinline preload="metadata">
                     <source src="video1.mp4" type="video/mp4" />
                 </video>
-                <video id="hero-video-2" class="hero-bg-video" muted playsinline preload="auto">
+                <video id="hero-video-2" class="hero-bg-video" muted playsinline preload="metadata">
                     <source src="video2.mp4" type="video/mp4" />
                 </video>
                 <div class="hero-overlay"></div>
@@ -193,7 +193,6 @@
 
     <!-- Initialize Lucide Icons, Supabase Auth, and PortOne -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/payment.js"></script>
     <script>
