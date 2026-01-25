@@ -262,8 +262,8 @@
                 const purchasedAt = student.purchased_at
                     ? new Date(student.purchased_at).toLocaleDateString('ko-KR')
                     : '-';
-                const currentName = (student.name && student.name !== 'User') ? student.name : '';
-                const nameCell = `<input type="text" value="${currentName}" placeholder="이름 입력" style="width: 80px; padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;" onchange="updateName('${student.user_id}', this.value)">`;
+                const displayName = student.name || '-';
+                const nameCell = `${displayName} <button class="btn btn-sm" style="background:#eee;color:#333;margin-left:4px;" onclick="promptNameChange('${student.user_id}', '${student.name || ''}')">변경</button>`;
 
                 return `
                     <tr>
@@ -309,12 +309,11 @@
 
                 const userId = users[0].id;
 
-                // 이름이 있으면 profiles에 저장
+                // 이름이 있으면 students 테이블에 저장
                 if (name) {
                     await supabaseClient
-                        .from('profiles')
-                        .update({ name: name })
-                        .eq('id', userId);
+                        .from('students')
+                        .upsert({ user_id: userId, name: name }, { onConflict: 'user_id' });
                 }
 
                 // role을 student로 설정 + 이용권한 부여 (RPC 함수로 한번에 처리)
@@ -372,14 +371,18 @@
             }
         }
 
-        async function updateName(userId, name) {
-            if (!name.trim()) return;
+        function promptNameChange(userId, currentName) {
+            const newName = prompt('새 이름을 입력하세요:', currentName);
+            if (newName !== null && newName.trim() !== '') {
+                updateName(userId, newName.trim());
+            }
+        }
 
+        async function updateName(userId, name) {
             try {
                 const { error } = await supabaseClient
-                    .from('profiles')
-                    .update({ name: name.trim() })
-                    .eq('id', userId);
+                    .from('students')
+                    .upsert({ user_id: userId, name: name, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
 
                 if (error) throw error;
 
