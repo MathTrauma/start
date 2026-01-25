@@ -176,9 +176,10 @@
         }
 
         async function login() {
+            localStorage.setItem('authRedirect', window.location.href);
             await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
-                options: { redirectTo: window.location.href }
+                options: { redirectTo: window.location.origin + '/auth/callback.html' }
             });
         }
 
