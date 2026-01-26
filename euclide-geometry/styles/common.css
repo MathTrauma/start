@@ -248,8 +248,8 @@ body {
 }
 
 .problem-content p {
-    display: inline;
-    margin: 0;
+    display: block;
+    margin: 0.8em 0;
 }
 
 /* Solution Container - Base */
