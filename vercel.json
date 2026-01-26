@@ -1,4 +1,5 @@
 {
+  "cleanUrls": true,
   "redirects": [
     { "source": "/start", "destination": "/" },
     { "source": "/start/", "destination": "/" },
