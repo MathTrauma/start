@@ -3,6 +3,9 @@ node_modules/
 package-lock.json
 package.json
 
+# Claude Code / oh-my-claudecode
+.claude/
+.omc/
 
 # Build outputs
 dist/
