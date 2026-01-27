@@ -11,6 +11,9 @@ const CHANNEL_KEYS = {
 const DEFAULT_CHANNEL_KEY = CHANNEL_KEYS.KCP;
 const PAYMENT_WORKER_URL = 'https://payment-worker.painfultrauma.workers.dev';
 
+// 중복 결제 방지 플래그
+let isPaymentInProgress = false;
+
 /**
  * PortOne SDK 동적 로드
  */
@@ -32,6 +35,24 @@ function generateOrderId() {
     const timestamp = Date.now();
     const random = Math.random().toString(36).substring(2, 8);
     return `order_${timestamp}_${random}`;
+}
+
+/**
+ * 기존 구독 확인 (결제 전 중복 방지)
+ */
+async function checkActiveSubscription() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) return { hasAccess: false };
+
+    const response = await fetch(`${PAYMENT_WORKER_URL}/check-access`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
+        },
+    });
+
+    return response.json();
 }
 
 /**
@@ -60,6 +81,11 @@ async function verifyPayment(paymentId) {
  * PortOne V2 결제 실행
  */
 async function requestPayment() {
+    // 중복 클릭 방지
+    if (isPaymentInProgress) {
+        return;
+    }
+
     // 로그인 확인
     const { data: { session } } = await supabaseClient.auth.getSession();
 
@@ -68,11 +94,21 @@ async function requestPayment() {
         return;
     }
 
-    const userId = session.user.id;
-    const userEmail = session.user.email;
-    const orderId = generateOrderId();
+    // 결제 진행 시작
+    isPaymentInProgress = true;
 
     try {
+        // 기존 구독 확인
+        const accessCheck = await checkActiveSubscription();
+        if (accessCheck.hasAccess) {
+            alert('이미 유효한 이용권이 있습니다. 만료일: ' + new Date(accessCheck.expiresAt).toLocaleDateString('ko-KR'));
+            isPaymentInProgress = false;
+            return;
+        }
+
+        const userEmail = session.user.email;
+        const orderId = generateOrderId();
+
         // PortOne SDK 동적 로드
         await loadPortOneSDK();
 
@@ -85,6 +121,17 @@ async function requestPayment() {
             totalAmount: 9900,
             currency: 'KRW',
             payMethod: 'CARD',
+            card: {
+                availableCards: [
+                    'SAMSUNG_CARD',   // 삼성
+                    'SHINHAN_CARD',   // 신한
+                    'BC_CARD',        // BC
+                    'KOOKMIN_CARD',   // KB국민
+                    'HYUNDAI_CARD',   // 현대
+                    'NH_CARD',        // NH농협
+                    'WOORI_CARD',     // 우리
+                ],
+            },
             customer: {
                 email: userEmail,
             },
@@ -128,6 +175,8 @@ async function requestPayment() {
     } catch (error) {
         console.error('결제 오류:', error);
         alert('결제 중 오류가 발생했습니다. 다시 시도해주세요.');
+    } finally {
+        isPaymentInProgress = false;
     }
 }
 
@@ -135,6 +184,11 @@ async function requestPayment() {
  * 카카오페이 결제
  */
 async function requestKakaoPayment() {
+    // 중복 클릭 방지
+    if (isPaymentInProgress) {
+        return;
+    }
+
     const { data: { session } } = await supabaseClient.auth.getSession();
 
     if (!session) {
@@ -142,10 +196,21 @@ async function requestKakaoPayment() {
         return;
     }
 
-    const userEmail = session.user.email;
-    const orderId = generateOrderId();
+    // 결제 진행 시작
+    isPaymentInProgress = true;
 
     try {
+        // 기존 구독 확인
+        const accessCheck = await checkActiveSubscription();
+        if (accessCheck.hasAccess) {
+            alert('이미 유효한 이용권이 있습니다. 만료일: ' + new Date(accessCheck.expiresAt).toLocaleDateString('ko-KR'));
+            isPaymentInProgress = false;
+            return;
+        }
+
+        const userEmail = session.user.email;
+        const orderId = generateOrderId();
+
         // PortOne SDK 동적 로드
         await loadPortOneSDK();
 
@@ -197,5 +262,7 @@ async function requestKakaoPayment() {
     } catch (error) {
         console.error('카카오페이 결제 오류:', error);
         alert('결제 중 오류가 발생했습니다. 다시 시도해주세요.');
+    } finally {
+        isPaymentInProgress = false;
     }
 }
