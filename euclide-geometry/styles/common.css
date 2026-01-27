@@ -252,6 +252,11 @@ body {
     margin: 0.8em 0;
 }
 
+/* 첫 번째 문단은 라벨과 같은 줄에 표시 */
+.problem-content #problem-text > p:first-child {
+    display: inline;
+}
+
 /* Display Math 중앙 정렬 */
 mjx-container[display="true"] {
     display: block;
