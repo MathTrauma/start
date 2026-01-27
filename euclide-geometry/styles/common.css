@@ -252,6 +252,13 @@ body {
     margin: 0.8em 0;
 }
 
+/* Display Math 중앙 정렬 */
+mjx-container[display="true"] {
+    display: block;
+    text-align: center;
+    margin: 1em 0;
+}
+
 /* Solution Container - Base */
 .solution-container {
     width: 100%;
