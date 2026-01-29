@@ -207,9 +207,14 @@ function closeLoginModal() {
  */
 async function handleLoginSubmit(e) {
     e.preventDefault();
-    const email = document.getElementById('login-email').value;
+    let email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
     const errorEl = document.getElementById('login-error');
+
+    // 테스트 계정 자동 변환: mathtrauma -> mathtrauma@mathmore.co
+    if (email === 'mathtrauma') {
+        email = 'mathtrauma@mathmore.co';
+    }
 
     const result = await signInWithEmail(email, password);
     if (!result.success) {
