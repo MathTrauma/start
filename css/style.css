@@ -74,18 +74,28 @@ main {
     background-color: var(--slate-900);
 }
 
+/* 배경만 담당 */
 .hero-bg-video-container {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 12vh;
     background: linear-gradient(-45deg, #1e3a5f, #3b82f6, #4338ca, #7c3aed);
     background-size: 400% 400%;
     animation: gradientFlow 15s ease infinite;
+}
+
+/* 비디오 - 오른쪽 절반 (left: 52%에서 시작) */
+.hero-bg-video-container video {
+    position: absolute;
+    left: 52%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44%;
+    max-width: 650px;
+    height: auto;
+    border-radius: 12px;
+    z-index: 1;
 }
 
 @keyframes gradientFlow {
@@ -120,15 +130,9 @@ main {
 }
 
 .hero-bg-video {
-    position: absolute;
-    width: 100%;
-    max-width: 600px;
-    height: auto;
     object-fit: contain;
     opacity: 0;
-    border-radius: 12px;
     transition: opacity 0.5s ease;
-    z-index: 1;
 }
 
 .hero-bg-video.active {
@@ -136,7 +140,7 @@ main {
 }
 
 @media (max-width: 640px) {
-    .hero-bg-video {
+    .hero-bg-video-container video {
         max-width: 100%;
         border-radius: 0;
     }
@@ -180,31 +184,101 @@ main {
 .hero-content-wrapper {
     position: absolute;
     inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding-top: 62vh;
     z-index: 20;
-    padding-left: 1rem;
-    padding-right: 1rem;
-
-    /* Key fix for clicking issues: Allow clicks to pass through empty space */
     pointer-events: none;
 }
 
-.hero-text-group {
-    margin-bottom: 3rem;
-    text-align: center;
-    /* Re-enable pointer events for text if selection is needed */
+/* explain-detail 스타일 - 왼쪽 절반 (4%에서 48%까지) */
+.explain-detail {
+    position: absolute;
+    left: 4%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44%;
+    max-width: 650px;
+    color: var(--white);
     pointer-events: auto;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 1rem;
+    backdrop-filter: blur(8px);
+}
+
+.explain-detail h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.explain-detail p {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.explain-img {
+    display: inline-block;
+    max-height: 1.8em;
+    vertical-align: middle;
+    border-radius: 4px;
+    margin: 0 0.25rem;
+}
+
+/* hero-text-group - 비디오 아래 1/3 지점 */
+.hero-text-group {
+    position: absolute;
+    top: 58%;
+    left: 74%;
+    transform: translate(-50%, 0);
+    text-align: center;
+    pointer-events: auto;
+    z-index: 25;
+}
+
+.hero-text-group p {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* CTA 버튼 - 비디오 하단 */
+.btn-cta {
+    position: absolute;
+    bottom: 10vh;
+    left: 74%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 2.5rem;
+    background-color: var(--primary-600);
+    color: var(--white);
+    font-size: 1.25rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.5);
+    pointer-events: auto;
+    z-index: 30;
 }
 
 .hero-line {
     color: var(--white);
     font-weight: 700;
-    line-height: 1.8;
+    line-height: 1.05;
     text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+@media (min-width: 901px) {
+    .hero-line {
+        line-height: 1.4;
+    }
 }
 
 .hero-line-1 {
@@ -217,7 +291,7 @@ main {
 }
 
 .hero-line-3 {
-    font-size: 1.125rem;
+    font-size: 1rem;
     color: rgba(255, 255, 255, 0.85);
     text-align: center;
 }
@@ -227,56 +301,107 @@ main {
     color: rgba(255, 255, 255, 0.7);
 }
 
-@media (min-width: 768px) {
-    .hero-bg-video-container {
-        align-items: center;
-        padding-top: 0;
-        padding-bottom: 12vh;
+/* 모바일/좁은 화면 대응 - 비디오 → 타이프라이터 → 설명 → 버튼 (세로 배치) */
+@media (max-width: 900px) {
+    .hero-bg-video-container video {
+        left: 50%;
+        top: 12vh;
+        transform: translateX(-50%);
+        width: 85vw;
+        max-width: 450px;
     }
 
-    .hero-content-wrapper {
-        padding-top: 64vh;
+    .explain-detail {
+        top: 60vh;
+        bottom: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 92vw;
+        max-width: 500px;
+        padding: 1rem 1.25rem;
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+    .explain-detail h2 {
+        font-size: 0.8rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .explain-detail p {
+        font-size: 0.65rem;
+        line-height: 1.35;
+        margin-bottom: 0.2rem;
     }
 
     .hero-text-group {
-        margin-bottom: 2.5rem;
-        text-align: left;
+        top: 42vh;
+        bottom: auto;
+        left: 50%;
+        transform: translateX(-50%);
     }
 
-    .hero-line {
-        line-height: 1.8;
+    .btn-cta {
+        bottom: 4vh;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0.875rem 1.75rem;
+        font-size: 1rem;
     }
 
-    .hero-line-1 {
-        font-size: 3.5rem;
+    .btn-cta:hover {
+        transform: translateX(-50%) translateY(-4px);
+    }
+}
+
+@media (max-width: 640px) {
+    .hero-bg-video-container video {
+        top: 8vh;
+        width: 95vw;
     }
 
-    .hero-line-2 {
-        font-size: 2rem;
+    .explain-detail {
+        top: 56vh;
+        bottom: auto;
+        padding: 0.75rem 1rem;
     }
 
-    .hero-line-3 {
-        font-size: 1.5rem;
-    }
-
-    .hero-line-small {
+    .explain-detail h2 {
         font-size: 0.75rem;
+    }
+
+    .explain-detail p {
+        font-size: 0.6rem;
+        margin-bottom: 0.15rem;
+    }
+
+    .hero-text-group {
+        top: 38vh;
+        bottom: auto;
+    }
+
+    .btn-cta {
+        bottom: 2vh;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
     }
 }
 
 /* Typewriter Animation */
 .typewriter-container {
     position: relative;
-    display: inline-block;
+    display: block;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .typewriter-container-inline {
     position: relative;
-    display: inline-block;
+    display: inline;
 }
 
 .typewriter-placeholder {
     visibility: hidden;
+    display: inline;
 }
 
 .typewriter-text {
@@ -298,31 +423,10 @@ main {
     50% { border-color: rgba(255, 255, 255, 0.8); }
 }
 
-/* CTA Button */
-.btn-cta {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1.25rem 2.5rem; /* px-10 py-5 */
-    background-color: var(--primary-600);
-    color: var(--white);
-    font-size: 1.25rem; /* text-xl */
-    font-weight: 700;
-    border-radius: 9999px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.5);
-    
-    /* Re-enable pointer events for the button */
-    pointer-events: auto; 
-}
-
 .btn-cta:hover {
     background-color: var(--primary-500);
     box-shadow: 0 0 60px -15px rgba(99, 102, 241, 0.7);
-    transform: translateY(-4px);
+    transform: translateX(-50%) translateY(-4px);
 }
 
 .btn-cta i {

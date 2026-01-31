@@ -62,6 +62,9 @@ euclide-geometry/lib*
 # docs
 docs/
 
+# Test
+_3D
+
 # tool's
 app.js
 *.py
