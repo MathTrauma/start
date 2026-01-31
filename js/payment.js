@@ -123,13 +123,15 @@ async function requestPayment() {
             payMethod: 'CARD',
             card: {
                 availableCards: [
-                    'SAMSUNG_CARD',   // 삼성
-                    'SHINHAN_CARD',   // 신한
-                    'BC_CARD',        // BC
-                    'KOOKMIN_CARD',   // KB국민
-                    'HYUNDAI_CARD',   // 현대
-                    'NH_CARD',        // NH농협
-                    'WOORI_CARD',     // 우리
+                    'SAMSUNG_CARD',   // 삼성카드
+                    'SHINHAN_CARD',   // 신한카드
+                    'BC_CARD',        // BC카드
+                    'KOOKMIN_CARD',   // KB국민카드
+                    'HANA_CARD',      // 하나카드, 하나카드(외환)
+                    'HYUNDAI_CARD',   // 현대카드
+                    'LOTTE_CARD',     // 롯데아멕스카드
+                    'NH_CARD',        // NH카드
+                    'WOORI_CARD',     // 우리카드
                 ],
             },
             customer: {
