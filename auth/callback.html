@@ -40,15 +40,12 @@
     </div>
 
     <!-- Supabase Config (centralized) -->
+    <script src="/js/config.js"></script>
     <script>
-        // Supabase 설정 (js/config.js와 동일한 값 - callback 페이지는 standalone이므로 직접 정의)
-        const SUPABASE_URL = 'https://bdunrluoivhgypwangcx.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkdW5ybHVvaXZoZ3lwd2FuZ2N4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyNjc1NTksImV4cCI6MjA4Mjg0MzU1OX0.JBkLVuR8RyOmwMl6_-KPIgsYBy1_qoG90v5j_vt0mSQ';
-        // 전역 변수로도 설정 (다른 스크립트에서 사용 가능)
-        window.SUPABASE_URL = SUPABASE_URL;
-        window.SUPABASE_ANON_KEY = SUPABASE_ANON_KEY;
-
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = supabase.createClient(
+            window.SUPABASE_URL,
+            window.SUPABASE_ANON_KEY
+        );
 
         async function handleCallback() {
             try {
