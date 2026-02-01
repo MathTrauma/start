@@ -188,7 +188,6 @@ body {
     z-index: 10;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     overflow-y: hidden;
-    scrollbar-gutter: stable;
 }
 
 /* WebKit Scrollbar */
