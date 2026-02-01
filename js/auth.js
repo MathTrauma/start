@@ -89,7 +89,7 @@ async function signInWithKakao() {
 async function signOut() {
     console.log('로그아웃 시도 중...');
     try {
-        const { error } = await supabaseClient.auth.signOut();
+        const { error } = await supabaseClient.auth.signOut({ scope: 'local' });
         if (error) throw error;
     } catch (err) {
         console.error('로그아웃 에러:', err.message);
