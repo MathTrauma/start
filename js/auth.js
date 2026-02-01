@@ -50,7 +50,6 @@ async function signInWithGoogle() {
     try {
         // 현재 페이지 URL 저장 (로그인 후 복귀용)
         localStorage.setItem('authRedirect', window.location.href);
-
         const { error } = await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
             options: {
@@ -121,7 +120,7 @@ async function signInWithEmail(email, password) {
  * 이메일/비밀번호 회원가입
  */
 async function signUpWithEmail(email, password) {
-    console.log('회원가입 시도 중...');
+    //console.log('회원가입 시도 중...');
     try {
         const { data, error } = await supabaseClient.auth.signUp({
             email: email,

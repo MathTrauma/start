@@ -643,3 +643,16 @@ button.active:hover {
     cursor: not-allowed;
     opacity: 0.5;
 }
+
+/* KaTeX Overlay */
+.math-overlay {
+    position: absolute;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.math-overlay .katex {
+    font-size: 1em;
+}
