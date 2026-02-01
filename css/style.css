@@ -85,14 +85,14 @@ main {
     animation: gradientFlow 15s ease infinite;
 }
 
-/* 비디오 - 오른쪽 절반 (left: 52%에서 시작) */
+/* 비디오 - 오른쪽 절반 중앙 */
 .hero-bg-video-container video {
     position: absolute;
-    left: 52%;
+    left: 75%;
     top: 50%;
-    transform: translateY(-50%);
-    width: 44%;
-    max-width: 650px;
+    transform: translate(-50%, -50%);
+    width: 46%;
+    max-width: 700px;
     height: auto;
     border-radius: 12px;
     z-index: 1;
@@ -188,34 +188,34 @@ main {
     pointer-events: none;
 }
 
-/* explain-detail 스타일 - 왼쪽 절반 (4%에서 48%까지) */
+/* explain-detail 스타일 - 왼쪽 절반 중앙 */
 .explain-detail {
     position: absolute;
-    left: 4%;
+    left: 25%;
     top: 50%;
-    transform: translateY(-50%);
-    width: 44%;
-    max-width: 650px;
+    transform: translate(-50%, -50%);
+    width: 46%;
+    max-width: 700px;
     color: var(--white);
     pointer-events: auto;
-    padding: 2rem;
+    padding: 2.5rem;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 1rem;
     backdrop-filter: blur(8px);
 }
 
 .explain-detail h2 {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
     line-height: 1.5;
     text-align: center;
 }
 
 .explain-detail p {
-    font-size: 0.85rem;
-    line-height: 1.7;
-    margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.1rem;
     color: rgba(255, 255, 255, 0.9);
 }
 
@@ -227,11 +227,11 @@ main {
     margin: 0 0.25rem;
 }
 
-/* hero-text-group - 비디오 아래 1/3 지점 */
+/* hero-text-group - 비디오 하단 20% 지점부터 */
 .hero-text-group {
     position: absolute;
-    top: 58%;
-    left: 74%;
+    top: 62%;
+    left: 75%;
     transform: translate(-50%, 0);
     text-align: center;
     pointer-events: auto;
@@ -243,11 +243,11 @@ main {
     padding: 0 !important;
 }
 
-/* CTA 버튼 - 비디오 하단 */
+/* CTA 버튼 - 비디오와 정렬 */
 .btn-cta {
     position: absolute;
     bottom: 10vh;
-    left: 74%;
+    left: 75%;
     transform: translateX(-50%);
     display: flex;
     align-items: center;
@@ -277,7 +277,7 @@ main {
 
 @media (min-width: 901px) {
     .hero-line {
-        line-height: 1.4;
+        line-height: 1.6;
     }
 }
 
@@ -323,14 +323,14 @@ main {
     }
 
     .explain-detail h2 {
-        font-size: 0.8rem;
-        margin-bottom: 0.4rem;
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
     }
 
     .explain-detail p {
-        font-size: 0.65rem;
-        line-height: 1.35;
-        margin-bottom: 0.2rem;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        margin-bottom: 0.3rem;
     }
 
     .hero-text-group {
@@ -366,12 +366,12 @@ main {
     }
 
     .explain-detail h2 {
-        font-size: 0.75rem;
+        font-size: 0.85rem;
     }
 
     .explain-detail p {
-        font-size: 0.6rem;
-        margin-bottom: 0.15rem;
+        font-size: 0.7rem;
+        margin-bottom: 0.2rem;
     }
 
     .hero-text-group {
