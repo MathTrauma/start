@@ -63,7 +63,8 @@ euclide-geometry/lib*
 docs/
 
 # Test
-_3D
+_3D/
+examples/
 
 # tool's
 app.js
