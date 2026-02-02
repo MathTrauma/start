@@ -341,6 +341,12 @@ function renderCategories(categories) {
         option.textContent = `${catName} (${categories[catName].length})`;
         select.appendChild(option);
     });
+
+    // 마지막에 '다시보기' 옵션 추가
+    const bookmarkOption = document.createElement('option');
+    bookmarkOption.value = 'bookmark';
+    bookmarkOption.textContent = '⭐ 다시보기';
+    select.appendChild(bookmarkOption);
 }
 
 function renderProblemList(problems) {
