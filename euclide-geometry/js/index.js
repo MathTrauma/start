@@ -5,6 +5,7 @@ lucide.createIcons();
 let isPaidUser = false;
 let currentUserId = null;
 let viewedProblems = new Set();  // 시청 완료 문제
+let bookmarkedProblems = new Set();  // 북마크된 문제
 
 // 인증 초기화
 const loginBtn = document.getElementById('login-btn');
@@ -15,10 +16,11 @@ initAuth(async (session) => {
         loginBtn.style.display = 'none';
         logoutBtn.style.display = 'block';
         currentUserId = session.user.id;
-        // 유료 사용자 여부 확인 및 시청 기록 조회
+        // 유료 사용자 여부 확인 및 시청 기록, 북마크 조회
         await Promise.all([
             checkPaidStatus(currentUserId),
-            loadViewedProblems(currentUserId)
+            loadViewedProblems(currentUserId),
+            loadBookmarks(currentUserId)
         ]);
     } else {
         loginBtn.style.display = 'block';
@@ -26,6 +28,7 @@ initAuth(async (session) => {
         currentUserId = null;
         isPaidUser = false;
         viewedProblems.clear();
+        bookmarkedProblems.clear();
     }
     // 상태 변경 시 문제 목록 다시 렌더링
     if (filteredProblems.length > 0) {
@@ -91,6 +94,26 @@ async function loadViewedProblems(userId) {
     } catch (error) {
         console.error('시청 기록 조회 실패:', error);
         viewedProblems.clear();
+    }
+}
+
+// 북마크된 문제 조회
+async function loadBookmarks(userId) {
+    try {
+        const { data, error } = await supabaseClient
+            .from('problem_bookmarks')
+            .select('problem_id')
+            .eq('user_id', userId);
+
+        if (error) throw error;
+
+        bookmarkedProblems.clear();
+        if (data) {
+            data.forEach(row => bookmarkedProblems.add(String(row.problem_id).padStart(3, '0')));
+        }
+    } catch (error) {
+        console.error('북마크 조회 실패:', error);
+        bookmarkedProblems.clear();
     }
 }
 
@@ -255,7 +278,11 @@ fetch(`${workerUrl}/problems/index.json?_t=${Date.now()}`)
         // 필터 적용 (페이지는 아래서 설정)
         let filtered = allProblems;
         if (state.level) filtered = filtered.filter(p => p.level == state.level);
-        if (state.category) filtered = filtered.filter(p => p.categories && p.categories.includes(state.category));
+        if (state.category === 'bookmark') {
+            filtered = filtered.filter(p => bookmarkedProblems.has(p.id));
+        } else if (state.category) {
+            filtered = filtered.filter(p => p.categories && p.categories.includes(state.category));
+        }
 
         currentPage = state.page;
         renderProblemList(filtered);
@@ -455,7 +482,10 @@ function setupFilters() {
             filtered = filtered.filter(p => p.level == level);
         }
 
-        if (category) {
+        if (category === 'bookmark') {
+            // 북마크 필터: 북마크된 문제만 표시
+            filtered = filtered.filter(p => bookmarkedProblems.has(p.id));
+        } else if (category) {
             filtered = filtered.filter(p => p.categories && p.categories.includes(category));
         }
 
@@ -488,7 +518,11 @@ window.addEventListener('popstate', (event) => {
 
     let filtered = allProblems;
     if (state.level) filtered = filtered.filter(p => p.level == state.level);
-    if (state.category) filtered = filtered.filter(p => p.categories && p.categories.includes(state.category));
+    if (state.category === 'bookmark') {
+        filtered = filtered.filter(p => bookmarkedProblems.has(p.id));
+    } else if (state.category) {
+        filtered = filtered.filter(p => p.categories && p.categories.includes(state.category));
+    }
 
     currentPage = state.page || 1;
     renderProblemList(filtered);

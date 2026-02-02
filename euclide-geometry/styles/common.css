@@ -102,17 +102,54 @@ body {
 .rotate-btn {
     background: transparent;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 4px 0 0 4px;
     color: #333;
     padding: 4px 10px;
     font-size: 16px;
     cursor: pointer;
-    margin-left: 8px;
     transition: background 0.2s;
 }
 
 .rotate-btn:hover {
     background: #e9ecef;
+}
+
+/* Button Group */
+.btn-group {
+    display: flex;
+    align-items: center;
+}
+
+/* Bookmark Button */
+.bookmark-btn {
+    background: transparent;
+    border: 1px solid #ddd;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    color: #333;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bookmark-btn:hover {
+    background: #e9ecef;
+}
+
+.bookmark-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.bookmark-btn.active {
+    color: #e6a23c;
+}
+
+.bookmark-btn.active svg {
+    fill: #e6a23c;
 }
 
 /* Theme Buttons */
