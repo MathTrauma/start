@@ -374,33 +374,28 @@ mjx-container[display="true"] {
 
 /* Toggle Canvas Button */
 .toggle-canvas-btn {
-    width: auto;
-    max-width: 600px;
-    margin-top: 15px;
-    padding: 10px 20px;
+    display: inline;
+    padding: 2px 10px;
     background-color: var(--text-muted);
     color: #fff;
     border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    transition: background-color 0.2s ease;
+    vertical-align: middle;
+    line-height: 1.4;
+    white-space: nowrap;
+    margin-left: 6px;
 }
 
 .toggle-canvas-btn:hover {
     background-color: #a0927e;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .toggle-canvas-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    background-color: #8a7d6b;
 }
 
 /* Canvas Container - Base */
