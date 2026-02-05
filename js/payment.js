@@ -1,15 +1,10 @@
-// PortOne V2 결제 설정
-const PORTONE_STORE_ID = 'store-c5f2423a-b1d3-4c1e-8ea3-7faa53da830e';
-
-// 결제 채널 키
-const CHANNEL_KEYS = {
-    KCP: 'channel-key-b612f825-8eef-4f9d-92f1-e71ec778d162',      // KCP 실연동
-    KAKAO: 'channel-key-f70ac506-2add-42cb-90db-478eef9f5717',    // 카카오페이 실연동
-};
+// PortOne V2 결제 설정 (config.js에서 로드)
+const PORTONE_STORE_ID = window.PORTONE_STORE_ID;
+const CHANNEL_KEYS = window.PAYMENT_CHANNEL_KEYS;
+const PAYMENT_WORKER_URL = window.PAYMENT_WORKER_URL;
 
 // 기본 결제 채널
 const DEFAULT_CHANNEL_KEY = CHANNEL_KEYS.KCP;
-const PAYMENT_WORKER_URL = 'https://payment-worker.painfultrauma.workers.dev';
 
 // 중복 결제 방지 플래그
 let isPaymentInProgress = false;
@@ -81,28 +76,53 @@ async function verifyPayment(paymentId) {
     return response.json();
 }
 
+// 결제 수단별 설정
+const PAYMENT_METHODS = {
+    CARD: {
+        channelKey: CHANNEL_KEYS.KCP,
+        payMethod: 'CARD',
+        card: {
+            availableCards: [
+                'SAMSUNG_CARD',
+                'SHINHAN_CARD',
+                'BC_CARD',
+                'KOOKMIN_CARD',
+                'HANA_CARD',
+                'HYUNDAI_CARD',
+                'LOTTE_CARD',
+                'NH_CARD',
+                'WOORI_CARD',
+            ],
+        },
+    },
+    KAKAO: {
+        channelKey: CHANNEL_KEYS.KAKAO,
+        payMethod: 'EASY_PAY',
+    },
+};
+
 /**
  * PortOne V2 결제 실행
+ * @param {'CARD'|'KAKAO'} method - 결제 수단
  */
-async function requestPayment() {
-    // 중복 클릭 방지
-    if (isPaymentInProgress) {
+async function processPayment(method) {
+    if (isPaymentInProgress) return;
+
+    const config = PAYMENT_METHODS[method];
+    if (!config) {
+        console.error('알 수 없는 결제 수단:', method);
         return;
     }
 
-    // 로그인 확인
     const { data: { session } } = await supabaseClient.auth.getSession();
-
     if (!session) {
         alert('결제를 진행하려면 먼저 로그인해주세요.');
         return;
     }
 
-    // 결제 진행 시작
     isPaymentInProgress = true;
 
     try {
-        // 기존 구독 확인
         const accessCheck = await checkActiveSubscription();
         if (accessCheck.hasAccess) {
             alert('이미 유효한 이용권이 있습니다. 만료일: ' + new Date(accessCheck.expiresAt).toLocaleDateString('ko-KR'));
@@ -110,44 +130,23 @@ async function requestPayment() {
             return;
         }
 
-        const userEmail = session.user.email;
-        const orderId = generateOrderId();
-
-        // PortOne SDK 동적 로드
         await loadPortOneSDK();
 
-        // PortOne V2 결제 요청
-        const response = await PortOne.requestPayment({
+        const paymentParams = {
             storeId: PORTONE_STORE_ID,
-            channelKey: DEFAULT_CHANNEL_KEY,
-            paymentId: orderId,
+            channelKey: config.channelKey,
+            paymentId: generateOrderId(),
             orderName: 'MathMore Basic',
             totalAmount: 9900,
             currency: 'KRW',
-            payMethod: 'CARD',
-            card: {
-                availableCards: [
-                    'SAMSUNG_CARD',   // 삼성카드
-                    'SHINHAN_CARD',   // 신한카드
-                    'BC_CARD',        // BC카드
-                    'KOOKMIN_CARD',   // KB국민카드
-                    'HANA_CARD',      // 하나카드, 하나카드(외환)
-                    'HYUNDAI_CARD',   // 현대카드
-                    'LOTTE_CARD',     // 롯데아멕스카드
-                    'NH_CARD',        // NH카드
-                    'WOORI_CARD',     // 우리카드
-                ],
-            },
-            customer: {
-                email: userEmail,
-            },
+            payMethod: config.payMethod,
+            customer: { email: session.user.email },
             offerPeriod: (() => {
                 const from = new Date();
                 const to = new Date(from);
                 to.setMonth(to.getMonth() + 3);
-                // 월말 오버플로우 보정 (예: 1/31 + 3개월 → 4/30)
                 if (to.getDate() !== from.getDate()) {
-                    to.setDate(0); // 이전 달의 마지막 날로 설정
+                    to.setDate(0);
                 }
                 return {
                     range: {
@@ -156,9 +155,14 @@ async function requestPayment() {
                     }
                 };
             })(),
-        });
+        };
 
-        // 결제 실패 처리
+        if (config.card) {
+            paymentParams.card = config.card;
+        }
+
+        const response = await PortOne.requestPayment(paymentParams);
+
         if (response.code) {
             if (response.code === 'FAILURE_TYPE_PG') {
                 alert(`결제 실패: ${response.message}`);
@@ -168,7 +172,6 @@ async function requestPayment() {
             return;
         }
 
-        // 결제 성공 - 서버 검증 (userId는 JWT에서 추출)
         const verifyResult = await verifyPayment(response.paymentId);
 
         if (verifyResult.success) {
@@ -186,89 +189,6 @@ async function requestPayment() {
     }
 }
 
-/**
- * 카카오페이 결제
- */
-async function requestKakaoPayment() {
-    // 중복 클릭 방지
-    if (isPaymentInProgress) {
-        return;
-    }
-
-    const { data: { session } } = await supabaseClient.auth.getSession();
-
-    if (!session) {
-        alert('결제를 진행하려면 먼저 로그인해주세요.');
-        return;
-    }
-
-    // 결제 진행 시작
-    isPaymentInProgress = true;
-
-    try {
-        // 기존 구독 확인
-        const accessCheck = await checkActiveSubscription();
-        if (accessCheck.hasAccess) {
-            alert('이미 유효한 이용권이 있습니다. 만료일: ' + new Date(accessCheck.expiresAt).toLocaleDateString('ko-KR'));
-            isPaymentInProgress = false;
-            return;
-        }
-
-        const userEmail = session.user.email;
-        const orderId = generateOrderId();
-
-        // PortOne SDK 동적 로드
-        await loadPortOneSDK();
-
-        const response = await PortOne.requestPayment({
-            storeId: PORTONE_STORE_ID,
-            channelKey: CHANNEL_KEYS.KAKAO,
-            paymentId: orderId,
-            orderName: 'MathMore Basic',
-            totalAmount: 9900,
-            currency: 'KRW',
-            payMethod: 'EASY_PAY',
-            customer: {
-                email: userEmail,
-            },
-            offerPeriod: (() => {
-                const from = new Date();
-                const to = new Date(from);
-                to.setMonth(to.getMonth() + 3);
-                if (to.getDate() !== from.getDate()) {
-                    to.setDate(0);
-                }
-                return {
-                    range: {
-                        from: from.toISOString(),
-                        to: to.toISOString(),
-                    }
-                };
-            })(),
-        });
-
-        if (response.code) {
-            if (response.code === 'FAILURE_TYPE_PG') {
-                alert(`결제 실패: ${response.message}`);
-            } else if (response.code !== 'USER_CANCEL') {
-                alert(`결제 오류: ${response.message}`);
-            }
-            return;
-        }
-
-        const verifyResult = await verifyPayment(response.paymentId);
-
-        if (verifyResult.success) {
-            alert('결제가 완료되었습니다! 이용권이 활성화되었습니다.');
-            window.location.reload();
-        } else {
-            alert(handlePaymentError(verifyResult, 'verify'));
-        }
-
-    } catch (error) {
-        console.error('카카오페이 결제 오류:', error);
-        alert('결제 중 오류가 발생했습니다. 다시 시도해주세요.');
-    } finally {
-        isPaymentInProgress = false;
-    }
-}
+// 기존 호출 호환
+function requestPayment() { return processPayment('CARD'); }
+function requestKakaoPayment() { return processPayment('KAKAO'); }
