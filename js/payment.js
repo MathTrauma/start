@@ -52,6 +52,10 @@ async function checkActiveSubscription() {
         },
     });
 
+    if (!response.ok) {
+        console.error('구독 확인 실패:', response.status);
+        return { hasAccess: false };
+    }
     return response.json();
 }
 
@@ -171,7 +175,7 @@ async function requestPayment() {
             alert('결제가 완료되었습니다! 이용권이 활성화되었습니다.');
             window.location.reload();
         } else {
-            alert(`결제 검증 실패: ${verifyResult.error}`);
+            alert(handlePaymentError(verifyResult, 'verify'));
         }
 
     } catch (error) {
@@ -258,7 +262,7 @@ async function requestKakaoPayment() {
             alert('결제가 완료되었습니다! 이용권이 활성화되었습니다.');
             window.location.reload();
         } else {
-            alert(`결제 검증 실패: ${verifyResult.error}`);
+            alert(handlePaymentError(verifyResult, 'verify'));
         }
 
     } catch (error) {
