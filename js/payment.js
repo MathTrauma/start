@@ -4,7 +4,7 @@ const PORTONE_STORE_ID = 'store-c5f2423a-b1d3-4c1e-8ea3-7faa53da830e';
 // 결제 채널 키
 const CHANNEL_KEYS = {
     KCP: 'channel-key-b612f825-8eef-4f9d-92f1-e71ec778d162',      // KCP 실연동
-    KAKAO: 'channel-key-585c9fea-065d-4320-977f-c4f87b96a3e5',    // 카카오페이 테스트
+    KAKAO: 'channel-key-f70ac506-2add-42cb-90db-478eef9f5717',    // 카카오페이 실연동
 };
 
 // 기본 결제 채널
