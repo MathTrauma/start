@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>탄그램 퍼즐 - 육각형 만들기</title>
+    <link rel="stylesheet" href="tangram.css">
+    <link rel="stylesheet" href="../common/visual-nav.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://esm.sh/three@0.172.0"
+        }
+    }
+    </script>
+</head>
+
+<body>
+    <div id="container"></div>
+
+    <div id="selected-info">
+        <span id="piece-name">-</span>
+    </div>
+
+    <div id="controls">
+        <button id="rotateBtn">↻ 회전 (R)</button>
+        <button id="flipBtn">↔ 뒤집기 (F)</button>
+        <button id="resetBtn">⟲ 리셋</button>
+    </div>
+
+    <script type="module">
+        import { initTangram } from '../common/tangram-core.js';
+
+        initTangram({
+            enableFlip: false,
+            pieces: [
+                { name: '1', vertices: [[0, 3], [0, -3], [3, 0]] },
+                { name: '2', vertices: [[-3, 0], [3, 0], [0, -3]] },
+                { name: '3', vertices: [[-1, 0], [1, 0], [0, 1]] },
+                { name: '4', vertices: [[-2, 0], [-1, -1], [2, 2], [0, 2]] },
+                { name: '5', vertices: [[0, 0], [2, 0], [3, 1], [3, 3]] },
+                { name: '6', vertices: [[-2, -2], [2, 2], [2, -2]] }
+            ],
+            initialPositions: [
+                { x: -5, y: 2 }, { x: -5, y: -2 }, { x: -2, y: 3 },
+                { x: -2, y: -3 }, { x: 2, y: 3 }, { x: 5, y: 2 }
+            ]
+        });
+    </script>
+    <script src="../common/visual-nav.js"></script>
+</body>
+
+</html>

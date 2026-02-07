@@ -22,7 +22,10 @@
             "react": "https://esm.sh/react@^19.2.3",
             "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
             "react/": "https://esm.sh/react@^19.2.3/",
-            "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+            "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+            "three": "https://esm.sh/three@0.172.0",
+            "three/addons/": "https://esm.sh/three@0.172.0/examples/jsm/",
+            "gsap": "https://esm.sh/gsap@3.12.5"
         }
     }
     </script>
@@ -35,12 +38,13 @@
         <section class="hero-section">
             <!-- Background Video -->
             <div class="hero-bg-video-container">
-                <video id="hero-video-1" class="hero-bg-video active" autoplay muted playsinline preload="metadata">
+                <video id="hero-video-1" class="hero-video-source" autoplay muted loop playsinline crossorigin="anonymous">
                     <source src="assets/video1.mp4" type="video/mp4" />
                 </video>
-                <video id="hero-video-2" class="hero-bg-video" muted playsinline preload="metadata">
+                <video id="hero-video-2" class="hero-video-source" muted loop playsinline crossorigin="anonymous">
                     <source src="assets/video2.mp4" type="video/mp4" />
                 </video>
+                <canvas class="webgl-hero"></canvas>
                 <div class="hero-overlay"></div>
             </div>
 
@@ -109,13 +113,25 @@
                 </div>
 
                 <button onclick="location.href='euclide-geometry/'" class="btn-cta group">
-                    <span>사용하기</span>
+                    <span>도형문제풀기</span>
                     <i data-lucide="arrow-right"></i>
                 </button>
             </div>
         </section>
 
-        <!-- 2단: Pricing Section -->
+        <!-- 2단: etc-visual Hero Section -->
+        <section class="hero-section hero-visual">
+            <div class="hero-visual-content">
+                <h2>etc-visual 제목</h2>
+                <p>간단한 설명 텍스트</p>
+                <button onclick="location.href='etc-visual/1-reorganize/tangram.html'" class="btn-cta-visual">
+                    <span>시작하기</span>
+                    <i data-lucide="arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- 3단: Pricing Section -->
         <section id="pricing" class="pricing-section">
             <div class="container">
 
@@ -240,46 +256,11 @@
                 });
             }  
 
-            // 비디오 교대 재생 (crossfade with overlap)
-            const video1 = document.getElementById('hero-video-1');
+            // 비디오 교대 재생은 hero-video-cubes.js에서 처리
+            // video2 미리 로드
             const video2 = document.getElementById('hero-video-2');
-            const CROSSFADE_TIME = 0.5; // 전환 시작 시점 (종료 n초 전)
-            let v1Switching = false;
-            let v2Switching = false;
-
-            if (video1 && video2) {
-                // video2 미리 로드
+            if (video2) {
                 video2.load();
-
-                // video1 → video2 전환 (종료 직전 시작)
-                video1.addEventListener('timeupdate', () => {
-                    if (!v1Switching && video1.duration - video1.currentTime <= CROSSFADE_TIME) {
-                        v1Switching = true;
-                        video2.currentTime = 0;
-                        video2.play();
-                        video2.classList.add('active');
-                        video1.classList.remove('active');
-                    }
-                });
-
-                video1.addEventListener('ended', () => {
-                    v1Switching = false;
-                });
-
-                // video2 → video1 전환 (종료 직전 시작)
-                video2.addEventListener('timeupdate', () => {
-                    if (!v2Switching && video2.duration - video2.currentTime <= CROSSFADE_TIME) {
-                        v2Switching = true;
-                        video1.currentTime = 0;
-                        video1.play();
-                        video1.classList.add('active');
-                        video2.classList.remove('active');
-                    }
-                });
-
-                video2.addEventListener('ended', () => {
-                    v2Switching = false;
-                });
             }
 
             // 타이프라이터 애니메이션
@@ -323,6 +304,9 @@
             }
         });
     </script>
+
+    <!-- Three.js Hero Video Cubes -->
+    <script type="module" src="js/hero-video-cubes.js"></script>
 </body>
 
 

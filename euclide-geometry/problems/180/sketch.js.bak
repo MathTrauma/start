@@ -1,0 +1,138 @@
+import p5 from 'p5';
+import { applyTheme, getCanvasSize } from '../../lib/draw-utils.js';
+import { XAnimator } from '../../lib/x_animator.js';
+import { XObject, XPolygon, XSegment, XPoint, XCircle, XRightAngle, XDimension, XAngleMarker } from '../../lib/x_object.js';
+import { sketchContext } from '../../lib/sketch-context.js';
+
+const sketch = (p) => {
+    let animator;
+
+    // 기본점 정의
+    const sqrt3 = Math.sqrt(3);
+    let A, B, C, O1, O2, H1, H2, P;
+
+    p.setup = function () {
+        const size = getCanvasSize(600, 20);
+        p.createCanvas(size, size);
+        p.pixelDensity(window.devicePixelRatio || 1);
+
+        const params = new URLSearchParams(window.location.search);
+        applyTheme(p, params.get('theme') || undefined);
+
+        // 점 정의 (animation.md 기준)
+        A = p.createVector(0, 0);
+        B = p.createVector(1 + sqrt3, 0);
+        C = p.createVector(0, 3 + sqrt3);
+        O1 = p.createVector(1, 1);
+        O2 = p.createVector(1 + 2 * sqrt3 / 3, 1 / 3);
+        H1 = p.createVector(1, 0);
+        H2 = p.createVector(1 + 2 * sqrt3 / 3, 0);
+        P = p.createVector(1, 1 / 3);
+
+        // 뷰포트 중심
+        const center = p.createVector((A.x + B.x + C.x) / 3, (A.y + B.y + C.y) / 3);
+
+        // Animator 초기화
+        animator = new XAnimator(p);
+        animator.initViewport([A, B, C], size, 50);
+
+        // 텍스트 객체 (screenCoord: true이면 fontSize도 스크린 픽셀 단위)
+        const textAngle = new XObject(p, {});
+        textAngle.render = function() {
+            if (!this.visible || this.progress === 0) return;
+            this._renderText('\\angle O_1 B A = 30^\\circ', size / 2, 25, { useTex: true, fontSize: 18, screenCoord: true });
+        };
+
+        // ===== Problem Phase 1 =====
+        animator.registerPhase('problem1', [
+            { id: 'triABC', object: new XPolygon(p, [A, B, C]), animate: { mode: 'draw', duration: 2.0 } },
+            {
+                group: [
+                    { id: 'pointA', object: new XPoint(p, A, 'A', { center }), animate: { mode: 'draw', duration: 0.4 } },
+                    { id: 'pointB', object: new XPoint(p, B, 'B', { center }), animate: { mode: 'draw', duration: 0.4 } },
+                    { id: 'pointC', object: new XPoint(p, C, 'C', { center }), animate: { mode: 'draw', duration: 0.4 } }
+                ],
+                parallel: true
+            },
+            { delay: 1.0 }
+        ]);
+
+        // ===== Problem Phase 2 =====
+        animator.registerPhase('problem2', [
+            { id: 'circleO1', object: XCircle(p, O1, 1), animate: { mode: 'draw', duration: 1.2 } },
+            { id: 'pointO1', object: new XPoint(p, O1, 'O₁', { dy: -10 }), animate: { mode: 'draw', duration: 0.4 } },
+            { delay: 2.0 }
+        ]);
+
+        // ===== Solution Phase 1 =====
+        animator.registerPhase('solution1', [
+            { id: 'segO1H1', object: XSegment(p, O1, H1, { dashed: true }), animate: { mode: 'draw', duration: 0.8 } },
+            { id: 'triO1H1B', object: new XPolygon(p, [O1, H1, B], { filled: true, fillColor: [...p.theme.fillBlue.slice(0, 3), 80] }), animate: { mode: 'draw', duration: 1.2 } },
+            {
+                group: [
+                    { id: 'dimH1B', object: new XDimension(p, H1, B, '\\sqrt{3}', { offset: -12, useTex: true }), animate: { mode: 'draw', duration: 1.2 } },
+                    { id: 'textAngle', object: textAngle, animate: { mode: 'draw', duration: 1.0 } }
+                ],
+                parallel: true
+            },
+            { delay: 1.0 },
+            { id: 'circleO2', object: XCircle(p, O2, 1 / 3), animate: { mode: 'draw', duration: 1.5 } },
+            { id: 'pointO2', object: new XPoint(p, O2, 'O₂', { dy: -10 }), animate: { mode: 'draw', duration: 0.4 } },
+            { delay: 1.0 }
+        ]);
+
+        // ===== Solution Phase 2 =====
+        animator.registerPhase('solution2', [
+            {
+                group: [
+                    { id: 'triO1H1B', action: 'hide', duration: 0.8 },
+                    { id: 'dimH1B', action: 'hide', duration: 0.8 },
+                    { id: 'textAngle', action: 'hide', duration: 0.8 }
+                ],
+                parallel: true
+            },
+            { id: 'segO1O2', object: XSegment(p, O1, O2), animate: { mode: 'draw', duration: 1.5 } },
+            { id: 'segO2H2', object: XSegment(p, O2, H2, { dashed: true }), animate: { mode: 'draw', duration: 0.8 } },
+            { id: 'segPO2', object: XSegment(p, P, O2), animate: { mode: 'draw', duration: 0.8 } },
+            { id: 'pointP', object: new XPoint(p, P, 'P', { dx: -15 }), animate: { mode: 'draw', duration: 0.4 } },
+            { id: 'rightO2PO1', object: new XRightAngle(p, O2, P, O1, 12, { pixel: true }), animate: { mode: 'draw', duration: 0.7 } },
+            { delay: 1.0 },
+            {
+                group: [
+                    { id: 'circleO1', action: 'fade', duration: 0.8 },
+                    { id: 'circleO2', action: 'fade', duration: 0.8 }
+                ],
+                parallel: true
+            },
+            { id: 'triO1PO2', object: new XPolygon(p, [O1, P, O2]), animate: { mode: 'draw', duration: 1.2 } },
+            { id: 'angleO1O2P', object: new XAngleMarker(p, O1, O2, P, { marker: '30°' }), animate: { mode: 'draw', duration: 0.7 } },
+            { delay: 2.0 }
+        ]);
+
+        // phaseMap 정의
+        const phaseMap = {
+            problem: { 1: 'problem1', 2: 'problem2' },
+            solution: { 1: 'solution1', 2: 'solution2' }
+        };
+
+        // sketchContext 등록
+        sketchContext.register({
+            p5Instance: p,
+            animator: animator,
+            phaseMap: phaseMap,
+            problemPhaseCount: 2,
+            solutionPhaseCount: 2
+        });
+    };
+
+    p.draw = function () {
+        p.background(p.theme.background);
+        p.push();
+        p.translate(p.width / 2, p.height / 2);
+        p.scale(1, -1);
+        animator.updateAndDraw();
+        p.pop();
+    };
+};
+
+new p5(sketch, 'canvas-wrapper');

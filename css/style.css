@@ -71,32 +71,19 @@ main {
     height: 100vh;
     width: 100%;
     overflow: hidden;
-    background-color: var(--slate-900);
+    background-color: transparent; /* Three.js 배경이 보이도록 */
+    z-index: 1; /* canvas(z-index:0) 위에 */
 }
 
-/* 배경만 담당 */
+/* 배경 컨테이너 - Three.js가 배경이므로 투명 */
 .hero-bg-video-container {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(-45deg, #1e3a5f, #3b82f6, #4338ca, #7c3aed);
-    background-size: 400% 400%;
-    animation: gradientFlow 15s ease infinite;
+    background: transparent;
 }
 
-/* 비디오 - 오른쪽 절반 중앙 */
-.hero-bg-video-container video {
-    position: absolute;
-    left: 75%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 46%;
-    max-width: 700px;
-    height: auto;
-    border-radius: 12px;
-    z-index: 1;
-}
 
 @keyframes gradientFlow {
     0% { background-position: 0% 50%; }
@@ -104,52 +91,37 @@ main {
     100% { background-position: 0% 50%; }
 }
 
-.hero-bg-video-container::before,
-.hero-bg-video-container::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' d='M0,160L48,170.7C96,181,192,203,288,192C384,181,480,139,576,128C672,117,768,139,864,165.3C960,192,1056,224,1152,213.3C1248,203,1344,149,1392,122.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/%3E%3C/svg%3E");
-    background-size: 1440px 320px;
-    background-repeat: repeat-x;
-    opacity: 0.06;
-    animation: waveFlow 25s linear infinite;
-    pointer-events: none;
-    z-index: 0;
-}
-
-.hero-bg-video-container::after {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' d='M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,117.3C960,107,1056,149,1152,165.3C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/%3E%3C/svg%3E");
-    animation: waveFlow 35s linear infinite reverse;
-    opacity: 0.04;
-}
+/* wave 효과는 Three.js 배경 사용으로 제거 */
 
 @keyframes waveFlow {
     0% { background-position: 0 50%; }
     100% { background-position: 1440px 50%; }
 }
 
-.hero-bg-video {
-    object-fit: contain;
-    opacity: 0;
-    transition: opacity 0.5s ease;
+/* WebGL Hero Canvas - 전체 페이지 배경 */
+.webgl-hero {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none; /* 콘텐츠 클릭 허용 */
 }
 
-.hero-bg-video.active {
-    opacity: 1;
-}
-
-@media (max-width: 640px) {
-    .hero-bg-video-container video {
-        max-width: 100%;
-        border-radius: 0;
-    }
-}
-
-.hero-overlay {
+/* Video sources (hidden, used for texture) */
+.hero-video-source {
     position: absolute;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.3);
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* hero-overlay는 Three.js 배경 위에서 사용 안 함 */
+.hero-overlay {
+    display: none;
 }
 
 /* Login Button Container */
@@ -301,16 +273,8 @@ main {
     color: rgba(255, 255, 255, 0.7);
 }
 
-/* 모바일/좁은 화면 대응 - 비디오 → 타이프라이터 → 설명 → 버튼 (세로 배치) */
+/* 모바일/좁은 화면 대응 - 세로 배치 */
 @media (max-width: 900px) {
-    .hero-bg-video-container video {
-        left: 50%;
-        top: 12vh;
-        transform: translateX(-50%);
-        width: 85vw;
-        max-width: 450px;
-    }
-
     .explain-detail {
         top: 60vh;
         bottom: auto;
@@ -354,11 +318,6 @@ main {
 }
 
 @media (max-width: 640px) {
-    .hero-bg-video-container video {
-        top: 8vh;
-        width: 95vw;
-    }
-
     .explain-detail {
         top: 56vh;
         bottom: auto;
@@ -438,12 +397,64 @@ main {
 }
 
 /* =========================================
+   etc-visual Hero Section
+   ========================================= */
+.hero-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent; /* Three.js 배경이 보이도록 */
+    position: relative;
+    z-index: 1;
+}
+
+.hero-visual-content {
+    text-align: center;
+    color: var(--white);
+    padding: 2rem;
+}
+
+.hero-visual-content h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero-visual-content p {
+    font-size: 1.25rem;
+    color: var(--slate-300);
+    margin-bottom: 2rem;
+}
+
+.btn-cta-visual {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 2.5rem;
+    background-color: var(--primary-600);
+    color: var(--white);
+    font-size: 1.25rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-cta-visual:hover {
+    background-color: var(--primary-500);
+    transform: translateY(-4px);
+}
+
+/* =========================================
    Pricing Section
    ========================================= */
 .pricing-section {
+    position: relative;
+    z-index: 10; /* Three.js canvas 위에 */
     padding-top: 3rem;
     padding-bottom: 3rem;
-    background-color: var(--white);
+    background-color: var(--slate-100); /* 밝은 회색 배경 */
 }
 
 @media (min-width: 768px) {
@@ -872,6 +883,8 @@ main {
    Footer
    ========================================= */
 .footer {
+    position: relative;
+    z-index: 10; /* Three.js canvas 위에 */
     background-color: var(--slate-950);
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
