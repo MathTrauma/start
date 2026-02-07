@@ -5,8 +5,8 @@ import gsap from 'gsap';
 // Configuration
 // ========================================
 // 비디오 비율: 774x766 (거의 1:1)
-const GRID_X = 8;
-const GRID_Y = 8;
+const GRID_X = 16;
+const GRID_Y = 16;
 const SECTION_DISTANCE = 4;
 
 // ========================================
@@ -14,6 +14,7 @@ const SECTION_DISTANCE = 4;
 // ========================================
 let scene, camera, renderer;
 let video1, video2, texture1, texture2;
+let traumaVideo, traumaTexture;
 let cubes = [];
 let materials = [];
 let cubeGridGroup;
@@ -28,6 +29,7 @@ const mouse = { x: 0, y: 0 };
 const targetRotation = { x: 0, y: 0 };
 
 const sizes = { width: window.innerWidth, height: window.innerHeight };
+const isMobile = sizes.width / sizes.height < 1;
 const clock = new THREE.Clock();
 let previousTime = 0;
 
@@ -47,7 +49,7 @@ function init() {
 
     // Camera
     camera = new THREE.PerspectiveCamera(40, sizes.width / sizes.height, 1, 100);
-    camera.position.z = 8;
+    camera.position.z = isMobile ? 12 : 8;
     scene.add(camera);
 
     // Renderer
@@ -70,6 +72,17 @@ function init() {
     texture2 = new THREE.VideoTexture(video2);
     texture2.colorSpace = THREE.SRGBColorSpace;
 
+    // Trauma video (뒷면용)
+    traumaVideo = document.createElement('video');
+    traumaVideo.src = 'assets/Trauma.mp4';
+    traumaVideo.muted = true;
+    traumaVideo.loop = true;
+    traumaVideo.playsInline = true;
+    traumaVideo.play().catch(e => console.log('Trauma video autoplay blocked:', e));
+
+    traumaTexture = new THREE.VideoTexture(traumaVideo);
+    traumaTexture.colorSpace = THREE.SRGBColorSpace;
+
     // Ensure video is playing
     video1.play().catch(e => console.log('Video1 autoplay blocked:', e));
 
@@ -88,8 +101,8 @@ function init() {
 // Section 1: Video Cube Grid (오른쪽 배치, Y축 회전)
 // ========================================
 function createSection1CubeGrid() {
-    const sectionY = 0;
-    const offsetX = 1.8;
+    const sectionY = isMobile ? 1 : 0;
+    const offsetX = isMobile ? 0 : 1.8;
 
     // 큐브 그리드를 담는 그룹
     cubeGridGroup = new THREE.Group();
@@ -113,13 +126,29 @@ function createSection1CubeGrid() {
             // 틈 없이
             const geometry = new THREE.BoxGeometry(cubeWidth, cubeHeight, cubeDepth);
 
-            // UV 변환
+            // UV 변환 (전면 + 측면)
             changeUVs(geometry, ux, uy, i, j);
 
-            const material = new THREE.MeshLambertMaterial({ map: texture1 });
-            materials.push(material);
+            // 뒷면(-Z) UV: x 인덱스 반전
+            const mirroredI = GRID_X - 1 - i;
+            const uvs = geometry.attributes.uv.array;
+            // -Z face = group 5, vertices 20-23, UV indices 40-47
+            uvs[40] = (0 + mirroredI) * ux;  uvs[41] = (1 + j) * uy;
+            uvs[42] = (1 + mirroredI) * ux;  uvs[43] = (1 + j) * uy;
+            uvs[44] = (0 + mirroredI) * ux;  uvs[45] = (0 + j) * uy;
+            uvs[46] = (1 + mirroredI) * ux;  uvs[47] = (0 + j) * uy;
 
-            const mesh = new THREE.Mesh(geometry, material);
+            // 전면(+Z): 현재 비디오, 뒷면(-Z): Trauma 비디오
+            const frontMat = new THREE.MeshLambertMaterial({ map: texture1 });
+            const backMat = new THREE.MeshLambertMaterial({ map: traumaTexture });
+            materials.push(frontMat);
+
+            // BoxGeometry 면 순서: +X, -X, +Y, -Y, +Z(전면), -Z(뒷면)
+            const mesh = new THREE.Mesh(geometry, [
+                frontMat, frontMat,
+                frontMat, frontMat,
+                frontMat, backMat
+            ]);
 
             // 위치: 그룹 내에서 그리드 중앙 기준
             mesh.position.x = (i - GRID_X / 2 + 0.5) * cubeWidth;
@@ -138,17 +167,18 @@ function createSection1CubeGrid() {
 }
 
 // ========================================
-// Section 2: TorusKnot (왼쪽 배치)
+// Section 2: Icosahedron wireframe (왼쪽 배치)
 // ========================================
 function createSection2Object() {
-    const sectionY = -SECTION_DISTANCE;
-    const offsetX = -1.8;
+    const sectionY = isMobile ? -SECTION_DISTANCE - 1 : -SECTION_DISTANCE;
+    const offsetX = isMobile ? 0 : -1.8;
 
-    const geometry = new THREE.TorusKnotGeometry(0.8, 0.25, 100, 16);
+    const geometry = new THREE.IcosahedronGeometry(1.2, 0);
     const material = new THREE.MeshStandardMaterial({
         color: 0x6366f1,
         roughness: 0.3,
-        metalness: 0.6
+        metalness: 0.6,
+        wireframe: true
     });
 
     const mesh = new THREE.Mesh(geometry, material);
@@ -263,7 +293,7 @@ function setupEvents() {
                     duration: 1.5,
                     ease: 'power2.inOut',
                     // x: '+=6',
-                    y: `+=${Math.PI * 2}`
+                    y: `+=${Math.PI}`
                 });
             }
         }
@@ -302,8 +332,8 @@ function tick() {
     previousTime = elapsedTime;
 
     // 마우스 기반 카메라 회전 (부드럽게)
-    targetRotation.y = mouse.x * 0.5;
-    targetRotation.x = mouse.y * 0.3;
+    targetRotation.y = mouse.x * 0.15;
+    targetRotation.x = mouse.y * 0.1;
 
     camera.rotation.y += (targetRotation.y - camera.rotation.y) * 2 * deltaTime;
     camera.rotation.x += (-targetRotation.x - camera.rotation.x) * 2 * deltaTime;
@@ -311,6 +341,15 @@ function tick() {
     // Camera Y position based on scroll
     const targetY = -scrollY / sizes.height * SECTION_DISTANCE;
     camera.position.y += (targetY - camera.position.y) * 0.1;
+
+    // 블록 웨이브 효과
+    if (!isTransitioning) {
+        cubes.forEach((cube) => {
+            const { i, j } = cube.userData.gridIndex;
+            const wave = Math.sin(elapsedTime * 2 + i * 0.4 ) * 0.5;
+            cube.position.z = cube.userData.originalPosition.z + wave;
+        });
+    }
 
     // Section 2 rotation
     if (sectionMeshes[1]) {
