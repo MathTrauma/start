@@ -4,7 +4,7 @@
 .visual-nav-toggle {
     position: fixed;
     top: 1rem;
-    left: 1rem;
+    left: 0;
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -15,7 +15,8 @@
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    border-left: none;
+    border-radius: 0 10px 10px 0;
     color: #fff;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -90,6 +91,34 @@
     width: 18px;
     height: 18px;
     stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+}
+
+/* Home Link */
+.visual-nav-home {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.75rem 1rem;
+    padding: 0.75rem 1rem;
+    background-color: #2a2a3e;
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.visual-nav-home:hover {
+    background-color: #3a3a4e;
+}
+
+.visual-nav-home svg {
+    width: 18px;
+    height: 18px;
+    stroke: #818cf8;
     stroke-width: 2;
     fill: none;
 }

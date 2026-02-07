@@ -4,8 +4,9 @@ import gsap from 'gsap';
 // ========================================
 // Configuration
 // ========================================
-const GRID_X = 16;
-const GRID_Y = 9;
+// 비디오 비율: 774x766 (거의 1:1)
+const GRID_X = 8;
+const GRID_Y = 8;
 const SECTION_DISTANCE = 4;
 
 // ========================================
@@ -96,9 +97,9 @@ function createSection1CubeGrid() {
     cubeGridGroup.rotation.y = -0.3; // Y축 시계방향 회전 (비스듬히)
     scene.add(cubeGridGroup);
 
-    // 그리드 전체 크기
-    const totalWidth = 4.0;
-    const totalHeight = totalWidth * (GRID_Y / GRID_X);
+    // 그리드 전체 크기 (비디오가 거의 정사각형)
+    const totalWidth = 3.5;
+    const totalHeight = totalWidth * (766 / 774); // 실제 비디오 비율
 
     const cubeWidth = totalWidth / GRID_X;
     const cubeHeight = totalHeight / GRID_Y;
