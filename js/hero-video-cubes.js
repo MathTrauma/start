@@ -342,12 +342,16 @@ function tick() {
     const targetY = -scrollY / sizes.height * SECTION_DISTANCE;
     camera.position.y += (targetY - camera.position.y) * 0.1;
 
-    // 블록 웨이브 효과
+    // 파도타기 효과 (가우시안 커브)
     if (!isTransitioning) {
+        const waveSpeed = 2;
+        const waveWidth = 2.5;
+        const cycleLength = GRID_X * 0.3 + 6;
         cubes.forEach((cube) => {
-            const { i, j } = cube.userData.gridIndex;
-            const wave = Math.sin(elapsedTime * 2 + i * 0.4 ) * 0.5;
-            cube.position.z = cube.userData.originalPosition.z + wave;
+            const { i } = cube.userData.gridIndex;
+            const phase = (elapsedTime * waveSpeed - i * 0.3) % cycleLength;
+            const peak = Math.exp(-(phase * phase) / waveWidth);
+            cube.position.z = cube.userData.originalPosition.z + peak * 0.5;
         });
     }
 

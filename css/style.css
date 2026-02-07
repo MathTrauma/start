@@ -136,20 +136,20 @@ main {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.06);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    color: var(--white);
+    color: var(--slate-800);
     padding: 0.625rem 1.5rem; /* py-2.5 px-6 */
     border-radius: 9999px;
     font-weight: 500;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .btn-login:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 /* Main Content (Center) */
