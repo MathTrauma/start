@@ -116,7 +116,7 @@ function createSection1CubeGrid() {
 
     const cubeWidth = totalWidth / GRID_X;
     const cubeHeight = totalHeight / GRID_Y;
-    const cubeDepth = cubeWidth * 0.5;
+    const cubeDepth = cubeWidth ;
 
     const ux = 1 / GRID_X;
     const uy = 1 / GRID_Y;
@@ -342,16 +342,22 @@ function tick() {
     const targetY = -scrollY / sizes.height * SECTION_DISTANCE;
     camera.position.y += (targetY - camera.position.y) * 0.1;
 
-    // 파도타기 효과 (가우시안 커브)
+    // 순차 팝 효과 (좌상단 → 우하단, 행 단위)
     if (!isTransitioning) {
-        const waveSpeed = 2;
-        const waveWidth = 2.5;
-        const cycleLength = GRID_X * 0.3 + 6;
+        const totalCubes = GRID_X * GRID_Y;
+        const speed = 2;
+        const popWidth = 1;
+        const t = (elapsedTime * speed) % totalCubes;
+
         cubes.forEach((cube) => {
-            const { i } = cube.userData.gridIndex;
-            const phase = (elapsedTime * waveSpeed - i * 0.3) % cycleLength;
-            const peak = Math.exp(-(phase * phase) / waveWidth);
-            cube.position.z = cube.userData.originalPosition.z + peak * 0.5;
+            const { i, j } = cube.userData.gridIndex;
+            const seq = (GRID_Y - 1 - j) * GRID_X + i;
+            const diff = t - seq;
+            let pop = 0;
+            if (diff > 0 && diff < popWidth) {
+                pop = Math.sin((diff / popWidth) * Math.PI);
+            }
+            cube.position.z = cube.userData.originalPosition.z + pop * 0.6;
         });
     }
 
