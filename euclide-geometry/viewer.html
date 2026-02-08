@@ -56,9 +56,15 @@
             <option value="sepia">세피아</option>
         </select>
         <div class="btn-group">
+            <button id="prev-btn" class="nav-prev-btn" onclick="navigatePrev()" title="이전 문제">
+                <i data-lucide="chevron-left"></i>
+            </button>
             <button id="rotate-btn" class="rotate-btn" onclick="rotateCanvas()" title="90° 회전">↻</button>
             <button id="bookmark-btn" class="bookmark-btn" onclick="toggleBookmark()" title="북마크" style="display: none;">
                 <i data-lucide="bookmark"></i>
+            </button>
+            <button id="next-btn" class="nav-next-btn" onclick="navigateNext()" title="다음 문제">
+                <i data-lucide="chevron-right"></i>
             </button>
         </div>
         <div class="auth-buttons">
