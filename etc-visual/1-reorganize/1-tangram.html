@@ -4,8 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>탄그램 퍼즐 - 육각형 만들기</title>
+    <title> 한과영 2022학년도 1-(1) </title>
     <link rel="stylesheet" href="tangram.css">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
     <link rel="stylesheet" href="../common/visual-nav.css">
     <script type="importmap">
     {
@@ -23,14 +29,18 @@
         <span id="piece-name">-</span>
     </div>
 
-    <div id="controls">
+    <div id = "controls">
         <button id="rotateBtn">↻ 회전 (R)</button>
         <button id="flipBtn">↔ 뒤집기 (F)</button>
         <button id="resetBtn">⟲ 리셋</button>
     </div>
 
+    <div id = "problem">
+        둘레의 길이가 $12 + 8\sqrt{2}$ 인 육각형을 만드시오. (뒤집기 불허)
+    </div>
+
     <script type="module">
-        import { initTangram } from '../common/tangram-core.js';
+        import { initTangram } from './js/tangram-core.js';
 
         initTangram({
             enableFlip: false,
@@ -38,13 +48,13 @@
                 { name: '1', vertices: [[0, 3], [0, -3], [3, 0]] },
                 { name: '2', vertices: [[-3, 0], [3, 0], [0, -3]] },
                 { name: '3', vertices: [[-1, 0], [1, 0], [0, 1]] },
-                { name: '4', vertices: [[-2, 0], [-1, -1], [2, 2], [0, 2]] },
+                { name: '4', vertices: [[-2, -2], [-1, -3], [2, 0], [0, 0]] },
                 { name: '5', vertices: [[0, 0], [2, 0], [3, 1], [3, 3]] },
                 { name: '6', vertices: [[-2, -2], [2, 2], [2, -2]] }
             ],
             initialPositions: [
-                { x: -5, y: 2 }, { x: -5, y: -2 }, { x: -2, y: 3 },
-                { x: -2, y: -3 }, { x: 2, y: 3 }, { x: 5, y: 2 }
+                { x: -3, y: 0 }, { x: 0, y: 3 }, { x: -2, y: -3 },
+                { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 1, y: -1 }
             ]
         });
     </script>

@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>한과영 22학년도 1-(2)</title>
     <link rel="stylesheet" href="tangram.css">
+    <script>
+    MathJax = {
+        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
     <link rel="stylesheet" href="../common/visual-nav.css">
     <script type="importmap">
     {
@@ -29,8 +35,12 @@
         <button id="resetBtn">⟲ 리셋</button>
     </div>
 
+    <div id="problem">
+        둘레의 길이가 $4 + 8\sqrt{2}$ 인 육각형을 만드시오. (뒤집기 허용)
+    </div>
+
     <script type="module">
-        import { initTangram } from '../common/tangram-core.js';
+        import { initTangram } from './js/tangram-core.js';
 
         initTangram({
             enableFlip: true,
