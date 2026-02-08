@@ -18,14 +18,14 @@
         {
             title: '1. Reorganize',
             items: [
-                { name: 'Tangram', path: '1-reorganize/tangram.html' },
-                { name: 'Tangram 2', path: '1-reorganize/tangram2.html' }
+                { name: 'Tangram', path: '1-reorganize/1-tangram.html' },
+                { name: 'Tangram 2', path: '1-reorganize/2-tangram.html' }
             ]
         },
         {
             title: '2. Make Table',
             items: [
-                { name: 'Counting Path', path: '2-makeTable/counting-path.html' }
+                { name: 'Counting Path', path: '2-makeTable/1-counting-path.html' }
             ]
         }
     ];
