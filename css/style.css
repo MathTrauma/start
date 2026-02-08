@@ -168,12 +168,9 @@ main {
     transform: translate(-50%, -50%);
     width: 46%;
     max-width: 700px;
-    color: var(--white);
+    color: var(--slate-800);
     pointer-events: auto;
     padding: 2.5rem;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 1rem;
-    backdrop-filter: blur(8px);
 }
 
 .explain-detail h2 {
@@ -188,7 +185,7 @@ main {
     font-size: 1.15rem;
     line-height: 1.8;
     margin-bottom: 1.1rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--slate-600);
 }
 
 .explain-img {
@@ -280,7 +277,6 @@ main {
         width: 92vw;
         max-width: 500px;
         padding: 1rem 1.25rem;
-        background: rgba(0, 0, 0, 0.7);
     }
 
     .explain-detail h2 {
@@ -391,7 +387,7 @@ main {
 .hero-visual {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     background-color: transparent; /* Three.js 배경이 보이도록 */
     position: relative;
     z-index: 1;
@@ -401,6 +397,7 @@ main {
     text-align: center;
     color: var(--slate-800);
     padding: 2rem;
+    width: 50%;
 }
 
 .hero-visual-content h2 {

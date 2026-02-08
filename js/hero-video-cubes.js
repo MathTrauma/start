@@ -12,7 +12,7 @@ const SECTION_DISTANCE = 4;
 // ========================================
 // State
 // ========================================
-let scene, camera, renderer;
+let scene, camera, renderer, pointLight;
 let video1, video2, texture1, texture2;
 let traumaVideo, traumaTexture;
 let cubes = [];
@@ -23,6 +23,14 @@ let currentVideoIndex = 1;
 let isTransitioning = false;
 let scrollY = 0;
 let currentSection = 0;
+let isGathering = true;
+
+// 랜덤 팝 스케줄 상태
+let popSchedule = [];
+let popCycleDuration = 0;
+let popCycleStart = 0;
+const POP_DURATION = 0.8;
+const GROUP_INTERVAL = 0.85;
 
 // 마우스 기반 회전
 const mouse = { x: 0, y: 0 };
@@ -58,11 +66,19 @@ function init() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     // Light
-    const light = new THREE.DirectionalLight(0xffffff, 2);
-    light.position.set(0.5, 1, 1).normalize();
+    const light = new THREE.DirectionalLight(0xffffff, 3);
+    light.position.set(2, 3, 4);
     scene.add(light);
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+    const light2 = new THREE.DirectionalLight(0xfff4e0, 2);
+    light2.position.set(-3, -1, 2);
+    scene.add(light2);
+
+    pointLight = new THREE.PointLight(0xffffff, 30, 15);
+    pointLight.position.set(2, 1, 5);
+    scene.add(pointLight);
+
+    const ambient = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambient);
 
     // Video Textures
@@ -90,6 +106,9 @@ function init() {
     createSection1CubeGrid();
     createSection2Object();
 
+    // 초기 흩어짐 → 모임 애니메이션
+    playInitialGatherAnimation();
+
     // Events
     setupEvents();
 
@@ -107,6 +126,7 @@ function createSection1CubeGrid() {
     // 큐브 그리드를 담는 그룹
     cubeGridGroup = new THREE.Group();
     cubeGridGroup.position.set(offsetX, sectionY, 0);
+    cubeGridGroup.rotation.x = 0.1;
     cubeGridGroup.rotation.y = -0.3; // Y축 시계방향 회전 (비스듬히)
     scene.add(cubeGridGroup);
 
@@ -139,14 +159,19 @@ function createSection1CubeGrid() {
             uvs[46] = (1 + mirroredI) * ux;  uvs[47] = (0 + j) * uy;
 
             // 전면(+Z): 현재 비디오, 뒷면(-Z): Trauma 비디오
-            const frontMat = new THREE.MeshLambertMaterial({ map: texture1 });
-            const backMat = new THREE.MeshLambertMaterial({ map: traumaTexture });
+            const frontMat = new THREE.MeshStandardMaterial({ map: texture1, metalness: 0.8, roughness: 0.2 });
+            const backMat = new THREE.MeshStandardMaterial({ map: traumaTexture, metalness: 0.8, roughness: 0.2 });
+            const sideMat = new THREE.MeshStandardMaterial({
+                color: 0xc0c0c0,
+                metalness: 1.0,
+                roughness: 0.15
+            });
             materials.push(frontMat);
 
             // BoxGeometry 면 순서: +X, -X, +Y, -Y, +Z(전면), -Z(뒷면)
             const mesh = new THREE.Mesh(geometry, [
-                frontMat, frontMat,
-                frontMat, frontMat,
+                sideMat, sideMat,
+                sideMat, sideMat,
                 frontMat, backMat
             ]);
 
@@ -200,6 +225,74 @@ function changeUVs(geometry, unitx, unity, offsetx, offsety) {
 }
 
 // ========================================
+// 랜덤 팝 스케줄 생성 (2~5개씩 그룹)
+// ========================================
+function generatePopSchedule() {
+    const indices = Array.from({ length: cubes.length }, (_, i) => i);
+    // Fisher-Yates shuffle
+    for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+
+    popSchedule = new Array(cubes.length);
+    let pos = 0;
+    let groupCount = 0;
+
+    while (pos < indices.length) {
+        const groupSize = 2 + Math.floor(Math.random() * 4); // 2~5개
+        const groupTime = groupCount * GROUP_INTERVAL;
+        for (let k = 0; k < groupSize && pos < indices.length; k++, pos++) {
+            popSchedule[indices[pos]] = groupTime;
+        }
+        groupCount++;
+    }
+
+    popCycleDuration = groupCount * GROUP_INTERVAL + POP_DURATION + 0.3;
+}
+
+// ========================================
+// 초기 흩어짐 → 모임 애니메이션
+// ========================================
+function playInitialGatherAnimation() {
+    isGathering = true;
+
+    cubes.forEach((cube) => {
+        // 랜덤 흩어진 위치로 설정
+        cube.position.x += (Math.random() - 0.5) * 8;
+        cube.position.y += (Math.random() - 0.5) * 8;
+        cube.position.z = Math.random() * 3 + 1;
+        cube.rotation.x = (Math.random() - 0.5) * Math.PI;
+        cube.rotation.y = (Math.random() - 0.5) * Math.PI;
+
+        const delay = Math.random() * 0.6;
+
+        gsap.to(cube.position, {
+            x: cube.userData.originalPosition.x,
+            y: cube.userData.originalPosition.y,
+            z: cube.userData.originalPosition.z,
+            duration: 1.5,
+            delay,
+            ease: 'power3.out'
+        });
+
+        gsap.to(cube.rotation, {
+            x: 0, y: 0, z: 0,
+            duration: 1.5,
+            delay,
+            ease: 'power3.out'
+        });
+    });
+
+    // 모든 애니메이션 완료 후 팝 효과 시작
+    gsap.delayedCall(2.2, () => {
+        isGathering = false;
+        popCycleStart = clock.getElapsedTime();
+        generatePopSchedule();
+    });
+}
+
+// ========================================
 // Video Transition
 // ========================================
 function transitionToVideo(nextVideoIndex) {
@@ -232,12 +325,12 @@ function transitionToVideo(nextVideoIndex) {
             ease: 'power2.out'
         }, delay);
 
-        // tl.to(cube.rotation, {
-        //     x: (Math.random() - 0.5) * Math.PI,
-        //     y: (Math.random() - 0.5) * Math.PI,
-        //     duration: 0.4,
-        //     ease: 'power2.out'
-        // }, delay);
+        tl.to(cube.rotation, {
+            x: (Math.random() - 0.5) * Math.PI,
+            y: (Math.random() - 0.5) * Math.PI,
+            duration: 0.4,
+            ease: 'power2.out'
+        }, delay);
     });
 
     // Change texture
@@ -338,26 +431,34 @@ function tick() {
     camera.rotation.y += (targetRotation.y - camera.rotation.y) * 2 * deltaTime;
     camera.rotation.x += (-targetRotation.x - camera.rotation.x) * 2 * deltaTime;
 
+    // 포인트 라이트 원형 궤도 이동
+    pointLight.position.x = -1;
+    pointLight.position.y = 3;
+
     // Camera Y position based on scroll
     const targetY = -scrollY / sizes.height * SECTION_DISTANCE;
     camera.position.y += (targetY - camera.position.y) * 0.1;
 
-    // 순차 팝 효과 (좌상단 → 우하단, 행 단위)
-    if (!isTransitioning) {
-        const totalCubes = GRID_X * GRID_Y;
-        const speed = 2;
-        const popWidth = 1;
-        const t = (elapsedTime * speed) % totalCubes;
+    // 랜덤 그룹 팝 효과 (2~5개씩 랜덤)
+    if (!isTransitioning && !isGathering) {
+        const cycleTime = elapsedTime - popCycleStart;
 
-        cubes.forEach((cube) => {
-            const { i, j } = cube.userData.gridIndex;
-            const seq = (GRID_Y - 1 - j) * GRID_X + i;
-            const diff = t - seq;
+        // 사이클 끝나면 새 스케줄 생성
+        if (cycleTime >= popCycleDuration) {
+            popCycleStart = elapsedTime;
+            generatePopSchedule();
+        }
+
+        const t = elapsedTime - popCycleStart;
+
+        cubes.forEach((cube, idx) => {
+            const groupTime = popSchedule[idx];
+            const diff = t - groupTime;
             let pop = 0;
-            if (diff > 0 && diff < popWidth) {
-                pop = Math.sin((diff / popWidth) * Math.PI);
+            if (diff > 0 && diff < POP_DURATION) {
+                pop = Math.sin((diff / POP_DURATION) * Math.PI);
             }
-            cube.position.z = cube.userData.originalPosition.z + pop * 0.6;
+            cube.position.z = cube.userData.originalPosition.z + pop * 1.2;
         });
     }
 
