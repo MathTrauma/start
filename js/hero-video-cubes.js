@@ -67,15 +67,15 @@ function init() {
 
     // Light
     const light = new THREE.DirectionalLight(0xffffff, 3);
-    light.position.set(2, 3, 4);
+    light.position.set(2, 3, -4);
     scene.add(light);
 
     const light2 = new THREE.DirectionalLight(0xfff4e0, 2);
     light2.position.set(-3, -1, 2);
     scene.add(light2);
 
-    pointLight = new THREE.PointLight(0xffffff, 30, 15);
-    pointLight.position.set(2, 1, 5);
+    pointLight = new THREE.PointLight(0xffffff, 15, 20);
+    pointLight.position.set(-4, 1.8, 6);
     scene.add(pointLight);
 
     const ambient = new THREE.AmbientLight(0xffffff, 0.4);
@@ -126,12 +126,13 @@ function createSection1CubeGrid() {
     // 큐브 그리드를 담는 그룹
     cubeGridGroup = new THREE.Group();
     cubeGridGroup.position.set(offsetX, sectionY, 0);
-    cubeGridGroup.rotation.x = 0.1;
+    //cubeGridGroup.rotation.x = 0.1;
     cubeGridGroup.rotation.y = -0.3; // Y축 시계방향 회전 (비스듬히)
     scene.add(cubeGridGroup);
 
     // 그리드 전체 크기 (비디오가 거의 정사각형)
-    const totalWidth = 3.5;
+    const totalWidth = 4;
+    //const totalWidth = 3.5;
     const totalHeight = totalWidth * (766 / 774); // 실제 비디오 비율
 
     const cubeWidth = totalWidth / GRID_X;
@@ -432,8 +433,8 @@ function tick() {
     camera.rotation.x += (-targetRotation.x - camera.rotation.x) * 2 * deltaTime;
 
     // 포인트 라이트 원형 궤도 이동
-    pointLight.position.x = -1;
-    pointLight.position.y = 3;
+    // pointLight.position.x = -1;
+    // pointLight.position.y = 3;
 
     // Camera Y position based on scroll
     const targetY = -scrollY / sizes.height * SECTION_DISTANCE;
