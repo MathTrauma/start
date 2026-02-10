@@ -7,7 +7,13 @@ import gsap from 'gsap';
 // 비디오 비율: 774x766 (거의 1:1)
 const GRID_X = 16;
 const GRID_Y = 16;
-const SECTION_DISTANCE = 4;
+const CAMERA_FOV = 40;
+const CAMERA_Z_DESKTOP = 8;
+const CAMERA_Z_MOBILE = 12;
+
+function calcSectionDistance(fov, cameraZ) {
+    return 2 * cameraZ * Math.tan(THREE.MathUtils.degToRad(fov / 2));
+}
 
 // ========================================
 // State
@@ -23,7 +29,7 @@ let currentVideoIndex = 1;
 let isTransitioning = false;
 let scrollY = 0;
 let currentSection = 0;
-let sectionDistance = SECTION_DISTANCE;
+let sectionDistance = calcSectionDistance(CAMERA_FOV, CAMERA_Z_DESKTOP);
 let isGathering = true;
 
 // 랜덤 팝 스케줄 상태
@@ -57,8 +63,8 @@ function init() {
     scene = new THREE.Scene();
 
     // Camera
-    camera = new THREE.PerspectiveCamera(40, sizes.width / sizes.height, 1, 100);
-    camera.position.z = 8;
+    camera = new THREE.PerspectiveCamera(CAMERA_FOV, sizes.width / sizes.height, 1, 100);
+    camera.position.z = CAMERA_Z_DESKTOP;
     scene.add(camera);
 
     // Renderer
@@ -215,8 +221,8 @@ function updateLayout() {
     const offsetX = Math.max(0, (18 / 7) * (camera.aspect - 1));
 
     // 카메라 거리에 비례해 섹션 간격 조정
-    camera.position.z = isMobile ? 12 : 8;
-    sectionDistance = SECTION_DISTANCE * (camera.position.z / 8);
+    camera.position.z = isMobile ? CAMERA_Z_MOBILE : CAMERA_Z_DESKTOP;
+    sectionDistance = calcSectionDistance(CAMERA_FOV, camera.position.z);
 
     // Section 1: Cube Grid
     if (cubeGridGroup) {
