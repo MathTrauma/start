@@ -76,3 +76,7 @@ test-payment.html
 
 # Cloudflare Workers (deployed separately via wrangler)
 payment-worker/
+etc-visual-worker/
+
+# etc-visual (R2로 배포)
+etc-visual/

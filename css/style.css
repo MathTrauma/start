@@ -301,6 +301,7 @@ main {
         padding: 0.875rem 1.75rem;
         font-size: 1rem;
     }
+
 }
 
 @media (max-width: 640px) {
@@ -430,6 +431,18 @@ main {
 .btn-cta-visual:hover {
     background-color: var(--primary-500);
     transform: translateY(-4px);
+}
+
+@media (max-width: 900px) {
+    .hero-visual {
+        justify-content: center;
+        align-items: flex-end;
+        padding-bottom: 8vh;
+    }
+
+    .hero-visual-content {
+        width: 100%;
+    }
 }
 
 /* =========================================

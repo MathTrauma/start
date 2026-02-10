@@ -23,6 +23,7 @@ let currentVideoIndex = 1;
 let isTransitioning = false;
 let scrollY = 0;
 let currentSection = 0;
+let sectionDistance = SECTION_DISTANCE;
 let isGathering = true;
 
 // 랜덤 팝 스케줄 상태
@@ -37,7 +38,7 @@ const mouse = { x: 0, y: 0 };
 const targetRotation = { x: 0, y: 0 };
 
 const sizes = { width: window.innerWidth, height: window.innerHeight };
-const isMobile = sizes.width / sizes.height < 1;
+let isMobile = sizes.width / sizes.height < 1;
 const clock = new THREE.Clock();
 let previousTime = 0;
 
@@ -57,7 +58,7 @@ function init() {
 
     // Camera
     camera = new THREE.PerspectiveCamera(40, sizes.width / sizes.height, 1, 100);
-    camera.position.z = isMobile ? 12 : 8;
+    camera.position.z = 8;
     scene.add(camera);
 
     // Renderer
@@ -105,6 +106,7 @@ function init() {
     // Create sections
     createSection1CubeGrid();
     createSection2Object();
+    updateLayout();
 
     // 초기 흩어짐 → 모임 애니메이션
     playInitialGatherAnimation();
@@ -120,14 +122,9 @@ function init() {
 // Section 1: Video Cube Grid (오른쪽 배치, Y축 회전)
 // ========================================
 function createSection1CubeGrid() {
-    const sectionY = isMobile ? 1 : 0;
-    const offsetX = isMobile ? 0 : 1.8;
-
-    // 큐브 그리드를 담는 그룹
+    // 큐브 그리드를 담는 그룹 (위치는 updateLayout()에서 설정)
     cubeGridGroup = new THREE.Group();
-    cubeGridGroup.position.set(offsetX, sectionY, 0);
-    //cubeGridGroup.rotation.x = 0.1;
-    cubeGridGroup.rotation.y = -0.3; // Y축 시계방향 회전 (비스듬히)
+    cubeGridGroup.rotation.y = -0.3;
     scene.add(cubeGridGroup);
 
     // 그리드 전체 크기 (비디오가 거의 정사각형)
@@ -196,9 +193,6 @@ function createSection1CubeGrid() {
 // Section 2: Icosahedron wireframe (왼쪽 배치)
 // ========================================
 function createSection2Object() {
-    const sectionY = isMobile ? -SECTION_DISTANCE - 1 : -SECTION_DISTANCE;
-    const offsetX = isMobile ? 0 : -1.8;
-
     const geometry = new THREE.IcosahedronGeometry(1.2, 0);
     const material = new THREE.MeshStandardMaterial({
         color: 0x6366f1,
@@ -207,11 +201,35 @@ function createSection2Object() {
         wireframe: true
     });
 
+    // 위치는 updateLayout()에서 설정
     const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(offsetX, sectionY, 0);
-
     scene.add(mesh);
     sectionMeshes.push(mesh);
+}
+
+// ========================================
+// Layout: 모든 섹션 오브젝트 위치를 일괄 계산
+// ========================================
+function updateLayout() {
+    isMobile = sizes.width / sizes.height < 1;
+    const offsetX = Math.max(0, (18 / 7) * (camera.aspect - 1));
+
+    // 카메라 거리에 비례해 섹션 간격 조정
+    camera.position.z = isMobile ? 12 : 8;
+    sectionDistance = SECTION_DISTANCE * (camera.position.z / 8);
+
+    // Section 1: Cube Grid
+    if (cubeGridGroup) {
+        cubeGridGroup.position.x = offsetX;
+        cubeGridGroup.position.y = isMobile ? 1.5 : 0;
+        cubeGridGroup.position.z = 0;
+    }
+
+    // Section 2: Icosahedron
+    if (sectionMeshes[1]) {
+        sectionMeshes[1].position.x = -offsetX;
+        sectionMeshes[1].position.y = -sectionDistance + (isMobile ? 1 : 0);
+    }
 }
 
 // ========================================
@@ -373,6 +391,7 @@ function setupEvents() {
         camera.aspect = sizes.width / sizes.height;
         camera.updateProjectionMatrix();
         renderer.setSize(sizes.width, sizes.height);
+        updateLayout();
     });
 
     window.addEventListener('scroll', () => {
@@ -432,12 +451,8 @@ function tick() {
     camera.rotation.y += (targetRotation.y - camera.rotation.y) * 2 * deltaTime;
     camera.rotation.x += (-targetRotation.x - camera.rotation.x) * 2 * deltaTime;
 
-    // 포인트 라이트 원형 궤도 이동
-    // pointLight.position.x = -1;
-    // pointLight.position.y = 3;
-
     // Camera Y position based on scroll
-    const targetY = -scrollY / sizes.height * SECTION_DISTANCE;
+    const targetY = -scrollY / sizes.height * sectionDistance;
     camera.position.y += (targetY - camera.position.y) * 0.1;
 
     // 랜덤 그룹 팝 효과 (2~5개씩 랜덤)
