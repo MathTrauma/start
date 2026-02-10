@@ -253,24 +253,12 @@
                 });
             }  
 
-            // etc-visual CTA 버튼: 로컬이면 로컬 경로, 프로덕션이면 Worker + 토큰 전달
+            // etc-visual CTA 버튼: 로컬이면 로컬 경로, 프로덕션이면 서브도메인
             const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            window.navigateToEtcVisual = async function() {
-                let url = isLocal
+            window.navigateToEtcVisual = function() {
+                location.href = isLocal
                     ? 'etc-visual/1-reorganize/1-tangram.html'
-                    : 'https://etc-visual-worker.painfultrauma.workers.dev/1-reorganize/1-tangram.html';
-                if (!isLocal && typeof supabaseClient !== 'undefined') {
-                    try {
-                        const { data: { session } } = await supabaseClient.auth.getSession();
-                        if (session) {
-                            url += '#access_token=' + session.access_token
-                                 + '&refresh_token=' + session.refresh_token;
-                        }
-                    } catch (e) {
-                        console.error('Session fetch error:', e);
-                    }
-                }
-                location.href = url;
+                    : 'https://visual.mathtrauma.com/1-reorganize/1-tangram.html';
             };
 
             // 비디오 교대 재생은 hero-video-cubes.js에서 처리

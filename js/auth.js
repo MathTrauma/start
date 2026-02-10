@@ -25,10 +25,12 @@ function initAuth(callback) {
     // 초기 세션 확인
     supabaseClient.auth.getSession().then(({ data: { session } }) => {
         sessionInitialized = true;
+        syncSessionCookie(session);
         if (callback) callback(session);
     }).catch(error => {
         console.error('Session check failed:', error);
         sessionInitialized = true;
+        syncSessionCookie(null);
         if (callback) callback(null);
     });
 
@@ -36,9 +38,22 @@ function initAuth(callback) {
     supabaseClient.auth.onAuthStateChange((_event, session) => {
         // 초기화 완료 후에만 콜백 호출하여 중복 방지
         if (sessionInitialized) {
+            syncSessionCookie(session);
             if (callback) callback(session);
         }
     });
+}
+
+/**
+ * 크로스 서브도메인 세션 쿠키 동기화
+ * .mathtrauma.com 도메인 쿠키로 visual.mathtrauma.com과 세션 공유
+ */
+function syncSessionCookie(session) {
+    if (session) {
+        document.cookie = `mt_session=${session.access_token}; domain=.mathtrauma.com; path=/; max-age=3600; Secure; SameSite=Lax`;
+    } else {
+        document.cookie = 'mt_session=; domain=.mathtrauma.com; path=/; max-age=0';
+    }
 }
 
 /**
@@ -88,6 +103,7 @@ async function signInWithKakao() {
 async function signOut() {
     console.log('로그아웃 시도 중...');
     try {
+        syncSessionCookie(null);
         const { error } = await supabaseClient.auth.signOut({ scope: 'local' });
         if (error) throw error;
     } catch (err) {
