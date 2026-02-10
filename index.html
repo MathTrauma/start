@@ -121,7 +121,7 @@
             <div class="hero-visual-content">
                 <h2>VISUAL MATH</h2>
                 <p>시각적 도구와 인터랙션이 도움이 되는 문제들</p>
-                <button onclick="location.href='https://etc-visual-worker.painfultrauma.workers.dev/1-reorganize/1-tangram.html'" class="btn-cta-visual">
+                <button onclick="navigateToEtcVisual()" class="btn-cta-visual">
                     <span>시작하기</span>
                     <i data-lucide="arrow-right"></i>
                 </button>
@@ -252,6 +252,26 @@
                     }
                 });
             }  
+
+            // etc-visual CTA 버튼: 로컬이면 로컬 경로, 프로덕션이면 Worker + 토큰 전달
+            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+            window.navigateToEtcVisual = async function() {
+                let url = isLocal
+                    ? 'etc-visual/1-reorganize/1-tangram.html'
+                    : 'https://etc-visual-worker.painfultrauma.workers.dev/1-reorganize/1-tangram.html';
+                if (!isLocal && typeof supabaseClient !== 'undefined') {
+                    try {
+                        const { data: { session } } = await supabaseClient.auth.getSession();
+                        if (session) {
+                            url += '#access_token=' + session.access_token
+                                 + '&refresh_token=' + session.refresh_token;
+                        }
+                    } catch (e) {
+                        console.error('Session fetch error:', e);
+                    }
+                }
+                location.href = url;
+            };
 
             // 비디오 교대 재생은 hero-video-cubes.js에서 처리
             // video2 미리 로드
