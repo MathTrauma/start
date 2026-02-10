@@ -1,6 +1,12 @@
 {
   "cleanUrls": true,
   "redirects": [
+    {
+      "source": "/:path(.*)",
+      "has": [{ "type": "host", "value": "www.mathtrauma.com" }],
+      "destination": "https://mathtrauma.com/:path",
+      "permanent": true
+    },
     { "source": "/start", "destination": "/" },
     { "source": "/start/", "destination": "/" },
     { "source": "/start/:path*", "destination": "/:path*" }

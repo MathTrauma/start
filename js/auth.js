@@ -30,7 +30,6 @@ function initAuth(callback) {
     }).catch(error => {
         console.error('Session check failed:', error);
         sessionInitialized = true;
-        syncSessionCookie(null);
         if (callback) callback(null);
     });
 
