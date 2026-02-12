@@ -55,6 +55,8 @@
             <option value="dark">어두운</option>
             <option value="sepia">세피아</option>
         </select>
+        <select id="solution-select" class="theme-select" onchange="changeSolution(this.value)" style="display: none;">
+        </select>
         <div class="btn-group">
             <button id="prev-btn" class="nav-prev-btn" onclick="navigatePrev()" title="이전 문제">
                 <i data-lucide="chevron-left"></i>
@@ -99,18 +101,7 @@
         </div>
     </main>
 
-    <!-- Viewer (Dynamic - Local or R2) -->
-    <script>
-        (function() {
-            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            const src = isLocal
-                ? 'lib/viewer-app.js'
-                : 'https://euclide-worker.painfultrauma.workers.dev/lib/viewer-app.js';
-            const script = document.createElement('script');
-            script.type = 'module';
-            script.src = src;
-            document.body.appendChild(script);
-        })();
-    </script>
+    <!-- Viewer App -->
+    <script type="module" src="js/viewer-app.js"></script>
 </body>
 </html>
