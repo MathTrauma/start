@@ -58,6 +58,7 @@ euclide-geometry/lib*
 
 # md's
 *.md
+instruct.*
 
 # docs
 docs/
