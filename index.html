@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/hero.css">
     <link rel="stylesheet" href="css/pricing.css">
     <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/explore.css">
     <link rel="stylesheet" href="css/login-modal.css">
 
@@ -37,16 +38,27 @@
 
 <body>
 
-    <!-- Explore Nav -->
-    <button class="explore-toggle" id="explore-toggle">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="1" y="1" width="5" height="5" rx="0.5"/>
-            <rect x="10" y="1" width="5" height="5" rx="0.5"/>
-            <rect x="1" y="10" width="5" height="5" rx="0.5"/>
-            <rect x="10" y="10" width="5" height="5" rx="0.5"/>
-        </svg>
-        <!-- <span>Explore</span> -->
-    </button>
+    <!-- 통합 네비게이션 바 -->
+    <header class="site-nav">
+        <button class="explore-toggle" id="explore-toggle">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="1" width="5" height="5" rx="0.5"/>
+                <rect x="10" y="1" width="5" height="5" rx="0.5"/>
+                <rect x="1" y="10" width="5" height="5" rx="0.5"/>
+                <rect x="10" y="10" width="5" height="5" rx="0.5"/>
+            </svg>
+        </button>
+        <div class="nav-auth">
+            <button id="login-btn" onclick="openLoginModal()" class="btn-login">
+                <i data-lucide="user" width="18" height="18"></i>
+                <span>로그인</span>
+            </button>
+            <button id="logout-btn" onclick="signOut()" class="btn-login" style="display: none;">
+                <i data-lucide="log-out" width="18" height="18"></i>
+                <span>로그아웃</span>
+            </button>
+        </div>
+    </header>
 
     <div class="explore-overlay" id="explore-overlay"></div>
 
@@ -97,21 +109,6 @@
                 </video>
                 <canvas class="webgl-hero"></canvas>
                 <div class="hero-overlay"></div>
-            </div>
-
-            <!-- Top Right Auth Buttons -->
-            <div class="login-container">
-                <!-- Login Button -->
-                <button id="login-btn" onclick="openLoginModal()" class="btn-login">
-                    <i data-lucide="user" width="18" height="18"></i>
-                    <span>로그인</span>
-                </button>
-                
-                <!-- Logout Button (Hidden by default) -->
-                <button id="logout-btn" onclick="signOut()" class="btn-login" style="display: none;">
-                    <i data-lucide="log-out" width="18" height="18"></i>
-                    <span>로그아웃</span>
-                </button>
             </div>
 
             <!-- Main Content (Centered/Bottom) -->
@@ -281,123 +278,8 @@
     <script src="js/config.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/payment.js"></script>
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            // Lucide 아이콘 초기화
-            lucide.createIcons();
-
-            // UI 요소 가져오기
-            const loginBtn = document.getElementById('login-btn');
-            const logoutBtn = document.getElementById('logout-btn');
-
-            // 인증 초기화 및 UI 업데이트 연결
-            if (typeof initAuth === 'function') {
-                initAuth((session) => {
-                    if (session) {
-                        loginBtn.style.display = 'none';
-                        logoutBtn.style.display = 'flex';
-                        console.log('사용자:', session.user.email);
-                    } else {
-                        loginBtn.style.display = 'flex';
-                        logoutBtn.style.display = 'none';
-                    }
-                });
-            }  
-
-            // etc-visual CTA 버튼: same-origin 경로 사용
-            window.navigateToEtcVisual = function() {
-                location.href = 'etc-visual/1-reorganize/1-tangram.html';
-            };
-
-            // 비디오 교대 재생은 hero-video-cubes.js에서 처리
-            // video2 미리 로드
-            const video2 = document.getElementById('hero-video-2');
-            if (video2) {
-                video2.load();
-            }
-
-            // 타이프라이터 애니메이션
-            function delay(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
-            }
-
-            function typeWriter(element, text, speed) {
-                return new Promise(resolve => {
-                    let i = 0;
-                    element.textContent = '';
-                    function type() {
-                        if (i < text.length) {
-                            element.textContent += text.charAt(i);
-                            i++;
-                            setTimeout(type, speed);
-                        } else {
-                            element.classList.add('done');
-                            resolve();
-                        }
-                    }
-                    type();
-                });
-            }
-
-            const line1 = document.getElementById('hero-line-1');
-            const line2 = document.getElementById('hero-line-2');
-            const line3 = document.getElementById('hero-line-3');
-            const line3b = document.getElementById('hero-line-3b');
-
-            if (line1 && line2 && line3 && line3b) {
-                (async () => {
-                    await typeWriter(line1, line1.dataset.text, 150);
-                    await delay(400);
-                    await typeWriter(line2, line2.dataset.text, 80);
-                    await delay(300);
-                    await typeWriter(line3, line3.dataset.text, 100);
-                    await delay(3000);
-                    await typeWriter(line3b, line3b.dataset.text, 100);
-                })();
-            }
-        });
-    </script>
-
-    <!-- Explore Nav -->
-    <script>
-    (function () {
-        document.addEventListener('DOMContentLoaded', function () {
-            const toggle = document.getElementById('explore-toggle');
-            const sidebar = document.getElementById('explore-sidebar');
-            const overlay = document.getElementById('explore-overlay');
-            const closeBtn = document.getElementById('explore-close');
-
-            function openNav() {
-                sidebar.classList.add('open');
-                overlay.classList.add('open');
-            }
-
-            function closeNav() {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('open');
-            }
-
-            toggle.addEventListener('click', function () {
-                sidebar.classList.contains('open') ? closeNav() : openNav();
-            });
-
-            overlay.addEventListener('click', closeNav);
-            closeBtn.addEventListener('click', closeNav);
-
-            document.querySelectorAll('.explore-item').forEach(function (item) {
-                item.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    var target = this.dataset.target;
-                    closeNav();
-                    setTimeout(function () {
-                        var el = document.getElementById(target);
-                        if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }, 300);
-                });
-            });
-        });
-    })();
-    </script>
+    <script src="js/main.js"></script>
+    <script src="js/explore-nav.js"></script>
 
     <!-- Three.js Hero Video Cubes -->
     <script type="module" src="js/hero-video-cubes.js"></script>

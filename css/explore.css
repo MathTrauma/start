@@ -4,34 +4,26 @@
    Noto Sans KR  — 한국어 텍스트 (body에서 상속)
    ========================================= */
 
-/* Toggle 버튼 — 반투명 흰색 glass */
+/* Toggle 버튼 — nav 내 flex 아이템 */
 .explore-toggle {
-    position: fixed;
-    top: 1.5rem;
-    left: 1.5rem;
-    z-index: 100;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background-color: rgba(255, 255, 255, 0.72);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background-color: transparent;
     color: #1e293b;
-    padding: 0.625rem 1.25rem;
+    padding: 0.5rem;
     border-radius: 9999px;
     font-weight: 500;
     font-size: 0.875rem;
     font-family: 'Space Grotesk', 'Noto Sans KR', sans-serif;
     letter-spacing: 0.02em;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    border: none;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .explore-toggle:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    background-color: rgba(0, 0, 0, 0.06);
 }
 
 /* 배경 오버레이 — 약한 블러 */

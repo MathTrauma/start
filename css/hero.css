@@ -57,26 +57,18 @@
     display: none;
 }
 
-/* Login Button Container */
-.login-container {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    z-index: 50;
-}
-
+/* .btn-login — nav.css로 이전됨 */
 .btn-login {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     background-color: rgba(0, 0, 0, 0.06);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     color: var(--slate-800);
-    padding: 0.625rem 1.5rem;
+    padding: 0.5rem 1.25rem;
     border-radius: 9999px;
     font-weight: 500;
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    font-size: 0.875rem;
+    border: 1px solid rgba(0, 0, 0, 0.12);
     cursor: pointer;
     transition: all 0.2s ease;
 }
