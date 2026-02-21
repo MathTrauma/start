@@ -1,0 +1,431 @@
+/* =========================================
+   Pricing Section
+   ========================================= */
+.pricing-section {
+    position: relative;
+    z-index: 10; /* Three.js canvas 위에 */
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    background-color: var(--slate-100);
+}
+
+@media (min-width: 768px) {
+    .pricing-section {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    }
+}
+
+.container {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+.pricing-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+    .pricing-header {
+        margin-bottom: 3rem;
+    }
+}
+
+.pricing-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--slate-900);
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .pricing-header h2 {
+        font-size: 1.875rem;
+    }
+}
+
+.pricing-header p {
+    font-size: 0.875rem;
+    color: var(--slate-500);
+}
+
+@media (min-width: 768px) {
+    .pricing-header p {
+        font-size: 1rem;
+    }
+}
+
+/* Grid Layout */
+.pricing-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    max-width: 64rem;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .pricing-grid {
+        gap: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .pricing-grid {
+        gap: 3rem;
+    }
+}
+
+/* Pricing Card Base */
+.pricing-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+    transition: border-color 0.3s;
+}
+
+@media (min-width: 768px) {
+    .pricing-card {
+        padding: 2rem;
+        border-radius: 1.5rem;
+    }
+}
+
+/* Free Card */
+.card-free {
+    background-color: var(--slate-50);
+    border: 1px solid var(--slate-200);
+}
+
+.card-free:hover {
+    border-color: var(--slate-300);
+}
+
+/* Paid Card */
+.card-paid {
+    position: relative;
+    background-color: var(--slate-900);
+    color: var(--white);
+    border: 1px solid var(--slate-800);
+    box-shadow: 0 20px 25px -5px rgba(49, 46, 129, 0.2), 0 8px 10px -6px rgba(49, 46, 129, 0.2);
+}
+
+.badge-best {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--primary-500);
+    color: var(--white);
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border-bottom-left-radius: 0.75rem;
+    border-top-right-radius: 1rem;
+}
+
+@media (min-width: 768px) {
+    .badge-best {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-top-right-radius: 1.5rem;
+    }
+}
+
+/* Card Content */
+.card-title-group {
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+    .card-title-group {
+        margin-bottom: 1.5rem;
+    }
+}
+
+.card-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    word-break: keep-all;
+}
+
+@media (min-width: 768px) {
+    .card-title {
+        font-size: 1.25rem;
+    }
+}
+
+.card-desc {
+    font-size: 0.75rem;
+    word-break: keep-all;
+    margin-bottom: 0.35rem;
+}
+
+@media (min-width: 768px) {
+    .card-desc {
+        font-size: 0.875rem;
+    }
+}
+
+.card-free .card-title { color: var(--slate-900); }
+.card-free .card-desc { color: var(--slate-500); }
+.card-paid .card-title { color: var(--white); }
+.card-paid .card-desc { color: var(--slate-400); }
+
+/* Price */
+.price-group {
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .price-group {
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: baseline;
+        gap: 0.25rem;
+    }
+}
+
+.price-val {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.price-unit {
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+@media (min-width: 768px) {
+    .price-val { font-size: 2.25rem; }
+    .price-unit { font-size: 1.25rem; }
+}
+
+.card-free .price-val, .card-free .price-unit { color: var(--slate-900); }
+.card-paid .price-val, .card-paid .price-unit { color: var(--white); }
+
+.price-period {
+    font-size: 0.75rem;
+    color: var(--slate-400);
+}
+
+@media (min-width: 768px) {
+    .price-period { font-size: 0.875rem; }
+}
+
+/* Feature List */
+.feature-list {
+    list-style: none;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .feature-list {
+        margin-bottom: 2rem;
+        gap: 1rem;
+    }
+}
+
+.feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .feature-item {
+        gap: 0.75rem;
+    }
+}
+
+.feature-icon {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+@media (min-width: 768px) {
+    .feature-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+}
+
+.feature-text {
+    font-size: 0.75rem;
+    line-height: 1.25;
+}
+
+@media (min-width: 768px) {
+    .feature-text {
+        font-size: 1rem;
+    }
+}
+
+/* Specific Feature Colors */
+.card-free .text-active { color: var(--slate-700); }
+.card-free .text-inactive { color: var(--slate-400); }
+.card-free .icon-check { color: #22c55e; }
+.card-free .icon-x { color: var(--slate-400); }
+
+.card-paid .text-active { color: var(--slate-200); }
+.card-paid .icon-check { color: var(--primary-400); }
+
+/* Buttons in Card */
+.btn-card {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    margin-top: auto;
+}
+
+@media (min-width: 768px) {
+    .btn-card {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+}
+
+.card-free .btn-card {
+    background-color: var(--white);
+    border: 1px solid var(--slate-300);
+    color: var(--slate-700);
+}
+
+.card-free .btn-card:hover {
+    background-color: var(--slate-100);
+}
+
+.card-paid .btn-card {
+    background-color: var(--primary-600);
+    color: var(--white);
+    box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+}
+
+.card-paid .btn-card:hover {
+    background-color: var(--primary-500);
+}
+
+/* Payment Buttons (Card + KakaoPay) */
+.payment-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+@media (min-width: 768px) {
+    .payment-buttons {
+        gap: 0.75rem;
+    }
+}
+
+.btn-payment {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.5rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+    .btn-payment {
+        padding: 1rem;
+        font-size: 0.875rem;
+        gap: 0.5rem;
+    }
+}
+
+.btn-card-pay {
+    background-color: #2563eb;
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-card-pay:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.btn-kakao-pay {
+    background-color: #fee500;
+    color: #3c1e1e;
+    position: relative;
+}
+
+.btn-kakao-pay:hover:not(:disabled) {
+    background-color: #fdd800;
+    transform: translateY(-1px);
+}
+
+.btn-kakao-pay:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-kakao-pay .coming-soon {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background-color: #ef4444;
+    color: white;
+    font-size: 0.5rem;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+@media (min-width: 768px) {
+    .btn-kakao-pay .coming-soon {
+        font-size: 0.6rem;
+        padding: 2px 6px;
+    }
+}
+
+.payment-warning {
+    margin-top: 0.75rem;
+    padding: 0.5rem;
+    background-color: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 0.5rem;
+    color: #fca5a5;
+    font-size: 0.7rem;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .payment-warning {
+        font-size: 0.75rem;
+        padding: 0.625rem;
+    }
+}

@@ -1,0 +1,177 @@
+/* =========================================
+   Explore Nav
+   Space Grotesk — 숫자/영문 헤더
+   Noto Sans KR  — 한국어 텍스트 (body에서 상속)
+   ========================================= */
+
+/* Toggle 버튼 — 반투명 흰색 glass */
+.explore-toggle {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: #1e293b;
+    padding: 0.625rem 1.25rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    font-family: 'Space Grotesk', 'Noto Sans KR', sans-serif;
+    letter-spacing: 0.02em;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.explore-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* 배경 오버레이 — 약한 블러 */
+.explore-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.25);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.explore-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 사이드바 — 반투명 흰색 glass */
+.explore-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    z-index: 1001;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 4px 0 40px rgba(0, 0, 0, 0.1);
+}
+
+.explore-sidebar.open {
+    transform: translateX(0);
+}
+
+/* 헤더 */
+.explore-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.explore-header-title {
+    color: #1e293b;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+/* 닫기 버튼 */
+.explore-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    border-radius: 6px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.explore-close:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #1e293b;
+}
+
+/* 메뉴 */
+.explore-menu {
+    padding: 0.5rem 0;
+}
+
+.explore-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.375rem 1rem;
+    color: #64748b;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.explore-item:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.explore-item:hover {
+    background-color: rgba(99, 102, 241, 0.05);
+    border-left-color: #6366f1;
+    color: #1e293b;
+}
+
+/* 번호 — Space Grotesk */
+.explore-item-num {
+    font-size: 1.375rem;
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+    color: #6366f1;
+    opacity: 0.22;
+    width: 30px;
+    flex-shrink: 0;
+    line-height: 1;
+    transition: opacity 0.2s ease;
+}
+
+.explore-item:hover .explore-item-num {
+    opacity: 1;
+}
+
+.explore-item-content {
+    flex: 1;
+}
+
+.explore-item-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1e293b;
+    margin-bottom: 0.2rem;
+}
+
+.explore-item-desc {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    line-height: 1.4;
+}
+
+.explore-item:hover .explore-item-desc {
+    color: #64748b;
+}

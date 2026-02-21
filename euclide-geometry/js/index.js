@@ -253,8 +253,11 @@ window.addEventListener('resize', () => {
 
 // 환경 감지 및 URL 설정
 const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-const workerUrl = isLocal ? '.' : 'https://euclide-worker.painfultrauma.workers.dev';
-fetch(`${workerUrl}/problems/index.json?_t=${Date.now()}`)
+const workerUrl = 'https://euclide-worker.painfultrauma.workers.dev';
+const indexJsonUrl = isLocal
+    ? `./problems/index.json?_t=${Date.now()}`
+    : `${workerUrl}/problems/index.json?_t=${Date.now()}`;
+fetch(indexJsonUrl)
     .then(res => res.json())
     .then(data => {
         // level 0은 마지막으로 정렬 (기본정리)

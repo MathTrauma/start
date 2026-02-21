@@ -1,0 +1,378 @@
+/* =========================================
+   Hero Section (Video Background)
+   ========================================= */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background-color: transparent; /* Three.js 배경이 보이도록 */
+    z-index: 1; /* canvas(z-index:0) 위에 */
+}
+
+/* 배경 컨테이너 - Three.js가 배경이므로 투명 */
+.hero-bg-video-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* wave 효과는 Three.js 배경 사용으로 제거 */
+
+@keyframes waveFlow {
+    0% { background-position: 0 50%; }
+    100% { background-position: 1440px 50%; }
+}
+
+/* WebGL Hero Canvas - 전체 페이지 배경 */
+.webgl-hero {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none; /* 콘텐츠 클릭 허용 */
+}
+
+/* Video sources (hidden, used for texture) */
+.hero-video-source {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* hero-overlay는 Three.js 배경 위에서 사용 안 함 */
+.hero-overlay {
+    display: none;
+}
+
+/* Login Button Container */
+.login-container {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 50;
+}
+
+.btn-login {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--slate-800);
+    padding: 0.625rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-login:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Main Content (Center) */
+.hero-content-wrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+}
+
+/* explain-detail 스타일 - 왼쪽 절반 중앙 */
+.explain-detail {
+    position: absolute;
+    left: 25%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 46%;
+    max-width: 700px;
+    color: var(--slate-800);
+    pointer-events: auto;
+    padding: 2.5rem;
+}
+
+.explain-detail h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.explain-detail p {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    margin-bottom: 1.1rem;
+    color: var(--slate-600);
+}
+
+.explain-img {
+    display: inline-block;
+    max-height: 1.8em;
+    vertical-align: middle;
+    border-radius: 4px;
+    margin: 0 0.25rem;
+}
+
+/* hero-text-group - 비디오 하단 20% 지점부터 */
+.hero-text-group {
+    position: absolute;
+    top: 62%;
+    left: 75%;
+    transform: translate(-50%, 0);
+    text-align: center;
+    pointer-events: auto;
+    z-index: 25;
+}
+
+.hero-text-group p {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* CTA 버튼 */
+.btn-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 1.5rem auto 0;
+    padding: 1.25rem 2.5rem;
+    background-color: var(--primary-600);
+    color: var(--white);
+    font-size: 1.25rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.5);
+    pointer-events: auto;
+}
+
+.btn-cta:hover {
+    background-color: var(--primary-500);
+    box-shadow: 0 0 60px -15px rgba(99, 102, 241, 0.7);
+    transform: translateY(-4px);
+}
+
+.btn-cta i {
+    transition: transform 0.3s ease;
+}
+
+.btn-cta:hover i {
+    transform: translateX(4px);
+}
+
+.hero-line {
+    color: var(--white);
+    font-weight: 700;
+    line-height: 1.05;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+@media (min-width: 901px) {
+    .hero-line {
+        line-height: 1.6;
+    }
+}
+
+.hero-line-1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+}
+
+.hero-line-2 {
+    font-size: 1.5rem;
+}
+
+.hero-line-3 {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+}
+
+.hero-line-small {
+    font-size: 0.5625rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* 모바일/좁은 화면 대응 - 세로 배치 */
+@media (max-width: 900px) {
+    .explain-detail {
+        top: 60vh;
+        bottom: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 92vw;
+        max-width: 500px;
+        padding: 1rem 1.25rem;
+    }
+
+    .explain-detail h2 {
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .explain-detail p {
+        font-size: 0.8rem;
+        line-height: 1.5;
+        margin-bottom: 0.3rem;
+    }
+
+    .hero-text-group {
+        top: 42vh;
+        bottom: auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .btn-cta {
+        padding: 0.875rem 1.75rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .explain-detail {
+        top: 56vh;
+        bottom: auto;
+        padding: 0.75rem 1rem;
+    }
+
+    .explain-detail h2 {
+        font-size: 0.85rem;
+    }
+
+    .explain-detail p {
+        font-size: 0.7rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .hero-text-group {
+        top: 38vh;
+        bottom: auto;
+    }
+
+    .btn-cta {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Typewriter Animation */
+.typewriter-container {
+    position: relative;
+    display: block;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.typewriter-container-inline {
+    position: relative;
+    display: inline;
+}
+
+.typewriter-placeholder {
+    visibility: hidden;
+    display: inline;
+}
+
+.typewriter-text {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    border-right: 2px solid rgba(255, 255, 255, 0.8);
+    animation: blink-caret 0.75s step-end infinite;
+}
+
+.typewriter-text.done {
+    border-right: none;
+    animation: none;
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: rgba(255, 255, 255, 0.8); }
+}
+
+/* =========================================
+   etc-visual Hero Section (2단)
+   ========================================= */
+.hero-visual {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: transparent;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-visual-content {
+    text-align: center;
+    color: var(--slate-800);
+    padding: 2rem;
+    width: 50%;
+}
+
+.hero-visual-content h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero-visual-content p {
+    font-size: 1.25rem;
+    color: var(--slate-600);
+    margin-bottom: 2rem;
+}
+
+.btn-cta-visual {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 2.5rem;
+    background-color: var(--primary-600);
+    color: var(--white);
+    font-size: 1.25rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-cta-visual:hover {
+    background-color: var(--primary-500);
+    transform: translateY(-4px);
+}
+
+@media (max-width: 900px) {
+    .hero-visual {
+        justify-content: center;
+        align-items: flex-end;
+        padding-bottom: 8vh;
+    }
+
+    .hero-visual-content {
+        width: 100%;
+    }
+}

@@ -9,9 +9,13 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/pricing.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/explore.css">
     <link rel="stylesheet" href="css/login-modal.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <!-- Lucide Icons (Vanilla JS version) -->
     <script src="https://unpkg.com/lucide@0.469.0"></script>
@@ -33,9 +37,56 @@
 
 <body>
 
+    <!-- Explore Nav -->
+    <button class="explore-toggle" id="explore-toggle">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="1" width="5" height="5" rx="0.5"/>
+            <rect x="10" y="1" width="5" height="5" rx="0.5"/>
+            <rect x="1" y="10" width="5" height="5" rx="0.5"/>
+            <rect x="10" y="10" width="5" height="5" rx="0.5"/>
+        </svg>
+        <!-- <span>Explore</span> -->
+    </button>
+
+    <div class="explore-overlay" id="explore-overlay"></div>
+
+    <div class="explore-sidebar" id="explore-sidebar">
+        <div class="explore-header">
+            <span class="explore-header-title">Explore</span>
+            <button class="explore-close" id="explore-close">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="2" y1="2" x2="16" y2="16"/><line x1="16" y1="2" x2="2" y2="16"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="explore-menu">
+            <a href="#section-geometry" class="explore-item" data-target="section-geometry">
+                <span class="explore-item-num">01</span>
+                <div class="explore-item-content">
+                    <div class="explore-item-title">도형문제풀이</div>
+                    <div class="explore-item-desc">유클리드 기하 단계별 애니메이션</div>
+                </div>
+            </a>
+            <a href="#section-visual" class="explore-item" data-target="section-visual">
+                <span class="explore-item-num">02</span>
+                <div class="explore-item-content">
+                    <div class="explore-item-title">Visual Math</div>
+                    <div class="explore-item-desc">시각적 보조 수학 도구</div>
+                </div>
+            </a>
+            <a href="#pricing" class="explore-item" data-target="pricing">
+                <span class="explore-item-num">03</span>
+                <div class="explore-item-content">
+                    <div class="explore-item-title">이용권</div>
+                    <div class="explore-item-desc">결제 및 요금제</div>
+                </div>
+            </a>
+        </nav>
+    </div>
+
     <main>
         <!-- 1단: Hero Video Section -->
-        <section class="hero-section">
+        <section id="section-geometry" class="hero-section">
             <!-- Background Video -->
             <div class="hero-bg-video-container">
                 <video id="hero-video-1" class="hero-video-source" autoplay muted loop playsinline crossorigin="anonymous">
@@ -117,7 +168,7 @@
         </section>
 
         <!-- 2단: etc-visual Hero Section -->
-        <section class="hero-section hero-visual">
+        <section id="section-visual" class="hero-section hero-visual">
             <div class="hero-visual-content">
                 <h2>VISUAL MATH</h2>
                 <p>시각적 도구와 인터랙션이 도움이 되는 문제들</p>
@@ -305,6 +356,47 @@
                 })();
             }
         });
+    </script>
+
+    <!-- Explore Nav -->
+    <script>
+    (function () {
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggle = document.getElementById('explore-toggle');
+            const sidebar = document.getElementById('explore-sidebar');
+            const overlay = document.getElementById('explore-overlay');
+            const closeBtn = document.getElementById('explore-close');
+
+            function openNav() {
+                sidebar.classList.add('open');
+                overlay.classList.add('open');
+            }
+
+            function closeNav() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('open');
+            }
+
+            toggle.addEventListener('click', function () {
+                sidebar.classList.contains('open') ? closeNav() : openNav();
+            });
+
+            overlay.addEventListener('click', closeNav);
+            closeBtn.addEventListener('click', closeNav);
+
+            document.querySelectorAll('.explore-item').forEach(function (item) {
+                item.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var target = this.dataset.target;
+                    closeNav();
+                    setTimeout(function () {
+                        var el = document.getElementById(target);
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }, 300);
+                });
+            });
+        });
+    })();
     </script>
 
     <!-- Three.js Hero Video Cubes -->
