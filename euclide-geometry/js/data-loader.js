@@ -7,7 +7,7 @@ import { LIB_BASE } from './env.js';
 const { CONFIG } = await import(LIB_BASE + 'config.js');
 
 // 무료 문제 목록
-const FREE_PROBLEMS = ['100', '200', '300', '400', '900'];
+const FREE_PROBLEMS = ['050', '100', '150', '200', '250', '300', '350', '400', '450', '900'];
 
 export class DataLoader {
     constructor() {
