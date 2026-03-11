@@ -338,9 +338,7 @@
 
             try {
                 const { error } = await supabaseClient
-                    .from('user_purchases')
-                    .update({ has_full_access: false })
-                    .eq('user_id', userId);
+                    .rpc('revoke_student_access', { target_user_id: userId });
 
                 if (error) throw error;
 
@@ -356,9 +354,7 @@
         async function restoreAccess(userId) {
             try {
                 const { error } = await supabaseClient
-                    .from('user_purchases')
-                    .update({ has_full_access: true })
-                    .eq('user_id', userId);
+                    .rpc('restore_student_access', { target_user_id: userId });
 
                 if (error) throw error;
 
