@@ -1,3 +1,12 @@
+// bfcache 복원 시 시청 기록 갱신
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted && currentUserId) {
+        loadViewedProblems(currentUserId).then(() => {
+            if (filteredProblems.length > 0) renderProblemList(filteredProblems);
+        });
+    }
+});
+
 // Lucide 초기화
 lucide.createIcons();
 

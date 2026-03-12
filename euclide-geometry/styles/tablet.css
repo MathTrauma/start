@@ -93,3 +93,10 @@ button {
     padding: 3px 0;
     min-width: 0;
 }
+
+/* 스크롤바 위치 보정 */
+#problem-scroll-container,
+#solution-scroll-container {
+    max-width: 640px;
+    margin: 0 auto;
+}
