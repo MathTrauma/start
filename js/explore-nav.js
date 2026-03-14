@@ -24,8 +24,9 @@
 
         document.querySelectorAll('.explore-item').forEach(function (item) {
             item.addEventListener('click', function (e) {
-                e.preventDefault();
                 var target = this.dataset.target;
+                if (!target) return; // data-target 없으면 기본 링크 동작
+                e.preventDefault();
                 closeNav();
                 setTimeout(function () {
                     var el = document.getElementById(target);
