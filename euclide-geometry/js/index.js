@@ -140,7 +140,7 @@ function canAccessProblem(problem) {
 }
 
 // 무료 문제 목록
-const FREE_PROBLEMS = ['100', '150', '200', '300', '350', '400', '900'];
+const FREE_PROBLEMS = ['050', '150', '200', '250', '300', '350', '400', '450', '900'];
 
 // 인증 토큰 가져오기
 async function getAuthToken() {
