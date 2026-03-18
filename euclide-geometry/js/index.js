@@ -136,11 +136,19 @@ function isFirstProblemOfLevel(problem, problems) {
 // 문제 접근 가능 여부 확인
 function canAccessProblem(problem) {
     if (isPaidUser) return true;
+    if (isFreeProblem(problem.id)) return true;
     return isFirstProblemOfLevel(problem, allProblems);
 }
 
 // 무료 문제 목록
 const FREE_PROBLEMS = ['050', '150', '200', '250', '300', '350', '400', '450', '900'];
+
+// 무료 문제 판별: 기존 목록 + 레벨1(100번대) 10의 배수
+function isFreeProblem(id) {
+    if (FREE_PROBLEMS.includes(id)) return true;
+    const num = parseInt(id, 10);
+    return num >= 100 && num < 200 && num % 10 === 0;
+}
 
 // 인증 토큰 가져오기
 async function getAuthToken() {
@@ -155,7 +163,7 @@ async function getAuthToken() {
 
 // 인증된 fetch (유료 문제용)
 async function authFetch(url, problemId) {
-    const isFree = FREE_PROBLEMS.includes(problemId);
+    const isFree = isFreeProblem(problemId);
     const headers = {};
 
     if (!isFree) {
