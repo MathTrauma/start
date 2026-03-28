@@ -87,7 +87,7 @@
                     <div class="explore-item-desc">시각적 보조 수학 도구</div>
                 </div>
             </a>
-            <a href="/e-number-theory/1-solved-problem-by-types/0000-pairing-sol.html" class="explore-item">
+            <a href="/e-number-theory/" class="explore-item" id="nt-entry-link">
                 <span class="explore-item-num">03</span>
                 <div class="explore-item-content">
                     <div class="explore-item-title">수론 이야기</div>
@@ -291,6 +291,13 @@
 
     <!-- Three.js Hero Video Cubes -->
     <script type="module" src="js/hero-video-cubes.js"></script>
+
+    <script>
+    fetch('/e-number-theory/common/nav-data.json').then(r=>r.json()).then(d=>{
+        const first=d[0]?.items[0];
+        if(first)document.getElementById('nt-entry-link').href='/e-number-theory/'+first.path;
+    }).catch(()=>{});
+    </script>
 </body>
 
 
