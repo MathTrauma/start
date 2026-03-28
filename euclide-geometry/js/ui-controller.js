@@ -83,11 +83,11 @@ export class UIController {
         const textContainer = this.elements['solution-text'];
         if (!container || !textContainer) return;
 
-        // "Step X" 텍스트를 포함하는 요소 찾기
+        // "Step X" 제목(h2)을 우선 찾고, 없으면 일반 요소에서 검색
         const findTarget = () => {
-            const paragraphs = textContainer.querySelectorAll('p');
-            for (const p of paragraphs) {
-                if (p.textContent.includes(`Step ${phase}`)) return p;
+            const headings = textContainer.querySelectorAll('h2');
+            for (const h of headings) {
+                if (h.textContent.includes(`Step ${phase}`)) return h;
             }
             const children = textContainer.children;
             for (const child of children) {
