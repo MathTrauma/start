@@ -4,17 +4,7 @@
  */
 
 import { LIB_BASE } from './env.js';
-const { CONFIG } = await import(LIB_BASE + 'config.js');
-
-// 무료 문제 목록
-const FREE_PROBLEMS = ['050', '150', '200', '250', '300', '350', '400', '450', '900'];
-
-// 무료 문제 판별: 기존 목록 + 레벨1(100번대) 10의 배수
-function isFreeProblem(id) {
-    if (FREE_PROBLEMS.includes(id)) return true;
-    const num = parseInt(id, 10);
-    return num >= 100 && num < 200 && num % 10 === 0;
-}
+const { CONFIG, isFreeProblem } = await import(LIB_BASE + 'config.js');
 
 export class DataLoader {
     constructor() {
