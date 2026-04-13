@@ -113,6 +113,12 @@ export class DataLoader {
             /from\s+['"]\.\.\/\.\.\/lib\//g,
             `from '${libBaseUrl}/`
         );
+        // ../../js/ → viewer-app.js 기준 동일 디렉토리
+        const jsBaseUrl = new URL('./js/', document.baseURI).href.replace(/\/$/, '');
+        scriptText = scriptText.replace(
+            /from\s+['"]\.\.\/\.\.\/js\//g,
+            `from '${jsBaseUrl}/`
+        );
         scriptText = scriptText.replace(
             /from\s+['"]\.\/([^'"]+)['"]/g,
             `from '${libBaseUrl}/$1'`
@@ -138,6 +144,38 @@ export class DataLoader {
             };
             document.body.appendChild(script);
         });
+    }
+
+    /** main.js 존재 여부 확인 (HEAD 요청) */
+    async hasMainJs(problemId) {
+        try {
+            const url = this._getUrl(CONFIG.API.ENDPOINTS.MAIN(problemId));
+            const headers = {};
+            const token = await this._getAuthToken();
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+            const response = await fetch(url, { method: 'HEAD', headers });
+            return response.ok;
+        } catch {
+            return false;
+        }
+    }
+
+    /** main.js 로드 및 실행, mount 함수 반환 */
+    async loadMainJs(problemId) {
+        const url = this._getUrl(CONFIG.API.ENDPOINTS.MAIN(problemId));
+        const response = await this._authFetch(url, problemId);
+        if (!response.ok) throw new Error('main.js 로드 실패');
+        let scriptText = await response.text();
+        scriptText = this._transformScript(scriptText);
+
+        const blob = new Blob([scriptText], { type: 'application/javascript' });
+        const blobUrl = URL.createObjectURL(blob);
+        try {
+            const mod = await import(blobUrl);
+            return mod;
+        } finally {
+            URL.revokeObjectURL(blobUrl);
+        }
     }
 
     async loadScript(problemId, solNum) {

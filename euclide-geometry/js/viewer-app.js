@@ -36,6 +36,7 @@ class EuclideApp {
         this.scriptLoaded = false;
         this.isBookmarked = false;
         this.activeSolution = 1;
+        this.mainModule = null;  // main.js mount/destroy
     }
 
     async init() {
@@ -74,12 +75,31 @@ class EuclideApp {
 
     async loadProblem(id) {
         try {
+            // 이전 main.js 정리
+            if (this.mainModule) {
+                this.mainModule.destroy();
+                this.mainModule = null;
+            }
+
             // 이전 상태 초기화
             sketchContext.reset();
             this.scriptLoaded = false;
             this.activeSolution = 1;
 
+            // config 로드 후 main.js 방식 여부 판단
             this.config = await this.dataLoader.loadConfig(id);
+
+            if (!this.config.problemPhases) {
+                // === 새 방식: main.js가 모든 렌더링 담당 ===
+                const mod = await this.dataLoader.loadMainJs(id);
+                this.mainModule = mod;
+
+                const container = document.querySelector('.viewer-main');
+                mod.mount(container, { problemId: id });
+                return;
+            }
+
+            // === 기존 방식: p5 + animator ===
             this.isContestMode = this.config.contest === true;
 
             // 다른 풀이가 있으면 UI 표시 + 프리로드
