@@ -417,7 +417,7 @@ function renderProblemList(problems) {
         const problemHtmlUrl = isLocal
             ? `./problems/${paddedId}/problem.html`
             : `${workerUrl}/problems/${paddedId}/problem.html`;
-        fetch(problemHtmlUrl)
+        authFetch(problemHtmlUrl, problem.id)
             .then(res => res.ok ? res.text() : Promise.reject('Not found'))
             .then(html => {
                 const card = grid.querySelector(`[data-problem-id="${problem.id}"]`);
