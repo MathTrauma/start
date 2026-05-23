@@ -144,32 +144,6 @@ function canAccessProblem(problem) {
 }
 
 
-// 인증 토큰 가져오기
-async function getAuthToken() {
-    if (typeof supabaseClient === 'undefined') return null;
-    try {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        return session?.access_token || null;
-    } catch {
-        return null;
-    }
-}
-
-// 인증된 fetch (유료 문제용)
-async function authFetch(url, problemId) {
-    const isFree = isFreeProblem(problemId);
-    const headers = {};
-
-    if (!isFree) {
-        const token = await getAuthToken();
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-    }
-
-    return fetch(url, { headers });
-}
-
 // 프리미엄 모달 로드
 let premiumModalLoaded = false;
 async function loadPremiumModal() {
@@ -262,12 +236,7 @@ window.addEventListener('resize', () => {
     }
 });
 
-// 환경 감지 및 URL 설정
-const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-const workerUrl = 'https://euclide-worker.painfultrauma.workers.dev';
-const indexJsonUrl = isLocal
-    ? `./problems/index.json?_t=${Date.now()}`
-    : `${workerUrl}/problems/index.json?_t=${Date.now()}`;
+const indexJsonUrl = `./problems/index.json?_t=${Date.now()}`;
 fetch(indexJsonUrl)
     .then(res => res.json())
     .then(data => {
@@ -404,7 +373,7 @@ function renderProblemList(problems) {
             <a href="${isLocked ? '#' : problem.url}" class="${cardClasses.join(' ')}" data-problem-id="${problem.id}" ${isLocked ? 'onclick="event.preventDefault(); handleLockedProblemClick();"' : ''}>
                 ${lockIcon}
                 <div class="problem-description">
-                    <span class="problem-tag level">${levelLabel}</span>
+                    <span class="problem-tag level level-${problem.level}">${levelLabel}</span>
                     <span class="problem-text skeleton">로딩 중...</span>
                 </div>
             </a>
@@ -414,10 +383,8 @@ function renderProblemList(problems) {
     // 각 카드의 problem.html을 비동기로 로드
     pageProblems.forEach(problem => {
         const paddedId = problem.id.padStart(3, '0');
-        const problemHtmlUrl = isLocal
-            ? `./problems/${paddedId}/problem.html`
-            : `${workerUrl}/problems/${paddedId}/problem.html`;
-        authFetch(problemHtmlUrl, problem.id)
+        const problemHtmlUrl = `./problems/${paddedId}/problem.html`;
+        fetch(problemHtmlUrl, { redirect: 'error' })
             .then(res => res.ok ? res.text() : Promise.reject('Not found'))
             .then(html => {
                 const card = grid.querySelector(`[data-problem-id="${problem.id}"]`);
@@ -426,6 +393,15 @@ function renderProblemList(problems) {
                     if (textEl) {
                         textEl.classList.remove('skeleton');
                         textEl.innerHTML = html.replace(/\n/g, '').replace(/\r/g, '');
+                        if (window.renderMathInElement) {
+                            renderMathInElement(textEl, {
+                                delimiters: [
+                                    { left: '$$', right: '$$', display: true },
+                                    { left: '$', right: '$', display: false }
+                                ],
+                                throwOnError: false
+                            });
+                        }
                     }
                 }
             })

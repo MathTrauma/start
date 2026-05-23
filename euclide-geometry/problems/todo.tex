@@ -1,0 +1,47 @@
+\textbf{[2022 KMO 2차 중등부 1번]}\\
+이등변삼각형이 아닌 예각삼각형 $ABC$의 내접원이 점 $D$, $E$에서 각각 변 $AB$, $BC$에 접한다.
+삼각형 $ABC$의 내심을 $I$라 하면, 직선 $AI$와 $DE$의 교점이 변 $AC$를 지름으로 하는 원 위에
+있음을 보여라.
+
+\vfill
+
+\textbf{[2022 KMO 2차 고등부 5번]}\\
+이등변삼각형이 아닌 예각삼각형 $ABC$의 내접원이 점 $D$, $E$, $F$에서 각각 변 $BC$, $CA$, $AB$에
+접한다. 삼각형 $ABC$의 내심을 $I$, 직선 $AI$와 $DF$의 교점을 $P$, 직선 $BI$와 $EF$의 교점을
+$Q$라 하자. 두 선분 $PQ$와 $CD$의 길이가 같음을 보여라.
+
+% A(-2,0), B(2,0), C(0.5,2.2) 기준
+% I=(0.334,0.881)  E=(-0.248,1.542)  F=(0.334,0)
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+  \tkzDefPoint(-2.000, 0.000){A}
+  \tkzDefPoint( 2.000, 0.000){B}
+  \tkzDefPoint( 0.500, 2.200){C}
+  \tkzDefPoint( 0.334, 0.881){I}
+  \tkzDefPoint( 1.061, 1.377){D}
+  \tkzDefPoint(-0.248, 1.542){E}
+  \tkzDefPoint( 0.334, 0.000){F}
+
+  % 삼각형 ABC
+  \tkzDrawPolygon(A,B,C)
+
+  % 반직선 AI  (I 너머 0.5·|AI| 연장)
+  \tkzDrawSegment[dashed, add=0 and 0.5](A,I)
+
+  % 반직선 BI  (I 너머 0.7·|BI| 연장)
+  \tkzDrawSegment[dashed, add=0 and 0.7](B,I)
+
+  % 직선 EF   (양방향 0.3·|EF| 연장)
+  \tkzDrawSegment[dashed, add=0.3 and 0.3](E,F)
+
+  % 점
+  \tkzDrawPoints(A,B,C,D,I,E,F)
+  \tkzLabelPoint[below left](A){$A$}
+  \tkzLabelPoint[below right](B){$B$}
+  \tkzLabelPoint[above](C){$C$}
+  \tkzLabelPoint[right](D){$D$}
+  \tkzLabelPoint[right](I){$I$}
+  \tkzLabelPoint[left](E){$E$}
+  \tkzLabelPoint[below](F){$F$}
+\end{tikzpicture}
+\end{center}

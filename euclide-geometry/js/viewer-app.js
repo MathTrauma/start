@@ -9,7 +9,7 @@ import { LIB_BASE } from './env.js';
 
 const [
     { sketchContext },
-    { CONFIG, THEMES, DEFAULT_THEME, setBaseUrl, useProductionUrl, useLocalUrl },
+    { CONFIG, THEMES, DEFAULT_THEME },
     { applyTheme }
 ] = await Promise.all([
     import(LIB_BASE + 'sketch-context.js'),
@@ -561,5 +561,4 @@ if (typeof window !== 'undefined') {
     app.init();
 }
 
-// CONFIG 함수들도 re-export (외부에서 URL 변경 가능)
-export { EuclideApp, app, CONFIG, setBaseUrl, useProductionUrl, useLocalUrl };
+export { EuclideApp, app, CONFIG };

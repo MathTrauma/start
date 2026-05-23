@@ -157,10 +157,21 @@ h1 {
     color: #d8dbde;
 }
 
-.problem-card.viewed .problem-tag.level {
-    background-color: #6b7178;
-    color: #edf0f2;
-}
+/* 레벨별 색상 — 평상시(선명한 채도) */
+.problem-tag.level-0 { background-color: #e6b949; }  /* 기본정리 — 골드 */
+.problem-tag.level-1 { background-color: #3dd17c; }  /* Level 1 — 초록 */
+.problem-tag.level-2 { background-color: #3ab4f5; }  /* Level 2 — 파랑 */
+.problem-tag.level-3 { background-color: #ff9a2e; }  /* Level 3 — 주황 */
+.problem-tag.level-4 { background-color: #f04c34; }  /* Level 4 — 빨강 */
+.problem-tag.level-9 { background-color: #b05ee0; }  /* 영재고 — 자주 */
+
+/* 시청 완료 — 같은 계열의 진한 톤 */
+.problem-card.viewed .problem-tag.level-0 { background-color: #a67f1e; color: #fff; }
+.problem-card.viewed .problem-tag.level-1 { background-color: #1f9e50; color: #fff; }
+.problem-card.viewed .problem-tag.level-2 { background-color: #1f7fbd; color: #fff; }
+.problem-card.viewed .problem-tag.level-3 { background-color: #c86810; color: #fff; }
+.problem-card.viewed .problem-tag.level-4 { background-color: #b32d18; color: #fff; }
+.problem-card.viewed .problem-tag.level-9 { background-color: #7a2fa8; color: #fff; }
 
 /* 잠금 문제 스타일 */
 .problem-card.locked {
@@ -235,7 +246,6 @@ h1 {
 }
 
 .problem-tag.level {
-    background-color: #8b7d6b;
     color: #fff;
     display: inline-block;
     margin-right: 10px;

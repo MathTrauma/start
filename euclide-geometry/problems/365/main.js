@@ -63,31 +63,26 @@ export function destroy() {
 
 // --- HTML 로더 ---
 
-const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-const WORKER_BASE = 'https://euclide-worker.painfultrauma.workers.dev';
-
-function getBaseUrl() {
-    return isLocal ? '.' : WORKER_BASE;
-}
-
-async function getAuthHeaders() {
-    const headers = {};
-    if (!isLocal && typeof window.supabaseClient !== 'undefined') {
-        try {
-            const { data: { session } } = await window.supabaseClient.auth.getSession();
-            if (session) headers['Authorization'] = `Bearer ${session.access_token}`;
-        } catch { /* ignore */ }
+function renderKaTeX(el) {
+    if (window.renderMathInElement) {
+        renderMathInElement(el, {
+            delimiters: [
+                { left: '$$', right: '$$', display: true },
+                { left: '$', right: '$', display: false }
+            ],
+            throwOnError: false
+        });
     }
-    return headers;
 }
 
 async function loadHtml(pid, file, targetId) {
     try {
-        const url = `${getBaseUrl()}/problems/${pid}/${file}`;
-        const headers = await getAuthHeaders();
-        const res = await fetch(url, { headers });
+        const url = `./problems/${pid}/${file}`;
+        const res = await fetch(url);
         if (!res.ok) throw new Error(res.status);
-        document.getElementById(targetId).innerHTML = await res.text();
+        const el = document.getElementById(targetId);
+        el.innerHTML = await res.text();
+        renderKaTeX(el);
     } catch {
         document.getElementById(targetId).textContent = '문제를 불러올 수 없습니다.';
     }
@@ -95,11 +90,12 @@ async function loadHtml(pid, file, targetId) {
 
 async function loadSolutionHtml(pid) {
     try {
-        const url = `${getBaseUrl()}/problems/${pid}/solution.html`;
-        const headers = await getAuthHeaders();
-        const res = await fetch(url, { headers });
+        const url = `./problems/${pid}/solution.html`;
+        const res = await fetch(url);
         if (res.ok) {
-            document.getElementById('solution-text').innerHTML = await res.text();
+            const el = document.getElementById('solution-text');
+            el.innerHTML = await res.text();
+            renderKaTeX(el);
         }
     } catch { /* 풀이 없음 — 무시 */ }
 }

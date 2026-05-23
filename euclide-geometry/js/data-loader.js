@@ -4,7 +4,7 @@
  */
 
 import { LIB_BASE } from './env.js';
-const { CONFIG, isFreeProblem } = await import(LIB_BASE + 'config.js');
+const { CONFIG } = await import(LIB_BASE + 'config.js');
 
 export class DataLoader {
     constructor() {
@@ -18,32 +18,6 @@ export class DataLoader {
         return CONFIG.API.getUrl(endpoint);
     }
 
-    /** * 인증 토큰 가져오기 */
-    async _getAuthToken() {
-        if (typeof window.supabaseClient === 'undefined') return null;
-        try {
-            const { data: { session } } = await window.supabaseClient.auth.getSession();
-            return session?.access_token || null;
-        } catch {
-            return null;
-        }
-    }
-
-    /** * 인증된 fetch (유료 문제용) */
-    async _authFetch(url, problemId) {
-        const isFree = isFreeProblem(problemId);
-        const headers = {};
-
-        if (!isFree) {
-            const token = await this._getAuthToken();
-            if (token) {
-                headers['Authorization'] = `Bearer ${token}`;
-            }
-        }
-
-        return fetch(url, { headers });
-    }
-
     async loadConfig(problemId) {
         if (this.cache.has(problemId)) {
             return this.cache.get(problemId);
@@ -51,7 +25,7 @@ export class DataLoader {
 
         try {
             const url = this._getUrl(CONFIG.API.ENDPOINTS.CONFIG(problemId));
-            const response = await this._authFetch(url, problemId);
+            const response = await fetch(url);
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
                 throw new Error(errorData.error || `Config load failed: ${response.status}`);
@@ -68,8 +42,7 @@ export class DataLoader {
 
     async loadProblemHtml(problemId) {
         try {
-            // problem.html은 Vercel에서 직접 서빙 (인증 불필요)
-            const url = `./problems/${problemId}/problem.html`;
+            const url = this._getUrl(CONFIG.API.ENDPOINTS.PROBLEM_HTML(problemId));
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`Problem HTML load failed: ${response.status}`);
@@ -89,7 +62,7 @@ export class DataLoader {
 
         try {
             const url = this._getUrl(CONFIG.API.ENDPOINTS.SOLUTION_HTML(problemId, solNum));
-            const response = await this._authFetch(url, problemId);
+            const response = await fetch(url);
             if (!response.ok) {
                 console.warn(`Solution HTML not found for ${problemId} (sol ${solNum})`);
                 return null;
@@ -150,10 +123,7 @@ export class DataLoader {
     async hasMainJs(problemId) {
         try {
             const url = this._getUrl(CONFIG.API.ENDPOINTS.MAIN(problemId));
-            const headers = {};
-            const token = await this._getAuthToken();
-            if (token) headers['Authorization'] = `Bearer ${token}`;
-            const response = await fetch(url, { method: 'HEAD', headers });
+            const response = await fetch(url, { method: 'HEAD' });
             return response.ok;
         } catch {
             return false;
@@ -163,7 +133,7 @@ export class DataLoader {
     /** main.js 로드 및 실행, mount 함수 반환 */
     async loadMainJs(problemId) {
         const url = this._getUrl(CONFIG.API.ENDPOINTS.MAIN(problemId));
-        const response = await this._authFetch(url, problemId);
+        const response = await fetch(url);
         if (!response.ok) throw new Error('main.js 로드 실패');
         let scriptText = await response.text();
         scriptText = this._transformScript(scriptText);
@@ -184,7 +154,7 @@ export class DataLoader {
 
         if (!scriptText) {
             const url = this._getUrl(CONFIG.API.ENDPOINTS.SKETCH(problemId, solNum));
-            const response = await this._authFetch(url, problemId);
+            const response = await fetch(url);
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
                 throw new Error(errorData.error || '스크립트 로드 실패');
@@ -202,7 +172,7 @@ export class DataLoader {
             const cacheKey = `${problemId}-${sol.id}`;
             if (this.scriptTextCache.has(cacheKey)) return;
             const url = this._getUrl(CONFIG.API.ENDPOINTS.SKETCH(problemId, sol.id));
-            const response = await this._authFetch(url, problemId);
+            const response = await fetch(url);
             if (response.ok) {
                 const text = await response.text();
                 this.scriptTextCache.set(cacheKey, text);
@@ -216,7 +186,7 @@ export class DataLoader {
             const cacheKey = `${problemId}-${sol.id}`;
             if (this.solutionHtmlCache.has(cacheKey)) return;
             const url = this._getUrl(CONFIG.API.ENDPOINTS.SOLUTION_HTML(problemId, sol.id));
-            const response = await this._authFetch(url, problemId);
+            const response = await fetch(url);
             if (response.ok) {
                 const html = await response.text();
                 this.solutionHtmlCache.set(cacheKey, html);
