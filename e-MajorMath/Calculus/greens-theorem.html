@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Green's Theorem — 전공수학</title>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    macros: {
+      R: '\\mathbb{R}',
+      bd: '\\partial',
+      vi: '\\mathbf{i}',
+      vj: '\\mathbf{j}',
+      vn: '\\mathbf{n}',
+      vF: '\\mathbf{F}',
+      dS: '\\,d\\mathbf{S}',
+      ds: '\\,ds',
+      Div: '\\operatorname{div}'
+    }
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Serif KR', 'Batang', serif;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 30px 60px;
+    line-height: 1.8;
+    color: #1a1a1a;
+    background: #fff;
+  }
+
+  .nav { margin-bottom: 20px; }
+  .nav a { font-size: 13px; color: #888; text-decoration: none; }
+  .nav a:hover { color: #333; }
+
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 16px;
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 22px; margin-bottom: 4px; }
+  .header .subtitle { font-size: 14px; color: #888; }
+
+  .problem { margin-bottom: 40px; }
+  .problem-source { font-size: 12px; color: #999; margin-bottom: 6px; }
+  .problem-title { font-weight: bold; margin-bottom: 8px; font-size: 15px; }
+  .problem-body { font-size: 15px; padding-left: 4px; }
+
+  .display-eq { margin: 14px 0; text-align: center; }
+
+  details.solution {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #f8f8f8;
+    border-left: 3px solid #667eea;
+    border-radius: 4px;
+  }
+  details.solution summary {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    color: #667eea;
+    user-select: none;
+  }
+  details.solution .sol-body {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+  .sol-answer { margin-top: 10px; font-weight: bold; }
+
+  .sub-problem {
+    margin-top: 12px;
+    padding-left: 8px;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="nav"><a href="/e-MajorMath/">← 전공수학</a></div>
+
+<div class="header">
+  <h1>Green's Theorem</h1>
+  <div class="subtitle">그린 정리</div>
+</div>
+
+<!-- ========== 문제 1 ========== -->
+
+<div class="problem">
+  <div class="problem-source">고급수학 2 (2022-2) 문제 4 · 20점</div>
+  <div class="problem-title">문제 1. 좌표평면에서 시작점이 $(\pi, 0)$이고 끝점이 $(0, 6\pi)$인 선분을 따라 벡터장 $\vF(x,y)=(\cos x\sin y,\; xy+\sin x\cos y)$의 선적분을 구하시오.</div>
+  <div class="problem-body">
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        $\vF = \vF_1 + \vF_2$로 분해한다.
+        $\vF_1 = (\cos x\sin y,\;\sin x\cos y)$,
+        $\vF_2 = (0,\; xy)$.
+
+        <p>$\vF_1$의 잠재함수는 $\sin x\sin y$이므로</p>
+
+        <div class="display-eq">$$
+          \int_C \vF_1\cdot d\mathbf{s}
+          = \bigl[\sin x\sin y\bigr]_{(\pi,0)}^{(0,6\pi)} = 0
+        $$</div>
+
+        $C$를 $X(t) = ((1-t)\pi,\;6\pi t)$, $0 \le t \le 1$로 매개화하면
+
+        <div class="display-eq">$$
+          \int_C \vF_2\cdot d\mathbf{s}
+          = \int_0^1 6\pi\cdot(1-t)\pi\cdot 6\pi t\,dt
+          = 36\pi^3\int_0^1 t(1-t)\,dt = 6\pi^3
+        $$</div>
+
+        <div class="sol-answer">답: $6\pi^3$</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ========== 문제 2 ========== -->
+
+<div class="problem">
+  <div class="problem-source">고급수학 2 (2022-2) 문제 5 · 25점</div>
+  <div class="problem-title">문제 2. 좌표평면 위의 데카르트 곡선</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      C : x^3 + y^3 = 3xy, \quad (x,y \ge 0)
+    $$</div>
+
+    로 둘러싸인 영역을 $D$라 하자.
+
+    <div class="sub-problem">
+      <p><b>(a)</b> (10점) $D$의 넓이를 구하시오.</p>
+
+      <details class="solution">
+        <summary>풀이</summary>
+        <div class="sol-body">
+          $y = tx$로 두면 $(t^3+1)x^3 = 3tx^2$이므로
+
+          <div class="display-eq">$$
+            x = \frac{3t}{t^3+1},\quad
+            y = \frac{3t^2}{t^3+1},\quad
+            0 \le t < \infty
+          $$</div>
+
+          그린 정리에 의해
+
+          <div class="display-eq">$$
+            \text{Area}(D)
+            = \frac{1}{2}\oint_C (x\,dy - y\,dx)
+            = \frac{1}{2}\int_0^\infty \frac{9t^2}{(1+t^3)^2}\,dt
+            = \frac{3}{2}
+          $$</div>
+
+          <div class="sol-answer">답: $\dfrac{3}{2}$</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="sub-problem">
+      <p><b>(b)</b> (15점) $C$에서 $y \ge \frac{1}{2}x$를 만족하는 부분을 $X$라고 하자. 벡터장</p>
+
+      <div class="display-eq">$$
+        \vF(x,y) = \frac{(x-1,\;y-1)}{(x-1)^2+(y-1)^2}
+      $$</div>
+
+      가 곡선 $X$를 수직으로 통과하는 양(flux)의 절댓값을 구하시오.
+
+      <details class="solution">
+        <summary>풀이</summary>
+        <div class="sol-body">
+          $\vF$는 중심이 $(1,1)$인 이차원 입체각 벡터장이며, $\Div\vF = 0$이다.
+          $y = \frac{1}{2}x$와 $C$의 교점은 $(0,0)$과 $(\frac{4}{3}, \frac{2}{3})$이다.
+
+          <p>$(0,0)$에서 $(\frac{4}{3},\frac{2}{3})$까지의 선분 $l_1$과
+          $(1,1)$ 중심의 소원 $l_2$를 도입하여 발산 정리를 적용하면,</p>
+
+          <div class="display-eq">$$
+            0 = \int_X \vF\cdot\vn\ds
+              + \int_{l_1} \vF\cdot\vn\ds - 2\pi
+          $$</div>
+
+          $l_1$ 위의 플럭스는 $(1,1)$에서 바라본 각도 변화량 $\frac{\pi}{2}$와 같으므로,
+
+          <div class="display-eq">$$
+            \int_X \vF\cdot\vn\ds
+            = 2\pi - \frac{\pi}{2} = \frac{3}{2}\pi
+          $$</div>
+
+          <div class="sol-answer">답: $\dfrac{3\pi}{2}$</div>
+        </div>
+      </details>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 문제 3 ========== -->
+
+<div class="problem">
+  <div class="problem-source">미적분학 2 (2019-2) 문제 3 · 20점</div>
+  <div class="problem-title">문제 3. 양수 $r$에 대하여, $D_r = \{(x,y) \in \R^2 \mid x^2+y^2 \le r^2\}$이라 하고</div>
+  <div class="problem-body">
+    이것의 경계를 $C_r : x^2+y^2=r^2$이라 하자.
+    또, $\R^2$에서 정의된 이급함수 $f(x,y)$에 대하여
+
+    <div class="display-eq">$$
+      \varphi(r) = \frac{1}{2\pi r}\int_{C_r} f\ds
+    $$</div>
+
+    를 생각하자. 이때,
+
+    <div class="display-eq">$$
+      \varphi'(r)
+      = \frac{1}{2\pi r}
+        \iint_{D_r}\left(\frac{\bd^2 f}{\bd x^2}+\frac{\bd^2 f}{\bd y^2}\right)dx\,dy
+    $$</div>
+
+    임을 보이시오.
+  </div>
+</div>
+
+<!-- ========== 문제 4 ========== -->
+
+<div class="problem">
+  <div class="problem-source">미적분학 2 (2019-2) 문제 4 · 20점</div>
+  <div class="problem-title">문제 4. 평면 위의 점</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      A_k = \left(\cos\frac{k\pi}{4},\;\sin\frac{k\pi}{4}\right)
+      \qquad (k=1,2,\cdots,8)
+    $$</div>
+
+    에 대해 점 $A_1, A_2, \cdots, A_8$을 꼭짓점으로 가지는
+    정팔각형을 생각하자.
+    점 $A_1$에서 출발하여 반시계방향으로
+    정팔각형의 둘레를 따라 $A_7$에 도착하는 곡선을 $C$라 할 때,
+
+    <div class="display-eq">$$
+      \int_C \frac{-y}{x^2+y^2}\,dx
+      + \frac{x}{x^2+y^2}\left(1+x^2+y^2\right)dy
+    $$</div>
+
+    를 구하시오.
+  </div>
+</div>
+
+<!-- ========== 문제 5 ========== -->
+
+<div class="problem">
+  <div class="problem-source">미적분학 2 (2019-2) 문제 5 · 20점</div>
+  <div class="problem-title">문제 5. 사이클로이드 곡선 $X(t) = (t-\sin t,\;1-\cos t)$, $(0 \le t \le 2\pi)$의 단위법벡터장 $\vn$을 $\vn \cdot \vj \ge 0$이 되도록 정할 때, 벡터장</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \vF(x,y)
+      = \left(x - x^2 + \sin(y^2+1)\right)\vi
+      + \left(\sin\frac{x}{2} - y + 2xy\right)\vj
+    $$</div>
+
+    에 대하여,
+
+    <div class="display-eq">$$
+      \int_X \vF \cdot \vn\ds
+    $$</div>
+
+    의 값을 구하시오.
+  </div>
+</div>
+
+</body>
+</html>

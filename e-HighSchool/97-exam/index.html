@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> 97학년도 수능 — 명제와 집합</title>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']]
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Serif KR', 'Batang', serif;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 30px 60px;
+    line-height: 1.8;
+    color: #1a1a1a;
+    background: #fff;
+  }
+
+  .nav { margin-bottom: 20px; }
+  .nav a { font-size: 13px; color: #888; text-decoration: none; }
+  .nav a:hover { color: #333; }
+
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 16px;
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 22px; margin-bottom: 4px; }
+  .header .subtitle { font-size: 14px; color: #888; }
+
+  .problem { margin-bottom: 40px; }
+  .problem-source { font-size: 12px; color: #999; margin-bottom: 6px; }
+  .problem-title { font-weight: bold; margin-bottom: 8px; font-size: 15px; }
+  .problem-body { font-size: 15px; padding-left: 4px; }
+
+  .display-eq { margin: 14px 0; text-align: center; }
+
+  details.solution {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #f8f8f8;
+    border-left: 3px solid #667eea;
+    border-radius: 4px;
+  }
+  details.solution summary {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    color: #667eea;
+    user-select: none;
+  }
+  details.solution .sol-body {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+  .sol-answer { margin-top: 10px; font-weight: bold; }
+</style>
+
+</head>
+<body>
+
+<div class="nav"><a href="/e-HighSchool/">← 고교수학</a></div>
+
+<div class="header">
+  <h1>명제와 집합</h1>
+</div>
+
+<div class="problem">
+  <div class="problem-source"> 97학년도 수능 29번 </div>
+  <div class="problem-title"> 두 방정식 $P(x)=0$, $Q(x)=0$의 서로 다른 실근의 개수는 7개, 9개이고, 집합</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      A = \{ (x,y) \mid P(x)Q(y)=0 \text{ 이고 } Q(x)P(y)=0,\;
+      x\text{와 } y\text{는 실수} \}
+    $$</div>
+
+    는 무한집합이다. 집합 $A$의 부분집합
+
+    <div class="display-eq">$$
+      B = \{ (x,y) \mid (x,y) \in A \text{ 이고 } x = y \}
+    $$</div>
+
+    의 원소의 개수를 $n(B)$라 하면,
+    이것은 $P(x)$, $Q(x)$에 따라 변한다.
+    $n(B)$의 최댓값을 구하라.
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        $P(x)Q(y)=0$는 $P(x)=0 \vee Q(y)=0$으로,
+        $Q(x)P(y)=0$은 $Q(x)=0 \vee P(y)=0$으로 바꾸어 보자.
+
+        <p style="margin-top:10px">집합 $A$의 조건은</p>
+
+        <div class="display-eq">$$
+        \begin{aligned}
+        & (P(x)=0 \vee Q(y)=0) \wedge (Q(x)=0 \vee P(y)=0)
+        \\[6pt]
+        \Longleftrightarrow\quad
+        & \{ (P(x)=0 \vee Q(y)=0) \wedge Q(x)=0 \}
+          \vee \{ (P(x)=0 \vee Q(y)=0) \wedge P(y)=0 \}
+        \\[6pt]
+        \Longleftrightarrow\quad
+        & \{ (P(x)=0 \wedge Q(x)=0) \vee (Q(y)=0 \wedge Q(x)=0) \}
+          \vee \{ (P(x)=0 \wedge P(y)=0) \vee (Q(y)=0 \wedge P(y)=0) \}
+        \end{aligned}
+        $$</div>
+
+        $x = y$를 대입하면 $B$의 조건은
+
+        <div class="display-eq">$$
+        (P(x)=0 \wedge Q(x)=0) \vee (Q(x)=0 \wedge Q(x)=0)
+        \vee (P(x)=0 \wedge P(x)=0) \vee (Q(x)=0 \wedge P(x)=0)
+        $$</div>
+
+        <div class="display-eq">$$
+        \Longleftrightarrow\quad P(x)=0 \vee Q(x)=0
+        $$</div>
+
+        <p style="margin-top:10px">
+          $A$가 무한집합이려면 $P$와 $Q$에 공통근이 있어야 한다는 조건은 없다.
+          $B$의 원소 수는 $P(x)=0$ 또는 $Q(x)=0$을 만족하는 서로 다른 실수 $x$의 개수이다.
+        </p>
+        <p>
+          $P$의 근 7개와 $Q$의 근 9개가 모두 다르면 $n(B) = 16$이지만,
+          이 경우 $A$가 무한집합인지 확인해야 한다.
+        </p>
+        <p>
+          $Q(x)=0 \wedge Q(y)=0$ 조건에서 $Q$의 근이 9개이므로
+          $(x,y)$ 순서쌍은 $9 \times 9 = 81$개 (유한).
+          마찬가지로 $P(x)=0 \wedge P(y)=0$은 $7 \times 7 = 49$개.
+          $P(x)=0 \wedge Q(x)=0$은 공통근의 수에 따라 결정.
+        </p>
+        <p>
+          $A$가 무한집합이려면 $Q(y)=0 \wedge P(y)=0$, 즉 공통근이 최소 1개 있어야 한다
+          — 이 경우 $Q(x)=0$인 $x$ 9개 각각에 대해 $(x, y)$에서 $y$는 공통근이면 되므로
+          무한이 아님. 실제로 무한이 되려면
+          "$P(x)=0$인 모든 $x$에 대해 $y$가 자유"이거나 그 반대여야 한다.
+        </p>
+        <p>
+          조건을 다시 보면: $P(x)=0 \wedge P(y)=0$ 부분에서
+          $P$의 근 $\alpha$에 대해 $x=\alpha$이면 $y$는 $P$의 임의의 근 — 유한.
+          무한집합이 되려면 $Q(y)=0 \wedge Q(x)=0$ 부분이 아닌,
+          원래 조건에서 $y$가 자유로운 경우가 필요하다.
+        </p>
+        <p>
+          원래 조건으로 돌아가면: $P(x)=0$이고 $Q(x)=0$이면 (공통근)
+          $y$는 임의의 실수가 될 수 있으므로 $A$는 무한집합이 된다.
+          따라서 공통근이 최소 1개 필요하다.
+        </p>
+        <p>
+          공통근이 $k$개이면 $n(B) = 7 + 9 - k = 16 - k$.
+          $k \ge 1$이므로 $n(B)$의 최댓값은
+        </p>
+
+        <div class="sol-answer">답: $15$</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+</body>
+</html>

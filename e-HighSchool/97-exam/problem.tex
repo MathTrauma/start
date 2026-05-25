@@ -1,0 +1,32 @@
+두 방정식 $P(x)=0,\, Q(x)=0$ 의 서로 다른 실근의 개수는 
+7 개, 9개이고, 집합
+\[ 
+A= 
+\{ (x,y) \,|\, 
+P(x)Q(y)=0 \mbox{ 이고 } Q(x)P(y) =0, \;
+x\mbox{와 } y\mbox{는 실수} \}
+\]
+는 무한집합이다. 집합 $A$ 의 부분집합 
+\[ B = \{ (x,y) \,|\, (x,y) \in A \mbox{ 이고 } x=y \} \]
+의 원소의 개수를 $n(B)$ 라고 하면, 
+이것은 $P(x),\, Q(x)$ 에 따라 변한다. 
+$n(B)$ 의 최댓값을 구하라.\\
+
+
+[풀이] 
+$P(x)Q(y) =0$ 는 $P(x)=0 \vee Q(y)=0$ 로
+$Q(x)P(y) =0$ 은 $Q(x)=0 \vee P(y)=0$ 로 바꾸어 보자.
+집합 $A$ 의 조건은
+\[
+\begin{aligned}
+& (P(x)=0 \vee Q(y)=0 ) \wedge (Q(x)=0 \vee P(y)=0 )
+\\[6pt]
+\Longleftrightarrow\quad
+& \{ (P(x)=0 \vee Q(y)=0 ) \wedge Q(x)=0 \}
+  \vee \{ (P(x)=0 \vee Q(y)=0 ) \wedge P(y)=0 \}
+\\[6pt]
+\Longleftrightarrow\quad
+& \{ (P(x)=0 \wedge Q(x)=0 ) \vee (Q(y)=0 \wedge Q(x)=0 ) \}
+  \vee \{ (P(x)=0 \wedge P(y)=0 ) \vee (Q(y)=0 \wedge P(y)=0 ) \}
+\end{aligned}
+\]

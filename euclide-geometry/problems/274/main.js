@@ -2,7 +2,7 @@ import p5 from 'p5';
 import { applyTheme, getCanvasSize } from '../../lib/draw-utils.js';
 import { getIncenter, getCircumcenter, circleLineIntersection, projectPointToLine } from '../../lib/geometry.js';
 import { XAnimator } from '../../lib/x_animator.js';
-import { XPolygon, XSegment, XPoint, XAngleMarker, XCircle, XSegmentMarker } from '../../lib/x_object.js';
+import { XPolygon, XSegment, XPoint, XAngleMarker, XCircle, XSegmentMarker, XRightAngle } from '../../lib/x_object.js';
 import { COLORS } from '../../lib/config.js';
 import { UIController } from '../../js/ui-controller.js';
 
@@ -146,23 +146,23 @@ function setupControls(animator, phaseNames) {
 }
 
 // pop 애니메이션: centroid 기준 scale 0→1
-const createPopCallback = (vertices, centroid, duration) => {
+const createPopFactory = (targets, centroid, duration) => {
     return () => {
         let elapsed = 0, lastTime = null;
-        const originals = vertices.map(v => ({ x: v.x, y: v.y }));
-        return (obj) => {
-            const now = performance.now();
-            if (!lastTime) lastTime = now;
-            elapsed += (now - lastTime) / 1000;
-            lastTime = now;
-            const t = Math.min(1, elapsed / duration);
-            const ease = 1 - Math.pow(1 - t, 3);
-            vertices.forEach((v, i) => {
-                v.x = centroid.x + (originals[i].x - centroid.x) * ease;
-                v.y = centroid.y + (originals[i].y - centroid.y) * ease;
+        return (obj, instant) => {
+            const ease = instant ? 1 : (() => {
+                const now = performance.now();
+                if (!lastTime) lastTime = now;
+                elapsed += (now - lastTime) / 1000;
+                lastTime = now;
+                return 1 - Math.pow(1 - Math.min(1, elapsed / duration), 3);
+            })();
+            obj.vertices.forEach((v, i) => {
+                v.x = centroid.x + (targets[i].x - centroid.x) * ease;
+                v.y = centroid.y + (targets[i].y - centroid.y) * ease;
             });
-            if (obj._perimeterDirty !== undefined) obj._perimeterDirty = true;
-            if (t >= 1) obj.frameCallback = null;
+            obj._perimeterDirty = true;
+            if (ease >= 1) obj.frameCallback = null;
         };
     };
 };
@@ -221,23 +221,16 @@ function createSketch(pid) {
             // 내접원 반지름
             inR = p5.Vector.dist(I, P);
 
-            const center = p.createVector((A.x + B.x + C.x) / 3, (A.y + B.y + C.y) / 3);
-
             animator = new XAnimator(p);
             animator.initViewport([A, B, C, D, E, I], size);
 
             // ===== Problem Phase 1 =====
-            const triVerts = [A.copy(), B.copy(), C.copy()];
-            const triCentroid = p.createVector(
-                (A.x + B.x + C.x) / 3,
-                (A.y + B.y + C.y) / 3
-            );
-            // pop 시작 시 centroid에 모아둠
-            triVerts.forEach(v => { v.x = triCentroid.x; v.y = triCentroid.y; });
+            const center = p.createVector((A.x + B.x + C.x) / 3, (A.y + B.y + C.y) / 3);
+            const popTargets = [A.copy(), B.copy(), C.copy()];
 
             animator.registerPhase('problem1', [
-                { id: 'triABC', object: new XPolygon(p, triVerts), action: 'show' },
-                { id: 'triABC', setFrameCallbackFactory: createPopCallback(triVerts, triCentroid, 0.5) },
+                { id: 'triABC', object: new XPolygon(p, [center.copy(), center.copy(), center.copy()]), action: 'show' },
+                { id: 'triABC', setFrameCallbackFactory: createPopFactory(popTargets, center, 0.5) },
                 { delay: 0.6 },
                 {
                     group: [
@@ -290,32 +283,85 @@ function createSketch(pid) {
                     ],
                     parallel: true
                 },
-                { delay: 1.0 }
+                { delay: 0.7 },
+                {
+                    group: [
+                        { id: 'rightIRA', object: new XRightAngle(p, I, R, A, 16, { pixel: true }), animate: { mode: 'draw', duration: 0.8 } },
+                        { id: 'rightAQI', object: new XRightAngle(p, A, Q, I, 16, { pixel: true }), animate: { mode: 'draw', duration: 0.8 } },
+                        { id: 'rightEPI', object: new XRightAngle(p, E, P, I, 16, { pixel: true }), animate: { mode: 'draw', duration: 0.8 } }
+                    ],
+                    parallel: true
+                },
+                { delay: 1.5 }
             ]);
 
             // ===== Solution Phase 2 =====
             animator.registerPhase('solution2', [
-                { id: 'circIC', action: 'fade', opacity: 0, duration: 0.7 },
+                // hide ic || recover O1 || draw seg IB
                 {
                     group: [
+                        { id: 'circIC', action: 'fade', opacity: 0, duration: 0.7 },
+                        { id: 'circO1', action: 'recover', duration: 0.7 },
+                        { id: 'segIB', object: XSegment(p, I, B), animate: { mode: 'draw', duration: 0.7 } }
+                    ],
+                    parallel: true
+                },
+                // draw angles IBR, DBI with markt
+                {
+                    group: [
+                        { id: 'angleIBR', object: new XAngleMarker(p, I, B, R, { marker: 'triangle' }), animate: { mode: 'draw', duration: 0.7 } },
+                        { id: 'angleDBI', object: new XAngleMarker(p, D, B, I, { marker: 'triangle' }), animate: { mode: 'draw', duration: 0.7 } }
+                    ],
+                    parallel: true
+                },
+                // pulse angles || draw segs IA, ID with mark[2]
+                {
+                    group: [
+                        { id: 'angleIBR', animate: { mode: 'pulse', duration: 0.8 } },
+                        { id: 'angleDBI', animate: { mode: 'pulse', duration: 0.8 } },
                         { id: 'segIA', object: XSegment(p, I, A), animate: { mode: 'draw', duration: 0.8 } },
-                        { id: 'segIB', object: XSegment(p, I, B), animate: { mode: 'draw', duration: 0.8 } },
-                        { id: 'segIC', object: XSegment(p, I, C), animate: { mode: 'draw', duration: 0.8 } }
+                        { id: 'segID', object: XSegment(p, I, D), animate: { mode: 'draw', duration: 0.8 } },
+                        { id: 'markIA', object: new XSegmentMarker(p, I, A, { mark: 2 }), animate: { mode: 'draw', duration: 0.8 } },
+                        { id: 'markID', object: new XSegmentMarker(p, I, D, { mark: 2 }), animate: { mode: 'draw', duration: 0.8 } }
                     ],
                     parallel: true
                 },
+                { delay: 2.0 },
+                // recover O2 || draw seg IC
                 {
                     group: [
-                        { id: 'markIA', object: new XSegmentMarker(p, I, A, { mark: 2 }), animate: { mode: 'draw', duration: 0.3 } },
-                        { id: 'markIB', object: new XSegmentMarker(p, I, B, { mark: 2 }), animate: { mode: 'draw', duration: 0.3 } },
-                        { id: 'markIC', object: new XSegmentMarker(p, I, C, { mark: 2 }), animate: { mode: 'draw', duration: 0.3 } }
+                        { id: 'circO2', action: 'recover', duration: 0.7 },
+                        { id: 'segIC', object: XSegment(p, I, C), animate: { mode: 'draw', duration: 0.7 } }
                     ],
                     parallel: true
                 },
-                { id: 'circO1', action: 'recover', duration: 0.3 },
+                // draw angles QCI, ICE with marker star
                 {
                     group: [
-                        { id: 'angleCDI', object: new XAngleMarker(p, C, D, I, { marker: 'circle' }), animate: { mode: 'draw', duration: 0.8 } },
+                        { id: 'angleQCI', object: new XAngleMarker(p, Q, C, I, { marker: 'star' }), animate: { mode: 'draw', duration: 0.7 } },
+                        { id: 'angleICE', object: new XAngleMarker(p, I, C, E, { marker: 'star' }), animate: { mode: 'draw', duration: 0.7 } }
+                    ],
+                    parallel: true
+                },
+                // pulse angles QCI, ICE || draw seg IE with mark[2]
+                {
+                    group: [
+                        { id: 'angleQCI', animate: { mode: 'pulse', duration: 0.8 } },
+                        { id: 'angleICE', animate: { mode: 'pulse', duration: 0.8 } },
+                        { id: 'segIE', object: XSegment(p, I, E), animate: { mode: 'draw', duration: 0.8 } },
+                        { id: 'markIE', object: new XSegmentMarker(p, I, E, { mark: 2 }), animate: { mode: 'draw', duration: 0.8 } }
+                    ],
+                    parallel: true
+                },
+                { delay: 2.0 }
+            ]);
+
+            // ===== Solution Phase 3 =====
+            animator.registerPhase('solution3', [
+                { id: 'circO1', animate: { mode: 'pulse', duration: 1.5 } },
+                {
+                    group: [
+                        { id: 'anglePDI', object: new XAngleMarker(p, P, D, I, { marker: 'circle' }), animate: { mode: 'draw', duration: 0.8 } },
                         { id: 'angleBAI', object: new XAngleMarker(p, B, A, I, { marker: 'circle' }), animate: { mode: 'draw', duration: 0.8 } }
                     ],
                     parallel: true
@@ -323,15 +369,38 @@ function createSketch(pid) {
                 {
                     group: [
                         { id: 'fillIRA', object: new XPolygon(p, [I, R, A], { filled: true, fillColor: [...p.theme.fillBlue.slice(0, 3), 60] }), animate: { mode: 'draw', duration: 1.3 } },
-                        { id: 'fillIPB', object: new XPolygon(p, [I, P, B], { filled: true, fillColor: [...p.theme.fillRed.slice(0, 3), 60] }), animate: { mode: 'draw', duration: 1.3 } }
+                        { id: 'fillIPD', object: new XPolygon(p, [I, P, D], { filled: true, fillColor: [...p.theme.fillBlue.slice(0, 3), 60] }), animate: { mode: 'draw', duration: 1.3 } }
                     ],
                     parallel: true
                 },
-                { delay: 1.0 }
+                { delay: 1.5 },
+                {
+                    group: [
+                        { id: 'circO1', action: 'fade', opacity: 0.3, duration: 0.5 },
+                        { id: 'circO2', action: 'recover', duration: 0.5 }
+                    ],
+                    parallel: true
+                },
+                { id: 'circO2', animate: { mode: 'pulse', duration: 1.5 } },
+                {
+                    group: [
+                        { id: 'angleIEP', object: new XAngleMarker(p, I, E, P, { marker: 'circle' }), animate: { mode: 'draw', duration: 0.8 } },
+                        { id: 'angleIAQ', object: new XAngleMarker(p, I, A, Q, { marker: 'circle' }), animate: { mode: 'draw', duration: 0.8 } }
+                    ],
+                    parallel: true
+                },
+                {
+                    group: [
+                        { id: 'fillIQA', object: new XPolygon(p, [I, Q, A], { filled: true, fillColor: [...p.theme.fillBlue.slice(0, 3), 60] }), animate: { mode: 'draw', duration: 1.3 } },
+                        { id: 'fillIPE', object: new XPolygon(p, [I, P, E], { filled: true, fillColor: [...p.theme.fillBlue.slice(0, 3), 60] }), animate: { mode: 'draw', duration: 1.3 } }
+                    ],
+                    parallel: true
+                },
+                { delay: 1.5 }
             ]);
 
             phaseNames.problem = ['problem1'];
-            phaseNames.solution = ['solution1', 'solution2'];
+            phaseNames.solution = ['solution1', 'solution2', 'solution3'];
 
             setupControls(animator, phaseNames);
             animator.playSequence(phaseNames.problem);

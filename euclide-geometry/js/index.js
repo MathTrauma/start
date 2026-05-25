@@ -138,6 +138,7 @@ function isFirstProblemOfLevel(problem, problems) {
 
 // 문제 접근 가능 여부 확인
 function canAccessProblem(problem) {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return true;
     if (isPaidUser) return true;
     if (isFreeProblem(problem.id)) return true;
     return isFirstProblemOfLevel(problem, allProblems);

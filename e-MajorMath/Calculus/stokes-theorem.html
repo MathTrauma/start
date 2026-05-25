@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stokes' Theorem — 전공수학</title>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    macros: {
+      R: '\\mathbb{R}',
+      bd: '\\partial',
+      vn: '\\mathbf{n}',
+      vF: '\\mathbf{F}',
+      dS: '\\,d\\mathbf{S}',
+      ds: '\\,ds',
+      curl: '\\operatorname{curl}'
+    }
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Serif KR', 'Batang', serif;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 30px 60px;
+    line-height: 1.8;
+    color: #1a1a1a;
+    background: #fff;
+  }
+
+  .nav { margin-bottom: 20px; }
+  .nav a { font-size: 13px; color: #888; text-decoration: none; }
+  .nav a:hover { color: #333; }
+
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 16px;
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 22px; margin-bottom: 4px; }
+  .header .subtitle { font-size: 14px; color: #888; }
+
+  .problem { margin-bottom: 40px; }
+  .problem-source { font-size: 12px; color: #999; margin-bottom: 6px; }
+  .problem-title { font-weight: bold; margin-bottom: 8px; font-size: 15px; }
+  .problem-body { font-size: 15px; padding-left: 4px; }
+
+  .display-eq { margin: 14px 0; text-align: center; }
+
+  details.solution {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #f8f8f8;
+    border-left: 3px solid #667eea;
+    border-radius: 4px;
+  }
+  details.solution summary {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    color: #667eea;
+    user-select: none;
+  }
+  details.solution .sol-body {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+  .sol-answer { margin-top: 10px; font-weight: bold; }
+</style>
+
+</head>
+<body>
+
+<div class="nav"><a href="/e-MajorMath/">← 전공수학</a></div>
+
+<div class="header">
+  <h1>Stokes' Theorem</h1>
+  <div class="subtitle">스토크스 정리</div>
+</div>
+
+<!-- ========== 문제 1 ========== -->
+
+<div class="problem">
+  <div class="problem-source">고급수학 2 (2022-2) 문제 10 · 25점</div>
+  <div class="problem-title">문제 1. 삼차원 좌표공간에서 정의된 원기둥면 $x^2+y^2=1$과 평면 $z = 2-2x-y$가 만나는 교선을 $C$라 할 때, 다음 선적분을 구하시오. (단, $C$의 향은 $C$를 $xy$-평면에 정사영 했을 때 반시계 방향이 되도록 잡는다.)</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \int_C (yze^{xyz}+\sin x+xyz)\,dx
+      + (xze^{xyz}+\cos y+xyz)\,dy
+      + (xye^{xyz}+\sin^2 z+xyz)\,dz
+    $$</div>
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        $\vF = (yze^{xyz}+\sin x+xyz,\;
+               xze^{xyz}+\cos y+xyz,\;
+               xye^{xyz}+\sin^2 z+xyz)$로 두면
+
+        <div class="display-eq">$$
+          \curl\vF = (zx-xy,\; xy-yz,\; yz-zx)
+        $$</div>
+
+        $\vF' = (xyz,\,xyz,\,xyz)$라 하면 $\curl\vF = \curl\vF'$이므로
+        스토크스 정리에 의해
+
+        <div class="display-eq">$$
+          \int_C \vF\cdot d\mathbf{s}
+          = \int_C \vF'\cdot d\mathbf{s}
+        $$</div>
+
+        $C$를 $X(t) = (\cos t,\;\sin t,\;2-2\cos t-\sin t)$, $0 \le t \le 2\pi$로 매개화하면
+
+        <div class="display-eq">$$
+          \int_C \vF'\cdot d\mathbf{s}
+          = -\int_0^{2\pi} 2\sin^2 t\cos^2 t\,dt
+          = -\frac{1}{2}\int_0^{2\pi}\sin^2(2t)\,dt
+          = -\frac{\pi}{2}
+        $$</div>
+
+        <div class="sol-answer">답: $-\dfrac{\pi}{2}$</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ========== 문제 2 ========== -->
+
+<div class="problem">
+  <div class="problem-source">미적분학 2 (2019-2) 문제 10 · 20점</div>
+  <div class="problem-title">문제 2. 구면 $x^2+y^2+z^2=2$와 영역 $x+y+z \ge 2$의 공통부분을 $S$라고 할 때, 벡터장</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \vF = (x+y+2z,\;2x+y+z,\;x+2y+z)
+    $$</div>
+
+    에 대하여 면적분 $\displaystyle\iint_S \operatorname{curl}\vF \cdot d\mathbf{S}$를 구하시오.
+    단, $S$의 향은 $\displaystyle\vn = \frac{(x,y,z)}{\sqrt{2}}$으로 준다.
+  </div>
+</div>
+
+</body>
+</html>

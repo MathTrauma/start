@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>다중적분 — 전공수학</title>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    macros: {
+      R: '\\mathbb{R}',
+      bd: '\\partial',
+      Vol: '\\operatorname{Vol}'
+    }
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Serif KR', 'Batang', serif;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 30px 60px;
+    line-height: 1.8;
+    color: #1a1a1a;
+    background: #fff;
+  }
+
+  .nav { margin-bottom: 20px; }
+  .nav a { font-size: 13px; color: #888; text-decoration: none; }
+  .nav a:hover { color: #333; }
+
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 16px;
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 22px; margin-bottom: 4px; }
+  .header .subtitle { font-size: 14px; color: #888; }
+
+  .problem { margin-bottom: 40px; }
+  .problem-source { font-size: 12px; color: #999; margin-bottom: 6px; }
+  .problem-title { font-weight: bold; margin-bottom: 8px; font-size: 15px; }
+  .problem-body { font-size: 15px; padding-left: 4px; }
+
+  .display-eq { margin: 14px 0; text-align: center; }
+
+  details.solution {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #f8f8f8;
+    border-left: 3px solid #667eea;
+    border-radius: 4px;
+  }
+  details.solution summary {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    color: #667eea;
+    user-select: none;
+  }
+  details.solution .sol-body {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+  .sol-answer { margin-top: 10px; font-weight: bold; }
+</style>
+
+</head>
+<body>
+
+<div class="nav"><a href="/e-MajorMath/">← 전공수학</a></div>
+
+<div class="header">
+  <h1>다중적분</h1>
+  <div class="subtitle">Multiple Integrals</div>
+</div>
+
+<!-- ========== 문제 1 ========== -->
+
+<div class="problem">
+  <div class="problem-source">고급수학 2 (2022-2) 문제 1 · 20점</div>
+  <div class="problem-title">문제 1. 삼차원 좌표공간의 세 영역</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      R_1 = \{(x,y,z) \mid x^2+y^2+z^2 \le 4\}
+    $$</div>
+
+    <div class="display-eq">$$
+      R_2 = \{(x,y,z) \mid x^2+y^2+(z-1)^2 \ge 1\}
+    $$</div>
+
+    <div class="display-eq">$$
+      R_3 = \left\{(x,y,z) \;\middle|\; z \ge \sqrt{x^2+y^2}\right\}
+    $$</div>
+
+    에 대하여 $R = R_1 \cap R_2 \cap R_3$의 부피를 구하시오.
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        구면좌표계 치환을 이용한다.
+        $R_3$의 조건 $z \ge \sqrt{x^2+y^2}$는 $\cos\varphi \ge \sin\varphi$, 즉 $0 \le \varphi \le \pi/4$이고,
+        $R_2$의 경계 $x^2+y^2+(z-1)^2=1$은 $\rho = 2\cos\varphi$이다.
+
+        <div class="display-eq">$$
+          \Vol(R)
+          = \int_0^{2\pi}\int_0^{\pi/4}\int_{2\cos\varphi}^{2}
+            \rho^2 \sin\varphi \,d\rho\,d\varphi\,d\theta
+        $$</div>
+
+        <div class="display-eq">$$
+          = 2\pi \int_0^{\pi/4}
+            \frac{8}{3}\bigl(1-\cos^3\varphi\bigr)\sin\varphi\,d\varphi
+          = \frac{16}{3}\pi \int_{1/\sqrt{2}}^{1}(1-t^3)\,dt
+        $$</div>
+
+        <div class="display-eq">$$
+          = \frac{16}{3}\pi
+            \left[\frac{13}{16} - \frac{1}{\sqrt{2}}\right]
+          = \frac{13-8\sqrt{2}}{3}\,\pi
+        $$</div>
+
+        <div class="sol-answer">
+          답: $\displaystyle\frac{(13-8\sqrt{2})\pi}{3}$
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ========== 문제 2 ========== -->
+
+<div class="problem">
+  <div class="problem-source">고급수학 2 (2022-2) 문제 2 · 15점</div>
+  <div class="problem-title">문제 2. 다음 적분을 구하시오.</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \int_0^1 \int_0^x \int_0^{1-x^2}
+        4e^{(1-z)^2}\,dz\,dy\,dx
+    $$</div>
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        푸비니 정리를 이용하여 적분 순서를 바꾼다.
+
+        <div class="display-eq">$$
+          = \int_0^1 \int_0^{\sqrt{1-z}} \int_y^{\sqrt{1-z}}
+            4e^{(1-z)^2}\,dx\,dy\,dz
+        $$</div>
+
+        $x$ 적분 후 $y$ 적분을 수행하면 $2(1-z)e^{(1-z)^2}$을 얻고,
+
+        <div class="display-eq">$$
+          \int_0^1 2(1-z)\,e^{(1-z)^2}\,dz
+          = \int_0^1 e^u\,du = e-1
+        $$</div>
+
+        ($u=(1-z)^2$ 치환)
+
+        <div class="sol-answer">답: $e-1$</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ========== 문제 3 ========== -->
+
+<div class="problem">
+  <div class="problem-source">고급수학 2 (2022-2) 문제 3 · 15점</div>
+  <div class="problem-title">문제 3. 삼차원 좌표공간의 영역 $R$을 $x^2+y^2=1$, $x^2+y^2=4$, $z=0$, $z=x+y+5$로 둘러싸인 부분이라 할 때, 다음 적분을 구하시오.</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \iiint_R \bigl(x^2+y^2\bigr)\,dx\,dy\,dz
+    $$</div>
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        원기둥좌표계 치환: $1 \le r \le 2$, $0 \le \theta \le 2\pi$,
+        $0 \le z \le r(\cos\theta+\sin\theta)+5$.
+
+        <div class="display-eq">$$
+          = \int_0^{2\pi}\int_1^2
+            \int_0^{r(\cos\theta+\sin\theta)+5}
+            r^3\,dz\,dr\,d\theta
+        $$</div>
+
+        $\theta$ 적분에서 $\cos\theta+\sin\theta$ 항은 소거되므로,
+
+        <div class="display-eq">$$
+          = 2\pi \int_1^2 5r^3\,dr
+          = 10\pi\left[\frac{r^4}{4}\right]_1^2
+          = \frac{75}{2}\pi
+        $$</div>
+
+        <div class="sol-answer">답: $\dfrac{75\pi}{2}$</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ========== 문제 4 ========== -->
+
+<div class="problem">
+  <div class="problem-source">미적분학 2 (2019-2) 문제 1 · 20점</div>
+  <div class="problem-title">문제 4. 다음 적분 값을 구하시오.</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \int_0^4 \int_{\sqrt{x}}^{2} \frac{x}{y^5+1}\,dy\,dx
+    $$</div>
+  </div>
+</div>
+
+<!-- ========== 문제 5 ========== -->
+
+<div class="problem">
+  <div class="problem-source">미적분학 2 (2019-2) 문제 2 · 20점</div>
+  <div class="problem-title">문제 5. 좌표평면에서 네 직선 $y = \pm x$, $y = \pm(x-1)$로 둘러싸인 영역을 $D$라 할 때, 다음 적분 값을 구하시오.</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \iint_D (x-y)\,e^{y^2-x^2}\,dx\,dy
+    $$</div>
+  </div>
+</div>
+
+</body>
+</html>

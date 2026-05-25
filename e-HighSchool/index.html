@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>고교수학 — MathMore</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+      rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- ========== 헤더 ========== -->
+
+<header class="header">
+  <a href="/e-HighSchool/" class="header-brand">
+    고교수학 <span>MathMore</span>
+  </a>
+  <a href="/" class="header-home">← 홈으로</a>
+</header>
+
+<!-- ========== 메인 ========== -->
+
+<div class="main">
+
+  <h1 class="page-title">고교수학</h1>
+  <p class="page-desc">대학 입시 기출문제와 3D 시각화 풀이</p>
+
+  <!-- ========== 탭 네비게이션 ========== -->
+
+  <div class="tabs">
+    <button class="tab active" data-tab="g1">1학년</button>
+    <button class="tab" data-tab="g2">2학년</button>
+    <button class="tab" data-tab="g3">3학년</button>
+    <button class="tab" data-tab="etc">기타</button>
+  </div>
+
+  <!-- ========== 1학년 ========== -->
+
+  <div class="tab-panel active" id="panel-g1">
+
+    <h3 class="section-title">명제</h3>
+    <ul class="item-list">
+      <li>
+        <a href="97-exam/index.html" class="item-link">
+          <span class="item-num">1</span>
+          <div class="item-text">
+            <div class="item-title">본고사 97학년도 — 명제와 집합</div>
+            <div class="item-desc">$P(x)Q(y)=0$, $Q(x)P(y)=0$ 조건의 집합과 $n(B)$ 최댓값</div>
+          </div>
+        </a>
+      </li>
+    </ul>
+
+  </div>
+
+  <!-- ========== 2학년 ========== -->
+
+  <div class="tab-panel" id="panel-g2">
+    <div class="coming-soon">준비 중입니다.</div>
+  </div>
+
+  <!-- ========== 3학년 ========== -->
+
+  <div class="tab-panel" id="panel-g3">
+
+    <h3 class="section-title">미분응용</h3>
+    <ul class="item-list">
+      <li>
+        <a href="bongosa-97/index.html" class="item-link">
+          <span class="item-num">1</span>
+          <div class="item-text">
+            <div class="item-title">본고사 97학년도 — 수면의 상승속도</div>
+            <div class="item-desc">정육면체 그릇에 공이 잠길 때 수면 상승속력</div>
+          </div>
+          <span class="item-badge badge-3d">3D</span>
+        </a>
+      </li>
+    </ul>
+
+  </div>
+
+  <!-- ========== 기타 ========== -->
+
+  <div class="tab-panel" id="panel-etc">
+    <div class="coming-soon">준비 중입니다.</div>
+  </div>
+
+</div>
+
+<!-- ========== 탭 전환 스크립트 ========== -->
+
+<script>
+document.querySelector('.tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+  btn.classList.add('active');
+  document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+});
+</script>
+
+</body>
+</html>

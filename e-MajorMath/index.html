@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>전공수학 — MathMore</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+      rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- ========== 헤더 ========== -->
+
+<header class="header">
+  <a href="/e-MajorMath/" class="header-brand">
+    전공수학 <span>MathMore</span>
+  </a>
+  <a href="/" class="header-home">← 홈으로</a>
+</header>
+
+<!-- ========== 메인 ========== -->
+
+<div class="main">
+
+  <h1 class="page-title">전공수학 기출문제</h1>
+  <p class="page-desc">서울대학교 수학과 전공 과목 기말고사 기출문제와 풀이</p>
+
+  <!-- ========== 탭 네비게이션 ========== -->
+
+  <div class="tabs">
+    <button class="tab active" data-tab="lower">1·2학년</button>
+    <button class="tab" data-tab="upper">3·4학년</button>
+  </div>
+
+  <!-- ========== 1·2학년 ========== -->
+
+  <div class="tab-panel active" id="panel-lower">
+
+    <!-- ===== 미적분학 ===== -->
+
+    <h3 class="section-title">미적분학</h3>
+
+    <ul class="item-list">
+      <li>
+        <a href="calculus/multiple-integrals.html" class="item-link">
+          <span class="item-num">1</span>
+          <div class="item-text">
+            <div class="item-title">다중적분</div>
+            <div class="item-desc">5문제</div>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="calculus/greens-theorem.html" class="item-link">
+          <span class="item-num">2</span>
+          <div class="item-text">
+            <div class="item-title">Green's Theorem</div>
+            <div class="item-desc">5문제</div>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="calculus/surface-integrals.html" class="item-link">
+          <span class="item-num">3</span>
+          <div class="item-text">
+            <div class="item-title">Surface Integrals</div>
+            <div class="item-desc">5문제</div>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="calculus/divergence-theorem.html" class="item-link">
+          <span class="item-num">4</span>
+          <div class="item-text">
+            <div class="item-title">Divergence Theorem</div>
+            <div class="item-desc">3문제</div>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="calculus/stokes-theorem.html" class="item-link">
+          <span class="item-num">5</span>
+          <div class="item-text">
+            <div class="item-title">Stokes' Theorem</div>
+            <div class="item-desc">2문제</div>
+          </div>
+        </a>
+      </li>
+    </ul>
+
+  </div>
+
+  <!-- ========== 3·4학년 ========== -->
+
+  <div class="tab-panel" id="panel-upper">
+    <div class="coming-soon">준비 중입니다.</div>
+  </div>
+
+</div>
+
+<!-- ========== 탭 전환 스크립트 ========== -->
+
+<script>
+document.querySelector('.tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+  btn.classList.add('active');
+  document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+});
+</script>
+
+</body>
+</html>

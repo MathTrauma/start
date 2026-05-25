@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>본고사 97학년도 — 수면의 상승속도</title>
+  <style>
+    :root { --panel-w: 600px; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #ffffff; overflow: hidden; }
+    #app {
+      position: fixed; top: 0; left: var(--panel-w);
+      width: 800px; height: 800px;
+      outline: 1px solid #bbb;
+    }
+    #panel {
+      position: fixed; top: 0; left: 0;
+      width: var(--panel-w); height: 100vh;
+      overflow-y: auto;
+      background: #fff;
+      padding: 22px 26px;
+      font: 15px/1.75 -apple-system, system-ui, sans-serif;
+      color: #222;
+      border-right: 1px solid #ddd;
+    }
+    #panel h2 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 1.6em 0 0.5em;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #eee;
+      color: #444;
+    }
+    #panel h2:first-child { margin-top: 0; }
+    #panel h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 1.2em 0 0.3em;
+      color: #666;
+    }
+    #panel p { margin: 0.35em 0; }
+    #panel .answer {
+      margin-top: 1em;
+      padding: 10px 14px;
+      background: #f5f9ff;
+      border-left: 3px solid #4a90d9;
+      border-radius: 3px;
+    }
+    #panel .answer2 {
+      margin-top: 1em;
+      padding: 10px 14px;
+      background: #fff8f0;
+      border-left: 3px solid #e07820;
+      border-radius: 3px;
+    }
+  </style>
+
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.184.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="panel">
+
+      <h2>문제 (본고사 97학년도)</h2>
+      <p>
+        한 변의 길이가 $3r$ cm인 정육면체 모양의 그릇에 물이 반 정도 차 있다.
+        이 그릇에 반지름의 길이가 $r$ cm인 공이 수면에 수직인 방향으로
+        $1$ cm/초의 속력으로 잠긴다고 하자.
+        공의 반이 물에 잠기는 순간의 수면의 상승속력을 구하라.
+      </p>
+
+      <!-- ── 풀이 A : dξ/dt = 1 ───────────────────────────── -->
+      <h2>풀이 A &nbsp;— 수면 기준 속도 $\left(\dfrac{d\xi}{dt}=1\right)$</h2>
+
+      <h3>부피 분해</h3>
+      <p>$V = C + W$</p>
+      <p>$C$: 최초 물의 부피 (상수) $\quad W$: 물에 잠긴 구의 부피</p>
+
+      <h3>잠긴 구의 부피 $W$</h3>
+      <p>$\xi$ : 수면 아래로 잠긴 깊이. 구의 잠긴 부분을 회전체로 보면:</p>
+      $$W = \pi \int_{r-\xi}^{r} (r^2 - u^2)\,du$$
+
+      <h3>전체 부피 방정식</h3>
+      <p>정육면체 밑넓이 $= (3r)^2 = 9r^2$ 이므로:</p>
+      $$9r^2\, h = C + \pi \int_{r-\xi}^{r} (r^2 - u^2)\,du$$
+
+      <h3>$t$ 에 대해 미분</h3>
+      $$9r^2 \frac{dh}{dt} = \pi\,\frac{d\xi}{dt}(2r\xi - \xi^2)$$
+
+      <h3>$\dfrac{d\xi}{dt} = 1$ 대입</h3>
+      $$\frac{dh}{dt} = \frac{\pi(2r\xi - \xi^2)}{9r^2}$$
+
+      <h3>공의 반이 잠기는 순간 $(\xi = r)$</h3>
+      $$\frac{dh}{dt}
+        = \frac{\pi(2r^2 - r^2)}{9r^2}
+        = \frac{\pi r^2}{9r^2}$$
+
+      <div class="answer">
+        $$\frac{dh}{dt} = \frac{\pi}{9} \text{ cm/초}$$
+      </div>
+
+      <!-- ── 풀이 B : dℓ/dt = -1 ──────────────────────────── -->
+      <h2>풀이 B &nbsp;— 밑바닥 기준 속도 $\left(\dfrac{d\ell}{dt}=-1\right)$</h2>
+
+      <h3>변수 정의</h3>
+      <p>
+        $\ell$ : 그릇 밑바닥에서 구의 아랫부분까지의 거리.
+        구가 1 cm/초로 가라앉으므로 $\dfrac{d\ell}{dt} = -1$.
+      </p>
+      <p>$\xi$ 와 $\ell$ 의 관계:</p>
+      $$\xi = h - \ell$$
+      $$\frac{d\xi}{dt} = \frac{dh}{dt} - \frac{d\ell}{dt} = \frac{dh}{dt} + 1$$
+
+      <h3>미분 방정식에 대입</h3>
+      <p>풀이 A의 미분 결과에 $\dfrac{d\xi}{dt} = \dfrac{dh}{dt}+1$ 을 넣으면:</p>
+      $$9r^2 \frac{dh}{dt} = \pi(2r\xi - \xi^2)\!\left(\frac{dh}{dt} + 1\right)$$
+
+      <h3>공의 반이 잠기는 순간 $(\xi = r)$</h3>
+      $$9r^2 \frac{dh}{dt} = \pi r^2\!\left(\frac{dh}{dt} + 1\right)$$
+      $$9r^2 \frac{dh}{dt} = \pi r^2 \frac{dh}{dt} + \pi r^2$$
+      $$(9 - \pi)\,r^2 \frac{dh}{dt} = \pi r^2$$
+
+      <div class="answer2">
+        $$\frac{dh}{dt} = \frac{\pi}{9 - \pi} \text{ cm/초}$$
+      </div>
+
+  </div>
+  <div id="app"></div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

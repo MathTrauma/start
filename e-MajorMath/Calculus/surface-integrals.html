@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surface Integrals — 전공수학</title>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    macros: {
+      R: '\\mathbb{R}',
+      bd: '\\partial',
+      vk: '\\mathbf{k}',
+      vn: '\\mathbf{n}',
+      vF: '\\mathbf{F}',
+      vA: '\\mathbf{A}',
+      vv: '\\mathbf{v}',
+      dS: '\\,d\\mathbf{S}',
+      ds: '\\,ds'
+    }
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Serif KR', 'Batang', serif;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 30px 60px;
+    line-height: 1.8;
+    color: #1a1a1a;
+    background: #fff;
+  }
+
+  .nav { margin-bottom: 20px; }
+  .nav a { font-size: 13px; color: #888; text-decoration: none; }
+  .nav a:hover { color: #333; }
+
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 16px;
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 22px; margin-bottom: 4px; }
+  .header .subtitle { font-size: 14px; color: #888; }
+
+  .problem { margin-bottom: 40px; }
+  .problem-source { font-size: 12px; color: #999; margin-bottom: 6px; }
+  .problem-title { font-weight: bold; margin-bottom: 8px; font-size: 15px; }
+  .problem-body { font-size: 15px; padding-left: 4px; }
+
+  .display-eq { margin: 14px 0; text-align: center; }
+
+  details.solution {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #f8f8f8;
+    border-left: 3px solid #667eea;
+    border-radius: 4px;
+  }
+  details.solution summary {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    color: #667eea;
+    user-select: none;
+  }
+  details.solution .sol-body {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+  .sol-answer { margin-top: 10px; font-weight: bold; }
+</style>
+
+</head>
+<body>
+
+<div class="nav"><a href="/e-MajorMath/">← 전공수학</a></div>
+
+<div class="header">
+  <h1>Surface Integrals</h1>
+  <div class="subtitle">곡면적분</div>
+</div>
+
+<!-- ========== 문제 1 ========== -->
+
+<div class="problem">
+  <div class="problem-source">고급수학 2 (2022-2) 문제 6 · 20점</div>
+  <div class="problem-title">문제 1. 삼차원 좌표공간의 영역 $x^2+y^2 \le \frac{3}{4}$에서 정의된 함수 $z = 1-x^2-y^2$의 그래프로 주어진 곡면 $S$에 대해 다음 적분을 구하시오.</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \iint_S z\,dS
+    $$</div>
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        $X(r,\theta) = (r\cos\theta,\; r\sin\theta,\; 1-r^2)$,
+        $0 \le r \le \frac{\sqrt{3}}{2}$, $0 \le \theta \le 2\pi$로 매개화하면
+        $|X_r \times X_\theta| = r\sqrt{1+4r^2}$이다.
+
+        <div class="display-eq">$$
+          \iint_S z\,dS
+          = 2\pi\int_0^{\sqrt{3}/2}
+            (1-r^2)\,r\sqrt{1+4r^2}\,dr
+        $$</div>
+
+        $u = 1+4r^2$ 치환 후 계산하면
+
+        <div class="display-eq">$$
+          = \frac{\pi}{16}\int_1^4 (5-u)\sqrt{u}\,du
+          = \frac{41}{60}\pi
+        $$</div>
+
+        <div class="sol-answer">답: $\dfrac{41\pi}{60}$</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ========== 문제 2 ========== -->
+
+<div class="problem">
+  <div class="problem-source">고급수학 2 (2022-2) 문제 7 · 15점</div>
+  <div class="problem-title">문제 2. 삼차원 좌표공간에서 정의된 곡면 $S : x^2+y^2+z^2 = 16$, $(z \ge 3)$의 향을 정하는 단위법벡터 $\vn$은 $\vn\cdot\vk \ge 0$이 되도록 정의되었다. 입체각 벡터장</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \vA(x,y,z) = \frac{(x,\,y,\,z)}{(x^2+y^2+z^2)^{3/2}}
+    $$</div>
+
+    가 곡면 $S$를 빠져나가는 양(flux)을 구하시오.
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        입체각 벡터장의 성질에 의해, 원점에서 바라본 $S$의 입체각과 같다.
+        반지름 $4$인 구면에서 $z \ge 3$인 구면 모자(spherical cap)이므로
+        $\cos\varphi_0 = 3/4$.
+
+        <p>아르키메데스 원리에 의해</p>
+
+        <div class="display-eq">$$
+          \Omega = 2\pi(1-\cos\varphi_0)
+          = 2\pi\!\left(1-\frac{3}{4}\right)
+          = \frac{\pi}{2}
+        $$</div>
+
+        <div class="sol-answer">답: $\dfrac{\pi}{2}$</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ========== 문제 3 ========== -->
+
+<div class="problem">
+  <div class="problem-source">고급수학 2 (2022-2) 문제 9 · 25점</div>
+  <div class="problem-title">문제 3. 다음 적분을 구하시오.</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \int_{-1}^{1}\int_{-1}^{1}
+        \frac{1}{(x^2+1+z^2)^{3/2}}\,dx\,dz
+    $$</div>
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        곡면 $S: y=1$, $-1 \le x \le 1$, $-1 \le z \le 1$에 대해
+        입체각 벡터장 $\vA = \frac{(x,y,z)}{(x^2+y^2+z^2)^{3/2}}$를 생각하면,
+
+        <div class="display-eq">$$
+          \iint_S \vA\cdot d\mathbf{S}
+          = \int_{-1}^{1}\int_{-1}^{1}
+            \frac{1}{(x^2+1+z^2)^{3/2}}\,dx\,dz
+        $$</div>
+
+        이는 원점에서 $S$를 바라본 입체각과 같다.
+        $S$는 정육면체 $[-1,1]^3$의 한 면이고, 전체 입체각 $4\pi$를
+        대칭인 6개 면이 등분하므로,
+
+        <div class="display-eq">$$
+          = \frac{4\pi}{6} = \frac{2}{3}\pi
+        $$</div>
+
+        <div class="sol-answer">답: $\dfrac{2\pi}{3}$</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ========== 문제 4 ========== -->
+
+<div class="problem">
+  <div class="problem-source">미적분학 2 (2019-2) 문제 6 · 20점</div>
+  <div class="problem-title">문제 4. $\R^3$의 벡터 $\vv = (a,b,c)$에 대하여 벡터장</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \vF(X) = (f_1(X),\,f_2(X),\,f_3(X)) = (X \cdot \vv)\,X
+    $$</div>
+
+    를 생각하자. 이때, 벡터
+
+    <div class="display-eq">$$
+      \left(
+        \iint_{S(r)} f_1\,dS,\;
+        \iint_{S(r)} f_2\,dS,\;
+        \iint_{S(r)} f_3\,dS
+      \right)
+    $$</div>
+
+    를 구하시오.
+    단, $S(r) = \{(x,y,z) \in \R^3 \mid x^2+y^2+z^2 = r^2\}$ 이다.
+  </div>
+</div>
+
+<!-- ========== 문제 5 ========== -->
+
+<div class="problem">
+  <div class="problem-source">미적분학 2 (2019-2) 문제 7 · 20점</div>
+  <div class="problem-title">문제 5. 곡면 $S : x^2+y^2-z^2=1$ $(0 \le z \le 1)$의 향을 정하는</div>
+  <div class="problem-body">
+    단위법벡터 $\vn$을 $\vn \cdot \vk \ge 0$이 되도록 정의되었다.
+    입체각 벡터장
+
+    <div class="display-eq">$$
+      \vA = \frac{(x,\,y,\,z)}{(x^2+y^2+z^2)^{3/2}}
+    $$</div>
+
+    가 곡면 $S$를 빠져나가는 플럭스(flux)를 구하시오.
+  </div>
+</div>
+
+</body>
+</html>
