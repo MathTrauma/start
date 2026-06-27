@@ -198,6 +198,11 @@
     color: #7c3aed;
 }
 
+.landing-card-sm--book .landing-card-sm__icon {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
 .landing-card-sm__title {
     font-size: 1rem;
     font-weight: 700;
