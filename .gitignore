@@ -84,3 +84,13 @@ etc-visual/
 
 # e-number-theory (R2로 배포)
 e-number-theory/
+
+# 참고 자료 (tex, pdf, 썸네일 등 — 웹 서빙 불필요)
+*.tex
+*.pdf
+*.txt
+e-HighSchool/**/*.png
+e-MajorMath/**/*.png
+
+# 백업 폴더 (로컬 보관 전용 — git에 올리지 않음)
+.backups/
