@@ -62,7 +62,7 @@
                     <div class="explore-item-desc">유클리드 기하 단계별 애니메이션</div>
                 </div>
             </a>
-            <a href="/etc-visual/1-reorganize/1-tangram.html" class="explore-item">
+            <a href="/etc-visual/" class="explore-item">
                 <span class="explore-item-num">02</span>
                 <div class="explore-item-content">
                     <div class="explore-item-title">Visual Math</div>
@@ -122,7 +122,7 @@
                 </a>
 
                 <!-- Visual Math -->
-                <a href="/etc-visual/1-reorganize/1-tangram.html" class="landing-card landing-card--visual">
+                <a href="/etc-visual/" class="landing-card landing-card--visual">
                     <div class="landing-card__icon">
                         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><circle cx="17.5" cy="6.5" r="3.5"/><path d="M3 17l4 4 4-4"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                     </div>
@@ -275,16 +275,6 @@
     <script src="js/payment.js"></script>
     <script src="js/main.js"></script>
     <script src="js/explore-nav.js"></script>
-
-<script>
-    fetch('/e-number-theory/common/nav-data.json').then(r=>r.json()).then(d=>{
-        const first=d[0]?.items[0];
-        if(first){
-            document.getElementById('nt-entry-link').href='/e-number-theory/'+first.path;
-            document.getElementById('nt-card-link').href='/e-number-theory/'+first.path;
-        }
-    }).catch(()=>{});
-    </script>
 </body>
 
 
