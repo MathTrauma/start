@@ -1,0 +1,14 @@
+name = "e-book-worker"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# mathtrauma.com/e-book/* 요청을 이 Worker가 처리 (R2 공개 서빙)
+routes = [
+  { pattern = "www.mathtrauma.com/e-book/*", zone_name = "mathtrauma.com" },
+  { pattern = "mathtrauma.com/e-book/*", zone_name = "mathtrauma.com" }
+]
+
+[[r2_buckets]]
+binding = "E_BOOK_BUCKET"
+bucket_name = "e-book"
+preview_bucket_name = "e-book"

@@ -1,0 +1,17 @@
+name = "e-highschool-worker"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+routes = [
+  { pattern = "www.mathtrauma.com/e-HighSchool/*", zone_name = "mathtrauma.com" },
+  { pattern = "mathtrauma.com/e-HighSchool/*", zone_name = "mathtrauma.com" }
+]
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "e-highschool"
+preview_bucket_name = "e-highschool"
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "656563deea8e49958294f5df78bc7c38"

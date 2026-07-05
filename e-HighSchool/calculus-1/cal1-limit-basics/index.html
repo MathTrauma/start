@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>Basic Properties — 미적분학1</title>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']]
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Serif KR', 'Batang', serif;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 30px 60px;
+    line-height: 1.8;
+    color: #1a1a1a;
+    background: #fff;
+  }
+
+  .nav { margin-bottom: 20px; }
+  .nav a { font-size: 13px; color: #888; text-decoration: none; }
+  .nav a:hover { color: #333; }
+
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 16px;
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 22px; margin-bottom: 4px; }
+  .header .subtitle { font-size: 14px; color: #888; }
+
+  .section-head {
+    font-size: 17px;
+    font-weight: bold;
+    margin: 36px 0 16px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #ccc;
+    color: #333;
+  }
+  .section-head:first-of-type { margin-top: 0; }
+
+  .explain {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+  .explain p { margin: 0.4em 0; }
+
+  .boxed {
+    display: inline-block;
+    border: 1px solid #333;
+    padding: 1px 8px;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 4px 0;
+  }
+
+  .problem { margin-bottom: 32px; font-size: 15px; }
+  .problem-source { font-size: 12px; color: #999; margin-bottom: 4px; }
+  .prob-num { font-weight: bold; }
+
+  .display-eq { margin: 14px 0; text-align: center; }
+
+  .remark {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+  }
+
+  details.solution {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #f8f8f8;
+    border-left: 3px solid #667eea;
+    border-radius: 4px;
+  }
+  details.solution summary {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    color: #667eea;
+    user-select: none;
+  }
+  details.solution .sol-body {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="nav"><a href="/e-HighSchool/">← 고교수학</a></div>
+
+<div class="header">
+  <h1>Basic Properties</h1>
+  <div class="subtitle">극한의 기본 성질</div>
+</div>
+
+<!-- ========== 발산 ========== -->
+
+<h2 class="section-head">발산</h2>
+
+<div class="explain">
+  <p>극한이 <strong>수렴하지 않을 때</strong>, <strong>발산</strong>한다고 하는데,
+  수렴을 정교하게 가르치지 않는 고교 과정에서 발산도 온전히 설명할 길이 없다.</p>
+  <p>앞 절에서 극한계산은 수렴하는 단위로 환원시키는 것이라 했지만,
+  무한대로 발산과 관련해서는 몇 가지 추가사항이 있다.</p>
+</div>
+
+<div class="problem">
+  <div class="problem-title"><span class="boxed">examples</span> 다음 식들의 극한을 조사하라.</div>
+
+    <div class="display-eq">$$
+      \lim_{x\to \infty} \frac{x+1}{3x^2 + x} \qquad
+      \lim_{x\to \infty} \frac{7x^2 - 3x + 1}{(2x+1)^2} \qquad
+      \lim_{x\to \infty} \frac{2x^3 - 10}{x^2+5x+4}
+    $$</div>
+    <p>위 문제들 풀이에서 다룬 것처럼
+    $\infty \cdot a \;(a\not=0)$ 형태를 만들어서 처리한다.</p>
+</div>
+
+<!-- ========== 연습문제 ========== -->
+
+<h2 class="section-head">연습문제</h2>
+
+<div class="problem">
+  <b class="prob-num">문제 1.</b>
+
+    두 함수 $f(x),\, g(x)$에 대하여
+    $\displaystyle\lim_{x\to \infty} f(x) = \infty$,
+    $\displaystyle\lim_{x\to \infty} g(x) = 3$
+    일 때,
+    <div class="display-eq">$$
+      \lim_{x\to \infty} \frac{f(x)g(x) +2}{2f(x) + g(x)}
+    $$</div>
+    의 값은?
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 2.</b>
+
+    모든 양수 $x$에 대하여 $f(x)$가 다음 부등식을 만족시킬 때,
+    $\displaystyle\lim_{x\to \infty} f(x)$의 값을 구하시오.
+    <div class="display-eq">$$
+      \frac{4x^2+5x}{2x^2+3} \le f(x) \le \frac{2x^2+6x}{x^2}
+    $$</div>
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 3.</b>
+
+    두 상수 $a,\,b$가 다음을 만족한다.
+    <div class="display-eq">$$
+      \lim_{x\to 3} \frac{\sqrt{x+a} + b}{x-3} = \frac{1}{8}
+    $$</div>
+    $a+b$를 구하여라.
+</div>
+
+<div class="problem">
+  <div class="problem-source">자이스토리 A-75번 · 2019학년도 6월 교육청</div>
+  <b class="prob-num">문제 4.</b>
+
+    함수 $f(x)$가 $\displaystyle\lim_{x\to 1} (x+1)f(x)=1$을 만족시킬 때,
+    <div class="display-eq">$$
+      \lim_{x \to 1} (2x^2+1)f(x) = a
+    $$</div>
+    이다. $20a$의 값을 구하여라.
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 5.</b>
+
+    수열 $\{a_n\}$이 $\displaystyle\lim_{n\to\infty} (2n+1)a_n=1$을 만족시킬 때,
+    <div class="display-eq">$$
+      \lim_{n \to \infty} na_n = A
+    $$</div>
+    이다. $10A$의 값을 구하여라.
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 6.</b>
+
+    함수 $f(x)$가
+    <div class="display-eq">$$
+      \lim_{x \to \infty} \frac{f(x)+5}{2f(x)+1} = 3
+    $$</div>
+    일 때, $\displaystyle\lim_{x\to\infty} f(x)$을 구하시오.
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 7.</b>
+
+    <p class="remark">위 문제의 다른 version (정수가 정의역인 함수)</p>
+    수열 $\{a_n\}$이
+    <div class="display-eq">$$
+      \lim_{n \to \infty} \frac{a_n+5}{2a_n+1} = 3
+    $$</div>
+    일 때, $\displaystyle\lim_{n\to\infty} a_n$을 구하시오.
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 8.</b>
+
+    $x\not=2$인 모든 실수 $x$에서 정의된 두 함수 $f(x),\, g(x)$가
+    다음 두 조건을 만족한다.
+    <div class="display-eq">$$
+      \lim_{x\to 2} \{2f(x) - 3g(x)\} = 1 \,,\quad
+      \lim_{x\to 2} g(x) = \infty
+    $$</div>
+    이 때,
+    <div class="display-eq">$$
+      \lim_{x\to 2} \frac{4f(x) + g(x)}{3f(x) - g(x)}
+    $$</div>
+    의 값을 구하시오.
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 9.</b>
+
+    두 함수 $f(x),\, g(x)$가 다음 두 조건을 만족한다.
+    <div class="display-eq">$$
+      \lim_{x\to \square} f(x) = a \,,\quad
+      \lim_{x\to \square} \{f(x)+ g(x)\} = b
+    $$</div>
+    이 때, $\displaystyle\lim_{x\to\square} g(x)$가 존재(수렴)하는가?
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 10.</b>
+
+    두 함수 $f(x),\, g(x)$가 다음 두 조건을 만족한다.
+    <div class="display-eq">$$
+      \lim_{x\to \square} f(x) = L \,,\quad
+      \lim_{x\to \square} f(x)\,g(x) = M
+    $$</div>
+    이 때, $\displaystyle\lim_{x\to\square} g(x)$가 존재(수렴)하는가?
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 11.</b>
+
+    함수 $f(x)$에 대하여
+    <div class="display-eq">$$
+      \lim_{x\to 2} \frac{f(x-2)}{x^2-2x} = 4
+    $$</div>
+    일 때, $\displaystyle\lim_{x\to 0} \frac{f(x)}{x}$의 값은?
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 12.</b>
+
+    함수 $f(x)$가
+    <div class="display-eq">$$
+      \lim_{x\to 1} (x-1)f(x) = 3
+    $$</div>
+    일 때, $\displaystyle\lim_{x\to 1} (x^2-1)f(x)$의 값은?
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 13.</b>
+
+    두 상수 $a,\,b$가 다음을 만족한다.
+    <div class="display-eq">$$
+      \lim_{x\to 3} \frac{\sqrt{x+a} + b}{x-3} = \frac{1}{8}
+    $$</div>
+    $a+b$를 구하여라.
+</div>
+
+<!-- ========== Infinity ========== -->
+
+<h2 class="section-head">Infinity $\infty$</h2>
+
+<div class="explain">
+  <p>극한의 기본성질은 각 part가 수렴하는 형태에만 적용된다.
+  따라서 발산에 대해 적절한 설명을 제공하지 못한다.
+  교육과정에서는 $a \neq 0$일 때 ($a$는 상수이거나 극한값),</p>
+
+  <div class="display-eq">$$
+    \frac{a}{\pm\infty} = 0 \,,\quad
+    |\pm\infty \cdot a| = \infty
+  $$</div>
+
+  <p>등을 판단가능한 형태로 간주하고</p>
+
+  <div class="display-eq">$$
+    0 \cdot \infty \,,\quad
+    \frac{0}{0} \,,\quad
+    \frac{\infty}{\infty}
+  $$</div>
+
+  <p>를 만나면 각각이 수렴하는 형태 또는 적어도 위의 형태로 바꾸어 판단할 것을 요구한다.</p>
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 14.</b>
+
+    다음 식들의 극한을 조사하라.
+    <div class="display-eq">$$
+      \lim_{x\to \infty} \frac{x+1}{3x^2 + x} \qquad
+      \lim_{x\to \infty} \frac{7x^2 - 3x + 1}{(2x+1)^2} \qquad
+      \lim_{x\to \infty} \frac{2x^3 - 10}{x^2+5x+4}
+    $$</div>
+</div>
+
+<div class="problem">
+  <b class="prob-num">문제 15.</b>
+
+    다음 과정에서 잘못된 부분은 어디일까?
+    <div class="display-eq">$$
+    \begin{aligned}
+      \lim_{n\to \infty} 1
+      &= \lim_{n\to \infty} n \cdot \frac{1}{n}
+      \\[6pt]
+      &= \lim_{n\to \infty}
+        \underbrace{\left(\frac{1}{n} + \frac{1}{n} + \cdots + \frac{1}{n}\right)}_{n\text{개}}
+      \\[6pt]
+      &= \lim_{n\to \infty} \frac{1}{n}
+        + \lim_{n\to \infty} \frac{1}{n}
+        + \cdots
+        + \lim_{n\to \infty} \frac{1}{n}
+      \\[6pt]
+      &= 0 + 0 + \cdots + 0 = 0
+    \end{aligned}
+    $$</div>
+</div>
+
+</body>
+</html>

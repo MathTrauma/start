@@ -62,9 +62,11 @@ body {
 
 /* Main Container */
 .problem-list-container {
+    width: 100%;            /* body가 flex column이라 width 없으면 내용폭으로 shrink됨 */
     max-width: 1200px;
     margin: 0 auto;
     padding: 15px 20px 80px 20px; /* 하단에 페이지네이션 공간 확보 */
+    box-sizing: border-box; /* padding 포함 1200px 유지 */
 }
 
 h1 {
@@ -106,23 +108,20 @@ h1 {
     z-index: 1001;
 }
 
-/* Responsive Grid */
+/* Responsive Grid — 카드 폭 고정, 폭이 넓어지면 열 개수만 증가 */
 #problem-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Mobile: 1 column */
+    /* 카드 폭 360px 고정. 들어가는 만큼 열 개수만 증가 */
+    grid-template-columns: repeat(auto-fill, 360px);
+    justify-content: center; /* 남는 공간은 좌우 균등 배분 */
     gap: 20px;
     margin-top: 20px;
 }
 
-@media (min-width: 640px) {
+/* 좁은 화면: 카드 폭을 화면에 맞춰 1열 */
+@media (max-width: 420px) {
     #problem-grid {
-        grid-template-columns: repeat(2, 1fr); /* Tablet: 2 columns */
-    }
-}
-
-@media (min-width: 1024px) {
-    #problem-grid {
-        grid-template-columns: repeat(3, 1fr); /* Desktop: 3 columns */
+        grid-template-columns: 1fr;
     }
 }
 

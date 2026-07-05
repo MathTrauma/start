@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>다중적분 — 전공수학</title>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']],
+    macros: {
+      R: '\\mathbb{R}',
+      bd: '\\partial',
+      Vol: '\\operatorname{Vol}'
+    }
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Serif KR', 'Batang', serif;
+    margin: 0;
+    line-height: 1.8;
+    color: #1a1a1a;
+    background: #fff;
+  }
+
+  /* ── 본문 ── */
+  .content {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 30px;
+  }
+
+  .header {
+    border-bottom: 1.5px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 26px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .header h1 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #222;
+  }
+  .header .subtitle { font-size: 12px; color: #999; font-family: 'Times New Roman', serif; font-style: italic; }
+
+  @media (max-width: 768px) {
+    .content { padding: 60px 18px 40px; }
+  }
+
+  .problem { margin-bottom: 40px; }
+  .problem-source { display: none; }  /* 출제 연도 — 참조용, 화면 숨김 */
+  .problem-title { font-weight: bold; margin-bottom: 8px; font-size: 15px; }
+  .problem-body { font-size: 15px; padding-left: 4px; }
+
+  .display-eq { margin: 14px 0; text-align: center; }
+
+  /* 풀이 안의 적분 영역 그림 */
+  .region-thumb {
+    width: 240px;
+    margin: 14px auto;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    padding: 8px;
+  }
+  .region-thumb svg { width: 100%; height: auto; display: block; }
+  .region-thumb .cap {
+    font-size: 11px;
+    color: #888;
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  details.solution {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #f8f8f8;
+    border-left: 3px solid #667eea;
+    border-radius: 4px;
+  }
+  details.solution summary {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    color: #667eea;
+    user-select: none;
+  }
+  details.solution .sol-body {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+  .sol-answer { margin-top: 10px; font-weight: bold; }
+</style>
+
+</head>
+<body>
+
+<script src="/e-MajorMath/Calculus/_sidebar.js" defer></script>
+
+<main class="content">
+
+<div class="header">
+  <h1>다중적분</h1>
+  <div class="subtitle">Multiple Integrals</div>
+</div>
+
+<!-- ========== 문제 1 (옛 4번) ========== -->
+
+<div class="problem">
+  <div class="problem-source">미적분학 2 (2019-2) 문제 1 · 20점</div>
+  <div class="problem-title">문제 1. 다음 적분 값을 구하시오.</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \int_0^4 \int_{\sqrt{x}}^{2} \frac{x}{y^5+1}\,dy\,dx
+    $$</div>
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        $y^5+1$이 분모에 있어 안쪽 $y$ 적분을 직접 할 수 없다. 푸비니 정리로 적분 순서를 바꾼다.
+        적분 영역은 $0 \le x \le 4,\ \sqrt{x} \le y \le 2$, 즉 $0 \le y \le 2,\ 0 \le x \le y^2$이므로
+
+        <figure class="region-thumb">
+          <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="hatch1" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="6" stroke="#667eea" stroke-width="1.2"/>
+              </pattern>
+            </defs>
+            <path d="M 30,140 L 30,20 L 180,20 C 150,20 80,90 30,140 Z" fill="url(#hatch1)" stroke="#667eea" stroke-width="1.3"/>
+            <path d="M 30,140 C 80,90 150,20 180,20" fill="none" stroke="#667eea" stroke-width="1.6"/>
+            <line x1="20" y1="140" x2="190" y2="140" stroke="#333" stroke-width="1"/>
+            <line x1="30" y1="150" x2="30" y2="10" stroke="#333" stroke-width="1"/>
+            <text x="180" y="155" font-size="10" fill="#666" text-anchor="middle">4</text>
+            <text x="25" y="143" font-size="10" fill="#666" text-anchor="end">O</text>
+            <text x="25" y="23" font-size="10" fill="#666" text-anchor="end">2</text>
+            <text x="187" y="138" font-size="10" fill="#666">x</text>
+            <text x="33" y="14" font-size="10" fill="#666">y</text>
+            <text x="120" y="70" font-size="10" fill="#4338ca">y=√x</text>
+            <text x="105" y="32" font-size="10" fill="#666">y=2</text>
+          </svg>
+          <figcaption class="cap">적분 영역 (곡선 $y=\sqrt{x}$와 $y=2$ 사이)</figcaption>
+        </figure>
+
+        <div class="display-eq">$$
+          \int_0^4 \int_{\sqrt{x}}^{2} \frac{x}{y^5+1}\,dy\,dx
+          = \int_0^2 \int_0^{y^2} \frac{x}{y^5+1}\,dx\,dy
+          = \frac{1}{2}\int_0^2 \frac{y^4}{y^5+1}\,dy.
+        $$</div>
+
+        $u = y^5+1$ 치환($du = 5y^4\,dy$)으로
+
+        <div class="display-eq">$$
+          = \left[\frac{1}{10}\ln(y^5+1)\right]_0^2
+          = \frac{1}{10}\ln 33.
+        $$</div>
+
+        <div class="sol-answer">답: $\dfrac{\ln 33}{10}$</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ========== 문제 2 (옛 5번) ========== -->
+
+<div class="problem">
+  <div class="problem-source">미적분학 2 (2019-2) 문제 2 · 20점</div>
+  <div class="problem-title">문제 2. 좌표평면에서 네 직선 $y = \pm x$, $y = \pm(x-1)$로 둘러싸인 영역을 $D$라 할 때, 다음 적분 값을 구하시오.</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \iint_D (x-y)\,e^{y^2-x^2}\,dx\,dy
+    $$</div>
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        영역 $D$가 평행사변형이고 피적분함수에 $y^2-x^2=(y-x)(y+x)$가 있으므로
+        $u = x-y,\ v = x+y$로 변수변환한다. 네 직선은 각각 $u=0,\,1$ 과 $v=0,\,1$ 에 대응되어
+        $D$가 단위 정사각형으로 펼쳐진다.
+
+        <figure class="region-thumb">
+          <!-- 좌표 매핑: x∈[-0.5, 1.5] → px[20, 180],   y∈[-1, 1] → px[150, 10]
+               즉 X(x) = 20 + (x+0.5)*80,  Y(y) = 150 - (y+1)*70
+               네 꼭짓점 (0,0),(½,½),(1,0),(½,-½) →
+                 (60,150), (100,115), (140,150), (100,185)  ← 어? Y(0)=150 이 아니라 80
+               다시: Y(y) = 80 - y*70  으로 잡으면 (0,0)→(60,80), (½,½)→(100,45), 일관 -->
+          <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="hatch2" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="6" stroke="#667eea" stroke-width="1.2"/>
+              </pattern>
+            </defs>
+            <!-- 네 직선 (가시 영역 x∈[-0.25,1.25]): X=20+(x+0.5)*80, Y=80-y*70
+                 y= x  : (-0.25,-0.25)→(40,97.5),  (1.25,1.25)→(160,-7.5)
+                 y=-x  : (-0.25, 0.25)→(40,62.5),  (1.25,-1.25)→(160,167.5)
+                 y= x-1: (-0.25,-1.25)→(40,167.5), (1.25, 0.25)→(160,62.5)
+                 y=1-x : (-0.25, 1.25)→(40,-7.5),  (1.25,-0.25)→(160,97.5)
+            -->
+            <line x1="40" y1="97.5" x2="160" y2="-7.5" stroke="#bbb" stroke-width="0.8"/>
+            <line x1="40" y1="62.5" x2="160" y2="167.5" stroke="#bbb" stroke-width="0.8"/>
+            <line x1="40" y1="167.5" x2="160" y2="62.5" stroke="#bbb" stroke-width="0.8"/>
+            <line x1="40" y1="-7.5" x2="160" y2="97.5" stroke="#bbb" stroke-width="0.8"/>
+            <!-- 영역 D: 꼭짓점 (0,0),(½,½),(1,0),(½,-½) → (60,80),(100,45),(140,80),(100,115) -->
+            <polygon points="60,80 100,45 140,80 100,115" fill="url(#hatch2)" stroke="#667eea" stroke-width="1.4"/>
+            <!-- 축 -->
+            <line x1="10" y1="80" x2="190" y2="80" stroke="#333" stroke-width="1"/>
+            <line x1="60" y1="155" x2="60" y2="5" stroke="#333" stroke-width="1"/>
+            <circle cx="60" cy="80" r="2" fill="#333"/>
+            <text x="55" y="93" font-size="10" fill="#666" text-anchor="end">O</text>
+            <circle cx="140" cy="80" r="2" fill="#333"/>
+            <text x="142" y="93" font-size="10" fill="#666">1</text>
+            <text x="105" y="50" font-size="11" fill="#4338ca" font-weight="bold">D</text>
+            <text x="187" y="78" font-size="10" fill="#666">x</text>
+            <text x="63" y="14" font-size="10" fill="#666">y</text>
+          </svg>
+          <figcaption class="cap">영역 $D$ — 네 직선이 만드는 마름모</figcaption>
+        </figure>
+
+        야코비안은 $\left|\dfrac{\partial(u,v)}{\partial(x,y)}\right| = 2$이므로 $dx\,dy = \tfrac{1}{2}\,du\,dv$.
+        또 $y^2-x^2 = -uv$, $x-y = u$이므로
+
+        <div class="display-eq">$$
+          \iint_D (x-y)\,e^{y^2-x^2}\,dx\,dy
+          = \frac{1}{2}\int_0^1\!\int_0^1 u\,e^{-uv}\,dv\,du.
+        $$</div>
+
+        안쪽 $v$ 적분: $\displaystyle\int_0^1 u\,e^{-uv}\,dv = 1 - e^{-u}$. 따라서
+
+        <div class="display-eq">$$
+          = \frac{1}{2}\int_0^1 (1 - e^{-u})\,du
+          = \frac{1}{2}\bigl[u + e^{-u}\bigr]_0^1
+          = \frac{1}{2}\!\left(1 + \frac{1}{e} - 1\right)
+          = \frac{1}{2e}.
+        $$</div>
+
+        <div class="sol-answer">답: $\dfrac{1}{2e}$</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ========== 문제 3 (옛 1번) ========== -->
+
+<div class="problem">
+  <div class="problem-source">고급수학 2 (2022-2) 문제 1 · 20점</div>
+  <div class="problem-title">문제 3. 삼차원 좌표공간의 세 영역</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      R_1 = \{(x,y,z) \mid x^2+y^2+z^2 \le 4\}
+    $$</div>
+
+    <div class="display-eq">$$
+      R_2 = \{(x,y,z) \mid x^2+y^2+(z-1)^2 \ge 1\}
+    $$</div>
+
+    <div class="display-eq">$$
+      R_3 = \left\{(x,y,z) \;\middle|\; z \ge \sqrt{x^2+y^2}\right\}
+    $$</div>
+
+    에 대하여 $R = R_1 \cap R_2 \cap R_3$의 부피를 구하시오.
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        $z$축 회전대칭이므로 $r$–$z$ 반평면 단면으로 영역을 파악한다.
+        $R$은 큰 구 $R_1$(반지름 2)과 원뿔 $R_3$의 교집합(아이스크림콘 모양)에서
+        작은 구 $R_2$(중심 $(0,0,1)$, 반지름 1)를 도려낸 영역이다.
+
+        <figure class="region-thumb">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="hatch3" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="6" stroke="#667eea" stroke-width="1.2"/>
+              </pattern>
+            </defs>
+            <path d="M 20,158 L 20,73 A 96,96 0 0 1 88.13,30 Z" fill="url(#hatch3)" stroke="none"/>
+            <path d="M 20,158 A 48,48 0 0 1 20,62 Z" fill="#fff" stroke="none"/>
+            <path d="M 20,14 A 96,96 0 0 1 116,110" fill="none" stroke="#aaa" stroke-width="0.8" stroke-dasharray="3 2"/>
+            <path d="M 20,14 A 96,96 0 0 1 88.13,30" fill="none" stroke="#667eea" stroke-width="1.5"/>
+            <path d="M 20,62 A 48,48 0 0 1 20,158" fill="none" stroke="#667eea" stroke-width="1.5"/>
+            <line x1="20" y1="110" x2="116" y2="14" stroke="#aaa" stroke-width="0.8" stroke-dasharray="3 2"/>
+            <line x1="20" y1="110" x2="88.13" y2="30" stroke="#667eea" stroke-width="1.5"/>
+            <line x1="10" y1="158" x2="195" y2="158" stroke="#333" stroke-width="1"/>
+            <line x1="20" y1="195" x2="20" y2="5" stroke="#333" stroke-width="1"/>
+            <text x="195" y="170" font-size="10" fill="#666" text-anchor="end">r</text>
+            <text x="14" y="14" font-size="10" fill="#666" text-anchor="end">z</text>
+            <text x="14" y="161" font-size="10" fill="#666" text-anchor="end">O</text>
+            <text x="14" y="113" font-size="10" fill="#666" text-anchor="end">1</text>
+            <text x="14" y="65" font-size="10" fill="#666" text-anchor="end">2</text>
+            <text x="60" y="78" font-size="11" fill="#4338ca" font-weight="bold">R</text>
+          </svg>
+          <figcaption class="cap">$r$–$z$ 단면 ($z$축 회전대칭)</figcaption>
+        </figure>
+
+        구면좌표계 치환을 이용한다.
+        $R_3$의 조건 $z \ge \sqrt{x^2+y^2}$는 $\cos\varphi \ge \sin\varphi$, 즉 $0 \le \varphi \le \pi/4$이고,
+        $R_2$의 경계 $x^2+y^2+(z-1)^2=1$은 $\rho = 2\cos\varphi$이다.
+
+        <div class="display-eq">$$
+          \Vol(R)
+          = \int_0^{2\pi}\int_0^{\pi/4}\int_{2\cos\varphi}^{2}
+            \rho^2 \sin\varphi \,d\rho\,d\varphi\,d\theta
+        $$</div>
+
+        <div class="display-eq">$$
+          = 2\pi \int_0^{\pi/4}
+            \frac{8}{3}\bigl(1-\cos^3\varphi\bigr)\sin\varphi\,d\varphi
+          = \frac{16}{3}\pi \int_{1/\sqrt{2}}^{1}(1-t^3)\,dt
+        $$</div>
+
+        <div class="display-eq">$$
+          = \frac{16}{3}\pi
+            \left[\frac{13}{16} - \frac{1}{\sqrt{2}}\right]
+          = \frac{13-8\sqrt{2}}{3}\,\pi
+        $$</div>
+
+        <div class="sol-answer">
+          답: $\displaystyle\frac{(13-8\sqrt{2})\pi}{3}$
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ========== 문제 4 (옛 2번) ========== -->
+
+<div class="problem">
+  <div class="problem-source">고급수학 2 (2022-2) 문제 2 · 15점</div>
+  <div class="problem-title">문제 4. 다음 적분을 구하시오.</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \int_0^1 \int_0^x \int_0^{1-x^2}
+        4e^{(1-z)^2}\,dz\,dy\,dx
+    $$</div>
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        피적분함수에 $e^{(1-z)^2}$이 있어 그대로 적분할 수 없다. $z$를 마지막에 두려면 적분 영역을
+        $xy$평면 영역과 $z$ 범위로 나눠 봐야 한다.
+        영역은 $0\le x\le 1,\ 0\le y\le x,\ 0\le z\le 1-x^2$.
+        $xy$평면 그림자는 $y=x$ 아래 삼각형이고, $xz$평면 그림자는 $z=1-x^2$ 아래 곡선 영역이다.
+
+        <figure class="region-thumb">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="hatch4" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="6" stroke="#667eea" stroke-width="1.2"/>
+              </pattern>
+            </defs>
+            <path d="M 30,80 L 30,10 Q 100,10 170,80 Z" fill="url(#hatch4)" stroke="#667eea" stroke-width="1.3"/>
+            <path d="M 30,10 Q 100,10 170,80" fill="none" stroke="#667eea" stroke-width="1.5"/>
+            <line x1="20" y1="80" x2="180" y2="80" stroke="#333" stroke-width="1"/>
+            <line x1="30" y1="90" x2="30" y2="5" stroke="#333" stroke-width="1"/>
+            <text x="170" y="92" font-size="10" fill="#666" text-anchor="middle">1</text>
+            <text x="25" y="83" font-size="10" fill="#666" text-anchor="end">O</text>
+            <text x="25" y="13" font-size="10" fill="#666" text-anchor="end">1</text>
+            <text x="177" y="78" font-size="10" fill="#666">x</text>
+            <text x="33" y="9" font-size="10" fill="#666">z</text>
+            <text x="105" y="38" font-size="10" fill="#4338ca">z = 1−x²</text>
+            <polygon points="30,190 170,190 170,120" fill="url(#hatch4)" stroke="#667eea" stroke-width="1.3"/>
+            <line x1="20" y1="190" x2="180" y2="190" stroke="#333" stroke-width="1"/>
+            <line x1="30" y1="200" x2="30" y2="115" stroke="#333" stroke-width="1"/>
+            <text x="170" y="103" font-size="10" fill="#666" text-anchor="middle">1</text>
+            <text x="25" y="193" font-size="10" fill="#666" text-anchor="end">O</text>
+            <text x="25" y="123" font-size="10" fill="#666" text-anchor="end">1</text>
+            <text x="177" y="188" font-size="10" fill="#666">x</text>
+            <text x="33" y="119" font-size="10" fill="#666">y</text>
+            <text x="115" y="170" font-size="10" fill="#4338ca">y = x</text>
+          </svg>
+          <figcaption class="cap">위: $xz$ 그림자 · 아래: $xy$ 그림자</figcaption>
+        </figure>
+
+        $z$를 가장 바깥으로 보내자. $z$ 고정 시 $xy$ 영역은 $0\le y\le x\le\sqrt{1-z}$.
+        다시 $y$를 가장 안쪽으로 두면
+
+        <div class="display-eq">$$
+          = \int_0^1 \int_0^{\sqrt{1-z}} \int_y^{\sqrt{1-z}}
+            4e^{(1-z)^2}\,dx\,dy\,dz
+        $$</div>
+
+        $x$ 적분 후 $y$ 적분을 수행하면 $2(1-z)e^{(1-z)^2}$을 얻고,
+
+        <div class="display-eq">$$
+          \int_0^1 2(1-z)\,e^{(1-z)^2}\,dz
+          = \int_0^1 e^u\,du = e-1
+        $$</div>
+
+        ($u=(1-z)^2$ 치환)
+
+        <div class="sol-answer">답: $e-1$</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ========== 문제 5 (옛 3번) ========== -->
+
+<div class="problem">
+  <div class="problem-source">고급수학 2 (2022-2) 문제 3 · 15점</div>
+  <div class="problem-title">문제 5. 삼차원 좌표공간의 영역 $R$을 $x^2+y^2=1$, $x^2+y^2=4$, $z=0$, $z=x+y+5$로 둘러싸인 부분이라 할 때, 다음 적분을 구하시오.</div>
+  <div class="problem-body">
+
+    <div class="display-eq">$$
+      \iiint_R \bigl(x^2+y^2\bigr)\,dx\,dy\,dz
+    $$</div>
+
+    <details class="solution">
+      <summary>풀이</summary>
+      <div class="sol-body">
+        $xy$평면 그림자는 두 원 $r=1,\,r=2$ 사이의 <b>환</b>이고,
+        그 위로 윗면 $z=x+y+5$ (기울어진 평면), 아랫면 $z=0$ 사이가 입체 $R$이다.
+
+        <figure class="region-thumb">
+          <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="hatch5" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+                <line x1="0" y1="0" x2="0" y2="6" stroke="#667eea" stroke-width="1.2"/>
+              </pattern>
+              <mask id="ring5">
+                <rect width="200" height="220" fill="white"/>
+                <circle cx="100" cy="55" r="20" fill="black"/>
+              </mask>
+            </defs>
+            <circle cx="100" cy="55" r="40" fill="url(#hatch5)" stroke="#667eea" stroke-width="1.4" mask="url(#ring5)"/>
+            <circle cx="100" cy="55" r="20" fill="none" stroke="#667eea" stroke-width="1.4"/>
+            <line x1="100" y1="100" x2="100" y2="10" stroke="#333" stroke-width="0.7"/>
+            <line x1="55" y1="55" x2="145" y2="55" stroke="#333" stroke-width="0.7"/>
+            <text x="142" y="68" font-size="9" fill="#666">2</text>
+            <text x="121" y="68" font-size="9" fill="#666">1</text>
+            <text x="105" y="58" font-size="9" fill="#666">O</text>
+            <text x="63" y="35" font-size="11" fill="#4338ca" font-weight="bold">환</text>
+            <text x="148" y="55" font-size="10" fill="#666">x</text>
+            <text x="100" y="9" font-size="10" fill="#666" text-anchor="middle">y</text>
+            <text x="100" y="115" font-size="9" fill="#888" text-anchor="middle">xy 평면 ($r=\sqrt{x^2+y^2}$)</text>
+            <polygon points="58,210 86,210 86,141.4 58,150" fill="url(#hatch5)" stroke="#667eea" stroke-width="1.3"/>
+            <polygon points="114,210 142,210 142,118.6 114,130" fill="url(#hatch5)" stroke="#667eea" stroke-width="1.3"/>
+            <line x1="30" y1="175" x2="170" y2="95" stroke="#667eea" stroke-width="1" stroke-dasharray="3 2"/>
+            <line x1="30" y1="210" x2="170" y2="210" stroke="#333" stroke-width="1"/>
+            <line x1="100" y1="220" x2="100" y2="115" stroke="#333" stroke-width="1"/>
+            <text x="170" y="222" font-size="10" fill="#666" text-anchor="end">x</text>
+            <text x="103" y="121" font-size="10" fill="#666">z</text>
+            <text x="100" y="222" font-size="10" fill="#666" text-anchor="middle">O</text>
+            <text x="60" y="222" font-size="9" fill="#666">−2</text>
+            <text x="140" y="222" font-size="9" fill="#666">2</text>
+            <text x="155" y="110" font-size="9" fill="#4338ca">z=x+y+5</text>
+            <text x="100" y="135" font-size="9" fill="#888" text-anchor="middle">y=0 단면</text>
+          </svg>
+          <figcaption class="cap">위: $xy$ 환 · 아래: $y=0$ 단면</figcaption>
+        </figure>
+
+        원기둥좌표계 치환: $1 \le r \le 2$, $0 \le \theta \le 2\pi$,
+        $0 \le z \le r(\cos\theta+\sin\theta)+5$.
+
+        <div class="display-eq">$$
+          = \int_0^{2\pi}\int_1^2
+            \int_0^{r(\cos\theta+\sin\theta)+5}
+            r^3\,dz\,dr\,d\theta
+        $$</div>
+
+        $\theta$ 적분에서 $\cos\theta+\sin\theta$ 항은 소거되므로,
+
+        <div class="display-eq">$$
+          = 2\pi \int_1^2 5r^3\,dr
+          = 10\pi\left[\frac{r^4}{4}\right]_1^2
+          = \frac{75}{2}\pi
+        $$</div>
+
+        <div class="sol-answer">답: $\dfrac{75\pi}{2}$</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+</main>
+
+</body>
+</html>

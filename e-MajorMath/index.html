@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7662489362586460" crossorigin="anonymous"></script>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,10 +17,13 @@
 <!-- ========== 헤더 ========== -->
 
 <header class="header">
-  <a href="/e-MajorMath/" class="header-brand">
-    전공수학 <span>MathMore</span>
+  <a href="/" class="header-home" aria-label="홈으로">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12L12 3l9 9"/>
+      <path d="M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/>
+    </svg>
   </a>
-  <a href="/" class="header-home">← 홈으로</a>
 </header>
 
 <!-- ========== 메인 ========== -->
@@ -27,26 +31,32 @@
 <div class="main">
 
   <h1 class="page-title">전공수학 기출문제</h1>
-  <p class="page-desc">서울대학교 수학과 전공 과목 기말고사 기출문제와 풀이</p>
+  <!-- <p class="page-desc">서울대학교 수학과 전공 과목 기말고사 기출문제와 풀이</p> -->
 
   <!-- ========== 탭 네비게이션 ========== -->
 
   <div class="tabs">
-    <button class="tab active" data-tab="lower">1·2학년</button>
-    <button class="tab" data-tab="upper">3·4학년</button>
+    <button class="tab active" data-tab="calculus">미적분학</button>
+    <button class="tab" data-tab="analysis">해석학</button>
+    <button class="tab" data-tab="diffgeo">미분기하</button>
   </div>
 
-  <!-- ========== 1·2학년 ========== -->
+  <!-- ========== 미적분학 ========== -->
 
-  <div class="tab-panel active" id="panel-lower">
-
-    <!-- ===== 미적분학 ===== -->
-
-    <h3 class="section-title">미적분학</h3>
+  <div class="tab-panel active" id="panel-calculus">
 
     <ul class="item-list">
       <li>
-        <a href="calculus/multiple-integrals.html" class="item-link">
+        <a href="Calculus/5-epsilon-delta/index.html" class="item-link">
+          <span class="item-num">0</span>
+          <div class="item-text">
+            <div class="item-title">ε-δ 정의 시각화</div>
+            <div class="item-desc">함수의 극한 ε-δ 정의 인터랙티브 탐색</div>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="Calculus/20-fubini/multiple-integrals.html" class="item-link">
           <span class="item-num">1</span>
           <div class="item-text">
             <div class="item-title">다중적분</div>
@@ -55,7 +65,7 @@
         </a>
       </li>
       <li>
-        <a href="calculus/greens-theorem.html" class="item-link">
+        <a href="Calculus/30-greens-theorem/" class="item-link">
           <span class="item-num">2</span>
           <div class="item-text">
             <div class="item-title">Green's Theorem</div>
@@ -64,7 +74,7 @@
         </a>
       </li>
       <li>
-        <a href="calculus/surface-integrals.html" class="item-link">
+        <a href="Calculus/40-surface-integrals/" class="item-link">
           <span class="item-num">3</span>
           <div class="item-text">
             <div class="item-title">Surface Integrals</div>
@@ -73,7 +83,7 @@
         </a>
       </li>
       <li>
-        <a href="calculus/divergence-theorem.html" class="item-link">
+        <a href="Calculus/50-divergence-theorem/" class="item-link">
           <span class="item-num">4</span>
           <div class="item-text">
             <div class="item-title">Divergence Theorem</div>
@@ -82,7 +92,7 @@
         </a>
       </li>
       <li>
-        <a href="calculus/stokes-theorem.html" class="item-link">
+        <a href="Calculus/60-stokes-theorem/" class="item-link">
           <span class="item-num">5</span>
           <div class="item-text">
             <div class="item-title">Stokes' Theorem</div>
@@ -94,10 +104,58 @@
 
   </div>
 
-  <!-- ========== 3·4학년 ========== -->
+  <!-- ========== 해석학 ========== -->
 
-  <div class="tab-panel" id="panel-upper">
-    <div class="coming-soon">준비 중입니다.</div>
+  <div class="tab-panel" id="panel-analysis">
+
+    <ul class="item-list">
+      <li>
+        <a href="Analysis/0-intro/" class="item-link">
+          <span class="item-num">0</span>
+          <div class="item-text">
+            <div class="item-title">도입</div>
+            <div class="item-desc">Understanding Analysis — Stephen Abbott</div>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="Analysis/1-completeness/" class="item-link">
+          <span class="item-num">1</span>
+          <div class="item-text">
+            <div class="item-title">The Axiom of Completeness</div>
+            <div class="item-desc">§1.3 완비성 공리, 상한·하한</div>
+          </div>
+        </a>
+      </li>
+    </ul>
+
+  </div>
+
+  <!-- ========== 미분기하 ========== -->
+
+  <div class="tab-panel" id="panel-diffgeo">
+
+    <ul class="item-list">
+      <li>
+        <a href="Differential-Geometry/1-curves/" class="item-link">
+          <span class="item-num">1</span>
+          <div class="item-text">
+            <div class="item-title">Curves in the Plane and in Space</div>
+            <div class="item-desc">§1.1 매개변수 곡선, 접선벡터</div>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="Differential-Geometry/2-curvature/" class="item-link">
+          <span class="item-num">2</span>
+          <div class="item-text">
+            <div class="item-title">Curvature</div>
+            <div class="item-desc">§2.1 곡률, 원형 나선</div>
+          </div>
+        </a>
+      </li>
+    </ul>
+
   </div>
 
 </div>

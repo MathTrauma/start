@@ -14,7 +14,7 @@ export function createSetup(container) {
   camera.position.set(4, 3, 5);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setPixelRatio(1);   // 정확히 1080×1080 픽셀
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
 

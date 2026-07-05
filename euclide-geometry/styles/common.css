@@ -701,3 +701,9 @@ button.active:hover {
 .math-overlay .katex {
     font-size: 1em;
 }
+
+/* 문제 출처 표기 — 굵은 고딕 */
+.problem-source {
+    font-weight: 700;
+    font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+}

@@ -209,14 +209,15 @@ function saveStateToURL(page, level, category) {
 }
 
 function getItemsPerPage() {
-    const width = window.innerWidth;
     const height = window.innerHeight;
 
-    // 컬럼 수 계산 (너비 기준)
-    let cols;
-    if (width < 640) cols = 1;
-    else if (width < 1024) cols = 2;
-    else cols = 3;
+    // 컬럼 수: 실제 렌더된 grid 열 수를 읽음 (CSS auto-fill이 단일 진실 소스)
+    let cols = 1;
+    const grid = document.getElementById('problem-grid');
+    if (grid) {
+        const tracks = getComputedStyle(grid).gridTemplateColumns.split(' ').filter(Boolean).length;
+        cols = Math.max(1, tracks);
+    }
 
     // 행 수 계산 (높이 기준)
     const navHeight = 60;

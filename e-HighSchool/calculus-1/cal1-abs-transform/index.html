@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>|f(x) − a| 그래프 — MathMore</title>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: #f5f5f5; }
+  body {
+    font: 15px/1.75 -apple-system, system-ui, 'Noto Sans KR', sans-serif;
+    color: #222;
+  }
+
+  .nav {
+    padding: 12px 20px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+  }
+  .nav a { font-size: 13px; color: #888; text-decoration: none; }
+  .nav a:hover { color: #333; }
+
+  .top-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 16px;
+  }
+
+  .info-card {
+    flex: 1 1 280px;
+    min-width: 260px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 24px 28px;
+    align-self: flex-start;
+  }
+  .info-card h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 16px;
+  }
+  .problem-banner {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 14px 20px;
+  }
+  .problem {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.8;
+    padding: 12px 16px;
+    background: #f8f9ff;
+    border-left: 3px solid #6366f1;
+    border-radius: 0 6px 6px 0;
+  }
+  .problem p { margin-bottom: 6px; }
+  .problem p:last-child { margin-bottom: 0; }
+
+  .slider-section {
+    padding-top: 14px;
+    border-top: 1px solid #eee;
+  }
+  .slider-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .slider-row input[type="range"] { flex: 1; }
+  .slider-val {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 36px;
+    text-align: right;
+  }
+  .color-a { color: #f59e0b; }
+  .color-t { color: #ef4444; }
+  .accent-a { accent-color: #f59e0b; }
+  .accent-t { accent-color: #ef4444; }
+
+  .legend {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #eee;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: #555;
+  }
+  .legend-swatch {
+    width: 18px;
+    height: 4px;
+    border-radius: 2px;
+  }
+
+  .canvas-wrap {
+    flex: 1 1 640px;
+    max-width: 760px;
+    aspect-ratio: 4/3;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  #app {
+    width: 100%;
+    height: 100%;
+  }
+  #app canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  @media (max-width: 720px) {
+    .top-area { flex-direction: column; }
+    .canvas-wrap { flex: none; max-width: 100%; width: 100%; }
+    .info-card { flex: none; width: 100%; }
+  }
+</style>
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.184.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+
+<div class="nav"><a href="/e-HighSchool/">← 고교수학</a></div>
+
+<div class="top-area">
+
+  <div class="problem-banner">
+    <div class="problem">
+      <p>$0 &lt; x &lt; 4$ 에서 정의된 함수 $y = f(x)$ 의 그래프가 다음 그림과 같고,
+      상수 $a$ 에 대하여 $|f(x) - a|$ 가 $x = k$ 에서 불연속이 되도록 하는
+      실수 $k\;(0 &lt; k &lt; 4)$ 의 개수가 1 이다.</p>
+      <p>실수 $t$ 에 대하여 방정식
+      $$|f(x) - a| = t$$
+      의 서로 다른 실근의 개수를 $g(t)$ 라 할 때,
+      함수 $g(t)$ 의 불연속점의 개수를 구하시오.</p>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h2>$|f(x) - a|$ 그래프</h2>
+
+    <div class="slider-section">
+      <label class="slider-label">$a$ 값</label>
+      <div class="slider-row">
+        <input type="range" id="a-slider" class="accent-a"
+               min="-1" max="3" step="0.05" value="0">
+        <span id="a-value" class="slider-val color-a">0.00</span>
+      </div>
+
+      <label class="slider-label">수평선 $t$</label>
+      <div class="slider-row">
+        <input type="range" id="t-slider" class="accent-t"
+               min="-0.5" max="4" step="0.05" value="0">
+        <span id="t-value" class="slider-val color-t">0.00</span>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <span class="legend-swatch" style="background:#3b82f6"></span>
+        <span>$y = |f(x) - a|$</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-swatch" style="background:#ef4444"></span>
+        <span>수평선 $y = t$</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="canvas-wrap">
+    <div id="app"></div>
+  </div>
+
+</div>
+
+<script type="module" src="./main.js"></script>
+</body>
+</html>

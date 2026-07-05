@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7662489362586460" crossorigin="anonymous"></script>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <title>고교수학 — MathMore</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
       rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+
+<script>
+MathJax = { tex: { inlineMath: [['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 
 </head>
 <body>
@@ -16,10 +23,13 @@
 <!-- ========== 헤더 ========== -->
 
 <header class="header">
-  <a href="/e-HighSchool/" class="header-brand">
-    고교수학 <span>MathMore</span>
+  <a href="/" class="header-home" aria-label="홈으로">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12L12 3l9 9"/>
+      <path d="M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/>
+    </svg>
   </a>
-  <a href="/" class="header-home">← 홈으로</a>
 </header>
 
 <!-- ========== 메인 ========== -->
@@ -32,23 +42,23 @@
   <!-- ========== 탭 네비게이션 ========== -->
 
   <div class="tabs">
-    <button class="tab active" data-tab="g1">1학년</button>
-    <button class="tab" data-tab="g2">2학년</button>
-    <button class="tab" data-tab="g3">3학년</button>
-    <button class="tab" data-tab="etc">기타</button>
+    <button class="tab active" data-tab="common2">공통수학2</button>
+    <button class="tab" data-tab="calc1">미적분학1</button>
+    <button class="tab" data-tab="calc2">미적분학2</button>
+    <button class="tab" data-tab="composite">합성함수</button>
   </div>
 
-  <!-- ========== 1학년 ========== -->
+  <!-- ========== 공통수학2 ========== -->
 
-  <div class="tab-panel active" id="panel-g1">
+  <div class="tab-panel active" id="panel-common2">
 
     <h3 class="section-title">명제</h3>
     <ul class="item-list">
       <li>
-        <a href="97-exam/index.html" class="item-link">
+        <a href="common-math-2/cm2-prop-97-exam/index.html" class="item-link">
           <span class="item-num">1</span>
           <div class="item-text">
-            <div class="item-title">본고사 97학년도 — 명제와 집합</div>
+            <div class="item-title">97학년도 수능 29번 — 명제와 집합</div>
             <div class="item-desc">$P(x)Q(y)=0$, $Q(x)P(y)=0$ 조건의 집합과 $n(B)$ 최댓값</div>
           </div>
         </a>
@@ -57,20 +67,46 @@
 
   </div>
 
-  <!-- ========== 2학년 ========== -->
+  <!-- ========== 미적분학1 ========== -->
 
-  <div class="tab-panel" id="panel-g2">
-    <div class="coming-soon">준비 중입니다.</div>
+  <div class="tab-panel" id="panel-calc1">
+
+    <h3 class="section-title">극한</h3>
+    <ul class="item-list">
+      <li>
+        <a href="calculus-1/cal1-limit-basics/index.html" class="item-link">
+          <span class="item-num">1</span>
+          <div class="item-text">
+            <div class="item-title">Basic Properties — 극한의 기본 성질</div>
+            <div class="item-desc">발산, 부정형, 연습문제 15제</div>
+          </div>
+        </a>
+      </li>
+    </ul>
+
+    <h3 class="section-title">함수</h3>
+    <ul class="item-list">
+      <li>
+        <a href="calculus-1/cal1-abs-transform/index.html" class="item-link">
+          <span class="item-num">1</span>
+          <div class="item-text">
+            <div class="item-title">$|f(x) - a|$ 그래프</div>
+            <div class="item-desc">구간별 함수의 절댓값 변환과 수평선 교점 탐색</div>
+          </div>
+        </a>
+      </li>
+    </ul>
+
   </div>
 
-  <!-- ========== 3학년 ========== -->
+  <!-- ========== 미적분학2 ========== -->
 
-  <div class="tab-panel" id="panel-g3">
+  <div class="tab-panel" id="panel-calc2">
 
     <h3 class="section-title">미분응용</h3>
     <ul class="item-list">
       <li>
-        <a href="bongosa-97/index.html" class="item-link">
+        <a href="calculus-2/cal2-diffapp-bongosa-97/index.html" class="item-link">
           <span class="item-num">1</span>
           <div class="item-text">
             <div class="item-title">본고사 97학년도 — 수면의 상승속도</div>
@@ -83,10 +119,23 @@
 
   </div>
 
-  <!-- ========== 기타 ========== -->
+  <!-- ========== 합성함수 ========== -->
 
-  <div class="tab-panel" id="panel-etc">
-    <div class="coming-soon">준비 중입니다.</div>
+  <div class="tab-panel" id="panel-composite">
+
+    <ul class="item-list">
+      <li>
+        <a href="composite-function/index.html" class="item-link">
+          <span class="item-num">1</span>
+          <div class="item-text">
+            <div class="item-title">합성함수 시각화</div>
+            <div class="item-desc">$f$, $g$, $g(f(x))$를 세 직교 평면에서 3D로 시각화</div>
+          </div>
+          <span class="item-badge badge-3d">3D</span>
+        </a>
+      </li>
+    </ul>
+
   </div>
 
 </div>

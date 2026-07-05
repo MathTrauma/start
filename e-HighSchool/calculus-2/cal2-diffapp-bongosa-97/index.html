@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>본고사 97학년도 — 수면의 상승속도</title>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: #f5f5f5; }
+    body {
+      font: 15px/1.75 -apple-system, system-ui, 'Noto Sans KR', sans-serif;
+      color: #222;
+    }
+
+    /* ── 네비게이션 ── */
+    .nav {
+      padding: 12px 20px;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+    }
+    .nav a { font-size: 13px; color: #888; text-decoration: none; }
+    .nav a:hover { color: #333; }
+
+    /* ── 상단 영역: 문제 카드 + 캔버스 ── */
+    .top-area {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      max-width: 1100px;
+      margin: 20px auto;
+      padding: 0 16px;
+    }
+
+    /* 문제 카드 */
+    .problem-card {
+      flex: 1 1 320px;
+      min-width: 280px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 24px 28px;
+      align-self: flex-start;
+    }
+    .problem-card .source {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 8px;
+    }
+    .problem-card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 12px;
+    }
+    .problem-card p {
+      margin: 0.35em 0;
+    }
+
+    /* 캔버스 래퍼 */
+    .canvas-wrap {
+      flex: 0 0 640px;
+      max-width: 640px;
+      aspect-ratio: 1;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    #app {
+      width: 100%;
+      height: 100%;
+    }
+    #app canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* ── 하단 영역: 풀이 토글 ── */
+    .solution-area {
+      max-width: 1100px;
+      margin: 0 auto 40px;
+      padding: 0 16px;
+    }
+
+    .sol-toggle {
+      display: block;
+      width: 100%;
+      padding: 14px 20px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font: inherit;
+      font-weight: 600;
+      font-size: 15px;
+      color: #667eea;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s;
+    }
+    .sol-toggle:hover { background: #f8f9ff; }
+    .sol-toggle::before {
+      content: '▶ ';
+      font-size: 11px;
+      transition: transform 0.2s;
+      display: inline-block;
+    }
+    .sol-toggle.open::before {
+      content: '▼ ';
+    }
+
+    .solution-content {
+      display: none;
+      margin-top: 12px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 28px 32px;
+    }
+    .solution-content.open { display: block; }
+
+    .solution-content h2 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 1.6em 0 0.5em;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #eee;
+      color: #444;
+    }
+    .solution-content h2:first-child { margin-top: 0; }
+    .solution-content h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 1.2em 0 0.3em;
+      color: #666;
+    }
+    .solution-content p { margin: 0.35em 0; }
+    .solution-content .answer {
+      margin-top: 1em;
+      padding: 10px 14px;
+      background: #f5f9ff;
+      border-left: 3px solid #4a90d9;
+      border-radius: 3px;
+    }
+    .solution-content .answer2 {
+      margin-top: 1em;
+      padding: 10px 14px;
+      background: #fff8f0;
+      border-left: 3px solid #e07820;
+      border-radius: 3px;
+    }
+
+    /* ── 반응형 ── */
+    @media (max-width: 720px) {
+      .top-area { flex-direction: column; }
+      .canvas-wrap {
+        flex: none;
+        max-width: 100%;
+        width: 100%;
+      }
+      .problem-card {
+        flex: none;
+        width: 100%;
+      }
+    }
+  </style>
+
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.184.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<div class="nav"><a href="/e-HighSchool/">← 고교수학</a></div>
+
+<!-- ========== 문제 + 캔버스 ========== -->
+
+<div class="top-area">
+
+  <div class="problem-card">
+    <div class="source">본고사 97학년도</div>
+    <h2>수면의 상승속도</h2>
+    <p>
+      한 변의 길이가 $3r$ cm인 정육면체 모양의 그릇에 물이 반 정도 차 있다.
+      이 그릇에 반지름의 길이가 $r$ cm인 공이 수면에 수직인 방향으로
+      $1$ cm/초의 속력으로 잠긴다고 하자.
+      공의 반이 물에 잠기는 순간의 수면의 상승속력을 구하라.
+    </p>
+  </div>
+
+  <div class="canvas-wrap">
+    <div id="app"></div>
+  </div>
+
+</div>
+
+<!-- ========== 풀이 (토글) ========== -->
+
+<div class="solution-area">
+
+  <button class="sol-toggle" id="sol-toggle">풀이 보기</button>
+
+  <div class="solution-content" id="sol-content">
+
+    <!-- ── 풀이 A ── -->
+    <h2>풀이 A &nbsp;— 수면 기준 속도 $\left(\dfrac{d\xi}{dt}=1\right)$</h2>
+
+    <h3>부피 분해</h3>
+    <p>$V = C + W$</p>
+    <p>$C$: 최초 물의 부피 (상수) $\quad W$: 물에 잠긴 구의 부피</p>
+
+    <h3>잠긴 구의 부피 $W$</h3>
+    <p>$\xi$ : 수면 아래로 잠긴 깊이. 구의 잠긴 부분을 회전체로 보면:</p>
+    $$W = \pi \int_{r-\xi}^{r} (r^2 - u^2)\,du$$
+
+    <h3>전체 부피 방정식</h3>
+    <p>정육면체 밑넓이 $= (3r)^2 = 9r^2$ 이므로:</p>
+    $$9r^2\, h = C + \pi \int_{r-\xi}^{r} (r^2 - u^2)\,du$$
+
+    <h3>$t$ 에 대해 미분</h3>
+    $$9r^2 \frac{dh}{dt} = \pi\,\frac{d\xi}{dt}(2r\xi - \xi^2)$$
+
+    <h3>$\dfrac{d\xi}{dt} = 1$ 대입</h3>
+    $$\frac{dh}{dt} = \frac{\pi(2r\xi - \xi^2)}{9r^2}$$
+
+    <h3>공의 반이 잠기는 순간 $(\xi = r)$</h3>
+    $$\frac{dh}{dt}
+      = \frac{\pi(2r^2 - r^2)}{9r^2}
+      = \frac{\pi r^2}{9r^2}$$
+
+    <div class="answer">
+      $$\frac{dh}{dt} = \frac{\pi}{9} \text{ cm/초}$$
+    </div>
+
+    <!-- ── 풀이 B ── -->
+    <h2>풀이 B &nbsp;— 밑바닥 기준 속도 $\left(\dfrac{d\ell}{dt}=-1\right)$</h2>
+
+    <h3>변수 정의</h3>
+    <p>
+      $\ell$ : 그릇 밑바닥에서 구의 아랫부분까지의 거리.
+      구가 1 cm/초로 가라앉으므로 $\dfrac{d\ell}{dt} = -1$.
+    </p>
+    <p>$\xi$ 와 $\ell$ 의 관계:</p>
+    $$\xi = h - \ell$$
+    $$\frac{d\xi}{dt} = \frac{dh}{dt} - \frac{d\ell}{dt} = \frac{dh}{dt} + 1$$
+
+    <h3>미분 방정식에 대입</h3>
+    <p>풀이 A의 미분 결과에 $\dfrac{d\xi}{dt} = \dfrac{dh}{dt}+1$ 을 넣으면:</p>
+    $$9r^2 \frac{dh}{dt} = \pi(2r\xi - \xi^2)\!\left(\frac{dh}{dt} + 1\right)$$
+
+    <h3>공의 반이 잠기는 순간 $(\xi = r)$</h3>
+    $$9r^2 \frac{dh}{dt} = \pi r^2\!\left(\frac{dh}{dt} + 1\right)$$
+    $$9r^2 \frac{dh}{dt} = \pi r^2 \frac{dh}{dt} + \pi r^2$$
+    $$(9 - \pi)\,r^2 \frac{dh}{dt} = \pi r^2$$
+
+    <div class="answer2">
+      $$\frac{dh}{dt} = \frac{\pi}{9 - \pi} \text{ cm/초}$$
+    </div>
+
+  </div>
+</div>
+
+<!-- ========== 풀이 토글 스크립트 ========== -->
+
+<script>
+document.getElementById('sol-toggle').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.getElementById('sol-content').classList.toggle('open');
+  if (this.classList.contains('open')) {
+    this.textContent = '풀이 닫기';
+    this.classList.add('open');
+    MathJax.typeset?.();
+  } else {
+    this.textContent = '풀이 보기';
+  }
+});
+</script>
+
+<script type="module" src="./main.js"></script>
+
+</body>
+</html>

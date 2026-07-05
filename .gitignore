@@ -94,3 +94,11 @@ e-MajorMath/**/*.png
 
 # 백업 폴더 (로컬 보관 전용 — git에 올리지 않음)
 .backups/
+
+# LaTeX 빌드 부산물
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.out
+*.toc

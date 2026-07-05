@@ -19,6 +19,8 @@ EXCLUDES=(
     --exclude ".claude/*"
     --exclude ".wrangler/*"
     --exclude "*.bak"
+    --exclude "*.pdf"
+    --exclude "*.tex"
 )
 
 echo "=== e-MajorMath R2 동기화 ==="

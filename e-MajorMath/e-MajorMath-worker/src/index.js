@@ -27,7 +27,7 @@ export default {
       : rawPath;
 
     if (path === '/' || path === '') {
-      return Response.redirect(`${url.origin}${PREFIX}/calculus/2019-2-final.html`, 302);
+      return Response.redirect(`${url.origin}${PREFIX}/index.html`, 302);
     }
 
     const filePath = path.slice(1);
@@ -55,7 +55,17 @@ export default {
         });
       }
 
-      const object = await env.BUCKET.get(filePath);
+      let resolvedPath = filePath;
+      let object = await env.BUCKET.get(resolvedPath);
+
+      if (object === null && filePath.endsWith('/')) {
+        resolvedPath = filePath + 'index.html';
+        object = await env.BUCKET.get(resolvedPath);
+      }
+      if (object === null && !filePath.includes('.')) {
+        resolvedPath = filePath + '/index.html';
+        object = await env.BUCKET.get(resolvedPath);
+      }
 
       if (object === null) {
         return new Response('File not found', {
@@ -67,8 +77,8 @@ export default {
       return new Response(object.body, {
         headers: {
           ...getCORSHeaders(),
-          'Content-Type': getContentType(filePath),
-          'Cache-Control': getCacheControl(filePath),
+          'Content-Type': getContentType(resolvedPath),
+          'Cache-Control': getCacheControl(resolvedPath),
           'ETag': object.httpEtag
         }
       });

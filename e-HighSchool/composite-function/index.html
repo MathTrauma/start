@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>합성함수 시각화 — MathMore</title>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: #f5f5f5; }
+  body {
+    font: 15px/1.75 -apple-system, system-ui, 'Noto Sans KR', sans-serif;
+    color: #222;
+  }
+
+  .nav {
+    padding: 12px 20px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+  }
+  .nav a { font-size: 13px; color: #888; text-decoration: none; }
+  .nav a:hover { color: #333; }
+
+  .top-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 16px;
+  }
+
+  .info-card {
+    flex: 1 1 280px;
+    min-width: 260px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 24px 28px;
+    align-self: flex-start;
+  }
+  .info-card h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 16px;
+  }
+
+  .func-section {
+    margin-bottom: 14px;
+  }
+  .func-section-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #999;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .func-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .func-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    min-width: 70px;
+  }
+
+  .coeff-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .coeff-group input {
+    width: 44px;
+    padding: 3px 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font: inherit;
+    font-size: 13px;
+    text-align: center;
+  }
+  .coeff-group span {
+    font-size: 13px;
+    color: #555;
+  }
+
+  .g-select {
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font: inherit;
+    font-size: 13px;
+    color: #333;
+    background: #fff;
+  }
+
+  .legend {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #eee;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: #555;
+  }
+  .legend-swatch {
+    width: 18px;
+    height: 4px;
+    border-radius: 2px;
+  }
+
+  .canvas-wrap {
+    flex: 1 1 640px;
+    max-width: 760px;
+    aspect-ratio: 1;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  #app {
+    width: 100%;
+    height: 100%;
+  }
+  #app canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .slider-section {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #eee;
+  }
+  .slider-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .slider-row input[type="range"] {
+    flex: 1;
+  }
+  .slider-val {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 32px;
+    text-align: right;
+  }
+  .slider-val.color-blue { color: #3498db; }
+  .slider-val.color-red { color: #e74c3c; }
+
+  .slider-row input[type="range"].accent-blue { accent-color: #3498db; }
+  .slider-row input[type="range"].accent-red { accent-color: #e74c3c; }
+
+  @media (max-width: 720px) {
+    .top-area { flex-direction: column; }
+    .canvas-wrap {
+      flex: none;
+      max-width: 100%;
+      width: 100%;
+    }
+    .info-card {
+      flex: none;
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.184.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+
+<div class="nav"><a href="/e-HighSchool/">← 고교수학</a></div>
+
+<div class="top-area">
+
+  <div class="info-card">
+    <h2>합성함수 $g(f(x))$</h2>
+
+    <div class="func-section">
+      <div class="func-section-title">$y = f(x)$</div>
+      <div class="func-row">
+        <div class="coeff-group">
+          <input type="number" id="coeff-a" value="0" step="0.5">
+          <span>$x^2$ +</span>
+          <input type="number" id="coeff-b" value="1" step="0.5">
+          <span>$x$ +</span>
+          <input type="number" id="coeff-c" value="0" step="0.5">
+        </div>
+      </div>
+    </div>
+
+    <div class="func-section">
+      <div class="func-section-title">$y = g(x)$</div>
+      <div class="func-row">
+        <select id="g-select" class="g-select">
+          <option value="abs">|x| (절댓값)</option>
+          <option value="floor">⌊x⌋ (최대정수)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <span class="legend-swatch" style="background:#e74c3c"></span>
+        <span>$xy$ 평면: $y = f(x)$</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-swatch" style="background:#2ecc71"></span>
+        <span>$yz$ 평면: $z = g(y)$</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-swatch" style="background:#3498db"></span>
+        <span>$xz$ 평면: $z = g(f(x))$</span>
+      </div>
+    </div>
+
+    <div class="slider-section">
+      <label class="slider-label">입력값 $x_0$</label>
+      <div class="slider-row">
+        <input type="range" id="x-slider" class="accent-red"
+               min="-4" max="4" step="0.1" value="1.5">
+        <span id="x-value" class="slider-val color-red">1.5</span>
+      </div>
+
+      <label class="slider-label">합성함수 평면 위치 ($y$)</label>
+      <div class="slider-row">
+        <input type="range" id="plane-slider" class="accent-blue"
+               min="-3" max="3" step="0.1" value="0">
+        <span id="plane-value" class="slider-val color-blue">0.0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="canvas-wrap">
+    <div id="app"></div>
+  </div>
+
+</div>
+
+<script type="module" src="./main.js"></script>
+</body>
+</html>

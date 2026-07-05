@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>ε-δ 정의 시각화 — MathMore</title>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: #f5f5f5; }
+  body {
+    font: 15px/1.75 -apple-system, system-ui, 'Noto Sans KR', sans-serif;
+    color: #222;
+  }
+
+  .nav {
+    padding: 12px 20px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+  }
+  .nav a { font-size: 13px; color: #888; text-decoration: none; }
+  .nav a:hover { color: #333; }
+
+  /* ── 정의 배너 ── */
+
+  .def-banner {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 10px 20px;
+  }
+  .def-banner .def {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-size: 19px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .def-banner .def-bar {
+    width: 3px;
+    height: 1.4em;
+    background: #6366f1;
+    border-radius: 2px;
+    margin-right: 8px;
+  }
+
+  /* ── 파라미터 바 ── */
+
+  .param-bar {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+  }
+  .param-bar-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .param-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .param-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+  }
+  .param-group input[type="number"] {
+    width: 60px;
+    padding: 3px 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font: inherit;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  /* ── 캔버스 ── */
+
+  .canvas-area {
+    max-width: 800px;
+    margin: 16px auto;
+    padding: 0 16px;
+  }
+  .canvas-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  /* 일변수 캔버스 최대 600px (정사각) */
+  #panel-2d .canvas-wrap { max-width: 600px; }
+  #app {
+    width: 100%;
+    height: 100%;
+  }
+  #app canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* ── 플로팅 슬라이더 ── */
+
+  .float-controls {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    border-radius: 10px;
+    padding: 10px 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    cursor: default;
+    user-select: none;
+    z-index: 10;
+  }
+  .float-controls .drag-handle {
+    height: 4px;
+    width: 32px;
+    margin: 0 auto 2px;
+    background: #ccc;
+    border-radius: 2px;
+    cursor: grab;
+  }
+  .float-controls .drag-handle:active { cursor: grabbing; }
+  .slider-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .slider-group label {
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .slider-group input[type="range"] {
+    flex: 1;
+    min-width: 0;
+  }
+  .slider-val {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 36px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .color-eps { color: #6366f1; }
+  .color-del { color: #f59e0b; }
+  .accent-eps { accent-color: #6366f1; }
+  .accent-del { accent-color: #f59e0b; }
+
+  /* ── 상태 표시 ── */
+
+  .status-float {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    pointer-events: none;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .status-float.ok {
+    background: rgba(236,253,245,0.95);
+    color: #059669;
+    border: 1px solid #a7f3d0;
+  }
+  .status-float.fail {
+    background: rgba(254,242,242,0.95);
+    color: #dc2626;
+    border: 1px solid #fecaca;
+  }
+
+  /* ── 탭 ── */
+
+  .tabs {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 14px 16px 0;
+    display: flex;
+    gap: 8px;
+  }
+  .tab-btn {
+    padding: 8px 18px;
+    border: 1px solid #e5e5e5;
+    border-bottom: none;
+    background: #efeff2;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+    color: #777;
+  }
+  .tab-btn.active {
+    background: #fff;
+    color: #6366f1;
+    font-weight: 700;
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .L-display {
+    font-weight: 700;
+    color: #6366f1;
+    font-size: 14px;
+    min-width: 28px;
+  }
+
+  /* ── 다변수 섹션 ── */
+
+  .multivar { margin-top: 28px; }
+  .multivar-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  .multivar-desc {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+    line-height: 1.7;
+  }
+  .multivar-desc b { color: #6366f1; }
+  .fn-label {
+    font-size: 19px;
+    color: #6366f1;
+    margin-bottom: 14px;
+  }
+  .param-bar-3d {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 460px;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+  .param-bar-3d label { font-weight: 700; flex-shrink: 0; }
+  .param-bar-3d input[type="range"] { flex: 1; min-width: 0; }
+  .param-bar-3d span { font-weight: 600; min-width: 38px; text-align: right; }
+  .canvas-wrap-3d {
+    aspect-ratio: 4 / 3;
+    background: #f5f5f7;
+  }
+  #app3d { width: 100%; height: 100%; }
+  #app3d canvas { display: block; width: 100% !important; height: 100% !important; }
+
+  /* ── 반응형 ── */
+
+  @media (max-width: 600px) {
+    .float-controls { width: 180px; }
+    .param-bar-inner { gap: 12px; }
+  }
+</style>
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.184.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+
+<script src="/e-MajorMath/Calculus/_sidebar.js" defer></script>
+
+<!-- 정의: 한 줄 배너 -->
+<div class="def-banner">
+  <div class="def">
+    <span class="def-bar"></span>
+    $\displaystyle\lim_{x \to x_0} f(x) = L$
+    $\;\Longleftrightarrow\;$
+    $\forall\,\varepsilon > 0,\;\exists\,\delta > 0$ s.t.
+    $0 < |x - x_0| < \delta \;\Rightarrow\; |f(x) - L| < \varepsilon$
+  </div>
+</div>
+
+<!-- 탭 -->
+<div class="tabs">
+  <button class="tab-btn active" data-tab="2d">단변수 &nbsp;$f(x)=x^2$</button>
+  <button class="tab-btn" data-tab="3d">다변수 &nbsp;$f(x,y)=4-\sqrt{x^2+y^2}$</button>
+</div>
+
+<!-- ── 단변수 패널 ── -->
+<div class="tab-panel active" id="panel-2d">
+
+<!-- 파라미터 바 -->
+<div class="param-bar">
+  <div class="param-bar-inner">
+    <div class="param-group">
+      <label>$x_0$</label>
+      <input type="number" id="x0-input" value="2" step="0.5">
+    </div>
+    <div class="param-group">
+      <label>$L = f(x_0)$</label>
+      <span id="L-display" class="L-display">4</span>
+    </div>
+  </div>
+</div>
+
+<!-- 캔버스 -->
+<div class="canvas-area">
+  <div class="canvas-wrap">
+    <div id="app"></div>
+
+    <!-- 상태 표시 -->
+    <div class="status-float ok" id="status">
+      δ-구간의 함수값이 ε-구간 안에 있습니다
+    </div>
+
+    <!-- 플로팅 슬라이더 (드래그 이동 가능) -->
+    <div class="float-controls" id="float-controls">
+      <div class="drag-handle" id="drag-handle"></div>
+      <div class="slider-group">
+        <label class="color-eps">$\varepsilon$</label>
+        <input type="range" id="eps-slider" class="accent-eps"
+               min="0.05" max="3" step="0.05" value="1.0">
+        <span id="eps-value" class="slider-val color-eps">1.00</span>
+      </div>
+      <div class="slider-group">
+        <label class="color-del">$\delta$</label>
+        <input type="range" id="del-slider" class="accent-del"
+               min="0.02" max="1" step="0.02" value="0.50">
+        <span id="del-value" class="slider-val color-del">1.00</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 드래그 이동 -->
+<script>
+(function() {
+  const panel = document.getElementById('float-controls');
+  const handle = document.getElementById('drag-handle');
+  const wrap = document.querySelector('.canvas-wrap');
+  let dragging = false, ox, oy;
+
+  handle.addEventListener('pointerdown', e => {
+    dragging = true;
+    ox = e.clientX - panel.offsetLeft;
+    oy = e.clientY - panel.offsetTop;
+    handle.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+
+  window.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const rect = wrap.getBoundingClientRect();
+    let x = e.clientX - ox;
+    let y = e.clientY - oy;
+    // 캔버스 내부로 제한
+    x = Math.max(0, Math.min(x, rect.width - panel.offsetWidth));
+    y = Math.max(0, Math.min(y, rect.height - panel.offsetHeight));
+    panel.style.left = x + 'px';
+    panel.style.top = y + 'px';
+    panel.style.right = 'auto';
+    panel.style.bottom = 'auto';
+  });
+
+  window.addEventListener('pointerup', () => { dragging = false; });
+})();
+</script>
+
+</div><!-- /panel-2d -->
+
+<!-- ── 다변수 패널 ── -->
+<div class="tab-panel" id="panel-3d">
+
+<!-- 다변수함수로의 확장 -->
+<div class="canvas-area multivar">
+  <h2 class="multivar-title">다변수함수로의 확장</h2>
+  <p class="multivar-desc">
+    정의역이 평면이면 $\delta$-근방은 <b>원판</b>($\sqrt{(x-1)^2+(y-1)^2}<\delta$), $\varepsilon$-근방은
+    함숫값 $z$의 <b>띠</b>($|z-L|<\varepsilon$)가 됩니다.
+    아래는 점 $(1,1)$ 근방에서 $z = 4-\sqrt{x^2+y^2}$ 의 그래프입니다.
+    정의역은 원점 중심 반지름 $2$인 <b>원판</b>입니다 (드래그하여 회전).
+  </p>
+  <p class="fn-label">$z = 4 - \sqrt{x^2 + y^2}$, &nbsp; 근방 점 $(1,\,1)$</p>
+  <div class="param-bar-3d">
+    <label class="color-del">$\delta$ 근방 반지름</label>
+    <input type="range" id="delta3d-slider" class="accent-del" min="0.1" max="1" step="0.05" value="0.5">
+    <span id="delta3d-value" class="color-del">0.50</span>
+  </div>
+  <div class="canvas-wrap canvas-wrap-3d">
+    <div id="app3d"></div>
+  </div>
+</div>
+
+</div><!-- /panel-3d -->
+
+<!-- 탭 전환 -->
+<script>
+(function() {
+  const btns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('panel-' + b.dataset.tab).classList.add('active');
+    // 전환된 패널의 캔버스 크기 재계산 (숨겨졌던 쪽 복구)
+    window.dispatchEvent(new Event('resize'));
+  }));
+})();
+</script>
+
+<script type="module" src="./main.js"></script>
+<script type="module" src="./surface.js"></script>
+</body>
+</html>
