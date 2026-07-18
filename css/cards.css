@@ -73,7 +73,7 @@
 }
 
 .landing-card--visual {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
 }
 
 /* Card Icon */
@@ -101,16 +101,25 @@
 
 /* Card Text */
 .landing-card__title {
+    font-family: 'LINE Seed Sans KR', 'Pretendard', sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
+    /* 글씨 뒤 음영 — 밝은 배경에서도 대비 확보 */
+    text-shadow:
+        0 0 4px rgba(0, 0, 0, 0.45),
+        0 1px 6px rgba(0, 0, 0, 0.45);
 }
 
 .landing-card__desc {
     font-size: 0.95rem;
-    opacity: 0.85;
+    opacity: 0.92;
     line-height: 1.5;
     margin-bottom: 1.5rem;
+    /* 글씨 뒤 음영 */
+    text-shadow:
+        0 0 3px rgba(0, 0, 0, 0.4),
+        0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 /* Card CTA */
@@ -204,6 +213,7 @@
 }
 
 .landing-card-sm__title {
+    font-family: 'LINE Seed Sans KR', 'Pretendard', sans-serif;
     font-size: 1rem;
     font-weight: 700;
 }
