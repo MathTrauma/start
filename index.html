@@ -28,12 +28,11 @@
 
     <!-- 통합 네비게이션 바 -->
     <header class="site-nav">
-        <button class="explore-toggle" id="explore-toggle">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="1" y="1" width="5" height="5" rx="0.5"/>
-                <rect x="10" y="1" width="5" height="5" rx="0.5"/>
-                <rect x="1" y="10" width="5" height="5" rx="0.5"/>
-                <rect x="10" y="10" width="5" height="5" rx="0.5"/>
+        <button class="explore-toggle" id="explore-toggle" aria-label="메뉴 열기">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="2" y1="4" x2="16" y2="4"/>
+                <line x1="2" y1="9" x2="16" y2="9"/>
+                <line x1="2" y1="14" x2="16" y2="14"/>
             </svg>
             <span>Explore</span>
         </button>
@@ -83,17 +82,36 @@
                     <div class="explore-item-desc">결제 및 요금제</div>
                 </div>
             </a>
+
+            <div class="explore-divider"></div>
+
+            <a href="/e-HighSchool/" class="explore-item" data-wip>
+                <span class="explore-item-num">05</span>
+                <div class="explore-item-content">
+                    <div class="explore-item-title">고교수학</div>
+                    <div class="explore-item-desc">대학 입시 기출과 3D 시각화 풀이</div>
+                </div>
+            </a>
+            <a href="/e-MajorMath/" class="explore-item" data-wip>
+                <span class="explore-item-num">06</span>
+                <div class="explore-item-content">
+                    <div class="explore-item-title">전공수학</div>
+                    <div class="explore-item-desc">전공 과목 기출문제와 풀이</div>
+                </div>
+            </a>
+            <a href="/e-book/" class="explore-item">
+                <span class="explore-item-num">07</span>
+                <div class="explore-item-content">
+                    <div class="explore-item-title">Graphic Novel</div>
+                    <div class="explore-item-desc">과학 이야기를 그래픽 노블로</div>
+                </div>
+            </a>
         </nav>
     </div>
 
     <main>
         <!-- Landing Cards -->
         <section class="landing-hero">
-            <div class="landing-hero-text">
-                <h1>수학, 눈으로 이해하다</h1>
-                <p>단계별 애니메이션과 시각 도구로 수학 문제를 풀어보세요</p>
-            </div>
-
             <div class="landing-cards">
                 <!-- 도형문제풀이 -->
                 <a href="/euclide-geometry/" class="landing-card landing-card--geometry">
@@ -137,7 +155,7 @@
 
             <div class="landing-cards landing-cards--small">
                 <!-- 고교수학 -->
-                <a href="/e-HighSchool/" class="landing-card-sm landing-card-sm--highschool">
+                <a href="/e-HighSchool/" class="landing-card-sm landing-card-sm--highschool" data-wip>
                     <div class="landing-card-sm__icon">
                         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                     </div>
@@ -148,7 +166,7 @@
                 </a>
 
                 <!-- 전공수학 -->
-                <a href="/e-MajorMath/" class="landing-card-sm landing-card-sm--major">
+                <a href="/e-MajorMath/" class="landing-card-sm landing-card-sm--major" data-wip>
                     <div class="landing-card-sm__icon">
                         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5"/></svg>
                     </div>

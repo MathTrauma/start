@@ -168,3 +168,10 @@
 .explore-item:hover .explore-item-desc {
     color: #64748b;
 }
+
+/* 사이드바 메인/서브 구분선 */
+.explore-divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    margin: 12px 20px;
+}

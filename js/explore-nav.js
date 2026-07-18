@@ -34,5 +34,26 @@
                 }, 300);
             });
         });
+
+        // 준비중 게이팅: 로컬 테스트에서는 진입 허용, 프로덕션에서는 링크 비활성 + '준비중'
+        var host = location.hostname;
+        var isLocal = host === 'localhost' || host === '127.0.0.1' || host === '' ||
+            host === '0.0.0.0' || /\.local$/.test(host) || location.protocol === 'file:';
+        if (!isLocal) {
+            document.querySelectorAll('[data-wip]').forEach(function (el) {
+                el.classList.add('is-wip');
+                el.setAttribute('aria-disabled', 'true');
+                if (!el.querySelector('.wip-badge')) {
+                    var badge = document.createElement('span');
+                    badge.className = 'wip-badge';
+                    badge.textContent = '준비중';
+                    el.appendChild(badge);
+                }
+                el.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
+        }
     });
 })();

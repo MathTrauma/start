@@ -64,3 +64,32 @@ body {
 main {
     flex-grow: 1;
 }
+
+/* =========================================
+   준비중(WIP) 상태 — 프로덕션에서 미완성 메뉴/카드 비활성
+   ========================================= */
+.is-wip {
+    position: relative;
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(0.35);
+}
+
+.is-wip:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.wip-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: rgba(30, 30, 40, 0.6);
+    color: #fff;
+    pointer-events: none;
+}
