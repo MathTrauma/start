@@ -1,6 +1,3 @@
-import { LIB_BASE } from './env.js';
-const { isFreeProblem } = await import(LIB_BASE + 'config.js');
-
 // bfcache 복원 시 시청 기록 갱신
 window.addEventListener('pageshow', (event) => {
     if (event.persisted && currentUserId) {
@@ -160,19 +157,12 @@ async function loadBookmarks(userId) {
     }
 }
 
-// 각 레벨별 첫 번째 문제인지 확인
-function isFirstProblemOfLevel(problem, problems) {
-    const sameLevel = problems.filter(p => p.level === problem.level);
-    sameLevel.sort((a, b) => parseInt(a.id) - parseInt(b.id));
-    return sameLevel.length > 0 && sameLevel[0].id === problem.id;
-}
-
 // 문제 접근 가능 여부 확인
+// 무료 여부는 index.json 의 free 플래그가 유일한 출처 (Worker 와 동일한 데이터).
 function canAccessProblem(problem) {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return true;
     if (isPaidUser) return true;
-    if (isFreeProblem(problem.id)) return true;
-    return isFirstProblemOfLevel(problem, allProblems);
+    return problem.free === true;
 }
 
 
