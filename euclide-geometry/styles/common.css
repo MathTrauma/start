@@ -516,9 +516,7 @@ mjx-container[display="true"] {
 /* Controls - Base */
 /* 컨트롤 UI 전용 폰트 — 본문 명조와 구분되는 둥근 서체 */
 .controls,
-.controls button,
-.controls-onboarding,
-.canvas-onboarding {
+.controls button {
     font-family: 'Jua', 'Noto Sans KR', sans-serif;
     /* Jua 는 단일 굵기 — 가짜 볼드가 생기지 않도록 400 고정 */
     font-weight: 400;
@@ -711,69 +709,49 @@ mjx-container[display="true"] {
     display: none;
 }
 
-/* 드래그 안내 말풍선 (최초 1회) */
-.controls-onboarding {
+/* 온보딩 툴팁 (최초 1회) — 흔히 쓰는 기본 툴팁 형태 */
+.controls-onboarding,
+.canvas-onboarding {
     position: absolute;
-    top: calc(100% + 10px);
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(45, 42, 38, 0.92);
+    background-color: rgba(0, 0, 0, 0.8);
     color: #fff;
-    font-size: 11px;
-    font-weight: 500;
-    line-height: 1;
-    padding: 7px 12px;
-    border-radius: 6px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+    padding: 6px 10px;
+    border-radius: 4px;
     white-space: nowrap;
     pointer-events: none;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
     opacity: 1;
     transition: opacity 0.3s ease;
-    animation: onboardingBob 1.6s ease-in-out infinite;
 }
 
-/* 말풍선 꼬리 */
-.controls-onboarding::before {
+/* 컨트롤 아래에 붙는 툴팁 — 위쪽 꼬리 */
+.controls-onboarding {
+    top: calc(100% + 8px);
+}
+
+.controls-onboarding::after {
     content: '';
     position: absolute;
     bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
     border: 5px solid transparent;
-    border-bottom-color: rgba(45, 42, 38, 0.92);
+    border-bottom-color: rgba(0, 0, 0, 0.8);
 }
 
-.controls-onboarding.hiding {
-    opacity: 0;
-}
-
-/* 캔버스 탭 안내 배너 (최초 1회) */
+/* 캔버스 위 툴팁 */
 .canvas-onboarding {
-    position: absolute;
-    left: 50%;
     bottom: 12%;
-    transform: translateX(-50%);
-    background-color: rgba(45, 42, 38, 0.85);
-    color: #fff;
-    font-size: 12px;
-    line-height: 1;
-    padding: 9px 14px;
-    border-radius: 6px;
-    white-space: nowrap;
-    pointer-events: none;
     z-index: 200;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    opacity: 1;
-    transition: opacity 0.3s ease;
 }
 
+.controls-onboarding.hiding,
 .canvas-onboarding.hiding {
     opacity: 0;
-}
-
-@keyframes onboardingBob {
-    0%, 100% { transform: translate(-50%, 0); }
-    50%      { transform: translate(-50%, 3px); }
 }
 
 /* Phase Block */
