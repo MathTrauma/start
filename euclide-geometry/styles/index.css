@@ -108,6 +108,69 @@ h1 {
     z-index: 1001;
 }
 
+/* 레벨 온보딩: 선택창 펄스 효과 */
+@keyframes level-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(90, 122, 174, 0.65); }
+    70% { box-shadow: 0 0 0 9px rgba(90, 122, 174, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(90, 122, 174, 0); }
+}
+
+#level-filter.level-pulse {
+    border-color: #5a7aae;
+    animation: level-pulse 1.5s ease-out infinite;
+}
+
+/* 레벨 온보딩: 코치마크 팝업 */
+.level-onboarding {
+    position: fixed;
+    z-index: 1002;
+    max-width: 300px;
+    padding: 14px 34px 14px 16px;
+    background: #2f2a24;
+    color: #f5f1ea;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.level-onboarding p {
+    margin: 0;
+}
+
+.level-onboarding strong {
+    color: #ffd98a;
+}
+
+/* 팝업 상단 화살표 — 레벨 선택창 중앙을 가리킴 */
+.level-onboarding::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: var(--arrow-left, 50%);
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #2f2a24;
+}
+
+.level-onboarding-close {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    border: none;
+    background: none;
+    color: #b8b0a4;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.level-onboarding-close:hover {
+    color: #fff;
+}
+
 /* Responsive Grid — 카드 폭 고정, 폭이 넓어지면 열 개수만 증가 */
 #problem-grid {
     display: grid;
@@ -142,35 +205,31 @@ h1 {
     border: 2px solid #e8e3d8;
 }
 
-/* 시청 완료 문제 - 회색 배경 + 밝은 글씨 */
-.problem-card.viewed {
-    background-color: #4a4f54;
-    border-color: #5e646a;
+/* 레벨별 색상 — 레벨별 배지 색은 common.css로 이관 (뷰어·목록 공통) */
+
+/* 시청 완료 표시 — 우측 상단 동그라미 안 녹색 체크 */
+.viewed-check {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    z-index: 5;
+    pointer-events: none;
+    color: #2e9e63;
 }
 
-.problem-card.viewed h3 {
-    color: #c0c4c8;
+.viewed-check svg {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
+/* 배지와 본문이 겹치지 않도록 첫 줄 우측 여백 확보 */
 .problem-card.viewed .problem-description {
-    color: #d8dbde;
+    padding-right: 26px;
+    margin-right: -8px;
 }
-
-/* 레벨별 색상 — 평상시(선명한 채도) */
-.problem-tag.level-0 { background-color: #e6b949; }  /* 기본정리 — 골드 */
-.problem-tag.level-1 { background-color: #3dd17c; }  /* Level 1 — 초록 */
-.problem-tag.level-2 { background-color: #3ab4f5; }  /* Level 2 — 파랑 */
-.problem-tag.level-3 { background-color: #ff9a2e; }  /* Level 3 — 주황 */
-.problem-tag.level-4 { background-color: #f04c34; }  /* Level 4 — 빨강 */
-.problem-tag.level-9 { background-color: #b05ee0; }  /* 영재고 — 자주 */
-
-/* 시청 완료 — 같은 계열의 진한 톤 */
-.problem-card.viewed .problem-tag.level-0 { background-color: #a67f1e; color: #fff; }
-.problem-card.viewed .problem-tag.level-1 { background-color: #1f9e50; color: #fff; }
-.problem-card.viewed .problem-tag.level-2 { background-color: #1f7fbd; color: #fff; }
-.problem-card.viewed .problem-tag.level-3 { background-color: #c86810; color: #fff; }
-.problem-card.viewed .problem-tag.level-4 { background-color: #b32d18; color: #fff; }
-.problem-card.viewed .problem-tag.level-9 { background-color: #7a2fa8; color: #fff; }
 
 /* 잠금 문제 스타일 */
 .problem-card.locked {
@@ -222,12 +281,6 @@ h1 {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* 시청 완료 문제 hover */
-.problem-card.viewed:hover {
-    background-color: #565c62;
-    box-shadow: 0 8px 20px rgba(80, 86, 92, 0.35);
-}
-
 .problem-card h3 {
     color: #8b7d6b;
     font-size: 18px;
@@ -257,6 +310,9 @@ h1 {
     font-size: 14px;
     line-height: 2;
     overflow-y: auto;
+    /* overflow-y 를 auto 로 두면 규격상 overflow-x 가 auto 로 계산되어,
+       인라인 수식이 몇 px만 넘쳐도 가로 스크롤바가 생긴다. 명시적으로 hidden 처리. */
+    overflow-x: hidden;
     flex: 1;
     padding-right: 8px;
     margin-right: -8px;
@@ -273,11 +329,6 @@ h1 {
 .problem-card .problem-description::-webkit-scrollbar-thumb {
     background: #d4cec3;
     border-radius: 2px;
-}
-
-/* 시청 완료 카드 스크롤바 */
-.problem-card.viewed .problem-description::-webkit-scrollbar-thumb {
-    background: #6b7178;
 }
 
 .problem-card .problem-description::after {
@@ -303,11 +354,6 @@ h1 {
 .problem-card .problem-description mjx-container svg {
     display: inline-block;
     vertical-align: baseline;
-}
-
-/* 시청 완료 카드 MathJax SVG 색상 */
-.problem-card.viewed .problem-description mjx-container svg {
-    fill: #d8dbde;
 }
 
 .stats-container {

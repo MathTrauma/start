@@ -2,17 +2,42 @@
    Mobile Styles (max-width: 768px)
    ========================================= */
 
-/* Top Nav on Mobile */
+/* Top Nav — 모바일에서는 제거 (캔버스 양옆 화살표로 대체) */
 .top-nav {
-    padding: 8px 12px;
+    display: none;
 }
 
-#theme-select {
-    font-size: 14px;
-    padding: 6px 10px;
-    -webkit-appearance: menulist;
-    appearance: menulist;
+/* 캔버스 양옆 이전/다음 화살표 */
+.canvas-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10%;
+    max-width: 44px;
+    aspect-ratio: 1 / 1;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--text-muted, #8b7d6b);
+    opacity: 0.65;
+    z-index: 101;
+    -webkit-tap-highlight-color: transparent;
 }
+
+.canvas-nav-btn:active {
+    opacity: 1;
+}
+
+.canvas-nav-btn svg {
+    width: 60%;
+    height: 60%;
+}
+
+.canvas-nav-btn.prev { left: 0; }
+.canvas-nav-btn.next { right: 0; }
 
 body {
     align-items: flex-start;
@@ -23,17 +48,28 @@ body {
 .viewer-main {
     padding: 0;
     height: 100dvh;
+    box-sizing: border-box;
 }
 
-/* Problem Container */
+/* 홈 화면에 추가(standalone)로 실행 시 상태바/홈 인디케이터 영역 확보 */
+@media (display-mode: standalone) {
+    .viewer-main {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* Problem Container — 화면 폭 90% 카드 (여백 확보) */
 .problem-container {
-    padding: 12px 15px;
-    width: 100%;
-    max-width: 100%;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    box-shadow: none;
+    padding: 16px 18px;
+    width: 90%;
+    max-width: 90%;
+    margin: 12px auto 10px;
+}
+
+/* 문제 영역 높이 확보 (기본 25vh → 34vh) */
+#problem-scroll-container {
+    max-height: 34vh;
 }
 
 .problem-tag {
@@ -51,54 +87,48 @@ body {
     padding-bottom: 100px;
 }
 
-/* Solution Container */
+/* Solution Container — 화면 폭 90% 카드 */
 .solution-container {
-    width: 100%;
-    max-width: 100%;
-    margin: 20px 0;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    background-color: transparent;
-    box-shadow: none;
+    width: 90%;
+    max-width: 90%;
+    margin: 20px auto;
 }
 
 .solution-container-content {
-    padding: 10px 15px;
+    padding: 14px 18px;
     font-size: 16px;
     line-height: 1.6;
 }
 
-/* Canvas */
+/* Canvas — 화면 폭 80% (문제·풀이 영역 높이 확보) */
 .canvas-container {
-    width: 100%;
-    max-width: 100%;
-    max-height: 100vw;
+    width: 80%;
+    max-width: 80%;
+    max-height: 80vw;
     position: sticky;
     top: 0;
-    margin-bottom: 10px;
+    margin: 0 auto 10px;
 }
 
 /* Controls */
 .controls {
     top: 6px;
     right: 6px;
-    max-width: 160px;
+    max-width: 220px;
     min-width: 100px;
     padding: 4px;
     gap: 2px;
 }
 
-/* Collapsed - 폭 넓게, 높이 납작하게 */
+/* Collapsed — 알약 형태, 짧은 라벨이라 가독성 확보 */
 .controls.collapsed {
-    min-width: 100px;
-    padding: 2px 4px;
+    min-width: auto;
+    padding: 4px 6px 4px 4px;
+    gap: 4px;
 }
 
-.controls.collapsed .controls-header {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
+.controls.collapsed .collapsed-view {
+    gap: 5px;
 }
 
 .controls-header {
@@ -116,10 +146,9 @@ body {
     font-size: 12px;
 }
 
-/* 드래그 핸들 - 시각적으로 작게 */
+/* 드래그 핸들 */
 .drag-handle-icon {
-    font-size: 8px;
-    padding: 0 1px;
+    width: 14px;
 }
 
 /* 터치 영역 확장 */
@@ -130,9 +159,10 @@ body {
     bottom: -12px;
 }
 
+/* 글자가 버튼을 꽉 채우도록 여백 최소 + 글자 크게 (위 패딩 1px 보정) */
 .mode-shortcut-btn {
-    padding: 2px 4px;
-    font-size: 8.5px;
+    padding: 5px 8px 3px;
+    font-size: 15px;
 }
 
 .control-label {
@@ -146,13 +176,12 @@ button {
 }
 
 .phase-buttons {
-    grid-template-columns: repeat(6, 1fr);
-    gap: 1.5px;
+    gap: 3px;
 }
 
 .phase-buttons button {
-    font-size: 8px;
-    padding: 2px 0;
+    font-size: 12px;
+    padding: 4px 0;
 }
 
 /* =========================================
@@ -171,7 +200,4 @@ button {
         padding: 10px 12px;
     }
 
-    .phase-buttons {
-        grid-template-columns: repeat(6, 1fr);
-    }
 }

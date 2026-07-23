@@ -14,6 +14,7 @@
     --text-muted: #8b7d6b;
     --border-light: #e8e3d8;
     --border-medium: #d4cec3;
+    --card-border: #c7bfae;   /* 문제/풀이 카드 테두리 */
     --scrollbar-color: rgba(139, 125, 107, 0.3);
 
     /* 로그인 모달용 변수 */
@@ -65,12 +66,32 @@ body {
 }
 
 .nav-logo {
-    font-weight: bold;
+    font-weight: 600;
     text-decoration: none;
-    color: #333;
-    display: flex;
+    color: var(--text-primary);
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    padding: 7px 16px;
+    border: 1px solid var(--border-medium);
+    border-radius: 8px;
+    background: #eef1f6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+}
+
+.nav-logo:hover {
+    background: #e2e7f0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.nav-logo:active {
+    transform: translateY(1px);
+}
+
+.nav-logo i {
+    width: 16px;
+    height: 16px;
 }
 
 #bg-container {
@@ -219,6 +240,8 @@ body {
     z-index: 11;
     display: flex;
     justify-content: center;
+    /* stretch 되면 카드 높이가 컨테이너 높이로 고정되어 내용이 테두리 밖으로 넘친다 */
+    align-items: flex-start;
 }
 
 #solution-scroll-container {
@@ -230,6 +253,7 @@ body {
 }
 
 .canvas-section {
+    position: relative;
     flex: 0 0 auto;
     width: 100%;
     max-height: 600px;
@@ -243,20 +267,33 @@ body {
 
 /* WebKit Scrollbar */
 #problem-scroll-container::-webkit-scrollbar,
-#solution-scroll-container::-webkit-scrollbar {
+#solution-scroll-container::-webkit-scrollbar,
+.problem-container::-webkit-scrollbar,
+.solution-container::-webkit-scrollbar {
     width: 6px;
     background: transparent;
 }
 
 #problem-scroll-container::-webkit-scrollbar-track,
-#solution-scroll-container::-webkit-scrollbar-track {
+#solution-scroll-container::-webkit-scrollbar-track,
+.problem-container::-webkit-scrollbar-track,
+.solution-container::-webkit-scrollbar-track {
     background: transparent;
 }
 
 #problem-scroll-container::-webkit-scrollbar-thumb,
-#solution-scroll-container::-webkit-scrollbar-thumb {
+#solution-scroll-container::-webkit-scrollbar-thumb,
+.problem-container::-webkit-scrollbar-thumb,
+.solution-container::-webkit-scrollbar-thumb {
     background: var(--scrollbar-color);
     border-radius: 3px;
+}
+
+/* 카드 내부 스크롤 (Firefox) */
+.problem-container,
+.solution-container {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-color) transparent;
 }
 
 #problem-scroll-container::-webkit-scrollbar-thumb:hover,
@@ -267,20 +304,21 @@ body {
 /* Problem Container - Base */
 .problem-container {
     background-color: var(--bg-card);
-    border-radius: 0 0 10px 10px;
+    border: 2.5px solid var(--card-border);
+    border-radius: 12px;
     width: 100%;
     max-width: 600px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     box-sizing: border-box;
 }
 
 .problem-tag {
     background-color: var(--border-light);
-    border-radius: 4px;
+    border-radius: 6px;
     color: var(--text-secondary);
     display: inline-block;
     vertical-align: middle;
-    margin-right: 8px;
+    margin-right: 4px;
 }
 
 .problem-tag.level {
@@ -288,6 +326,15 @@ body {
     color: #fff;
     font-weight: bold;
 }
+
+/* 레벨별 배지 색 — 목록(index)과 뷰어 공통 */
+.problem-tag.level-mid2       { background-color: #7ac6a1; } /* 중2 — 연녹 */
+.problem-tag.level-mid3       { background-color: #5bb6d1; } /* 중3 — 연청 */
+.problem-tag.level-contest1-1 { background-color: #3ab4f5; } /* 경시 1차-1 — 파랑 */
+.problem-tag.level-contest1-2 { background-color: #ff9a2e; } /* 경시 1차-2 — 주황 */
+.problem-tag.level-contest2   { background-color: #f04c34; } /* 경시 2차 — 빨강 */
+.problem-tag.level-gifted     { background-color: #b05ee0; } /* 영재고 — 자주 */
+.problem-tag.level-0          { background-color: #e6b949; } /* 기본정리 — 골드 */
 
 .problem-content {
     color: var(--text-primary);
@@ -303,15 +350,29 @@ body {
 }
 
 /* 첫 번째 문단은 라벨과 같은 줄에 표시 */
-.problem-content #problem-text > p:first-child {
+.problem-content #problem-text > p:first-child,
+.problem-content #main-problem-text > p:first-child {
     display: inline;
 }
 
+/* KaTeX(신 방식) 수식 크기 통일 — 기본 1.21em 대신 1.1em */
+.problem-content .katex,
+.solution-container-content .katex {
+    font-size: 1.1em;
+}
+
 /* Display Math 중앙 정렬 */
+/* Display 수식(\[ \]) 위·아래 간격 축소.
+   MathJax 런타임 주입 스타일(mjx-container[jax="SVG"][display="true"] margin:1em)과
+   KaTeX 기본 .katex-display margin:1em 이 우선순위상 이기므로 !important 로 강제한다. */
 mjx-container[display="true"] {
     display: block;
     text-align: center;
-    margin: 1em 0;
+    margin: 0.3em 0 !important;
+}
+
+.katex-display {
+    margin: 0.3em 0 !important;
 }
 
 /* Solution Container - Base */
@@ -321,8 +382,9 @@ mjx-container[display="true"] {
     min-height: 200px;
     flex-shrink: 0;
     background-color: var(--bg-solution);
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2.5px solid var(--card-border);
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     transition: opacity 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -388,14 +450,15 @@ mjx-container[display="true"] {
 
 /* Toggle Canvas Button */
 .toggle-canvas-btn {
-    display: inline;
-    padding: 2px 10px;
-    background-color: var(--text-muted);
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 500;
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: #efe7d8;
+    color: #7a6547;
+    border: 1px solid var(--border-medium);
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    vertical-align: middle;
     cursor: pointer;
     transition: background-color 0.2s ease;
     vertical-align: middle;
@@ -405,7 +468,7 @@ mjx-container[display="true"] {
 }
 
 .toggle-canvas-btn:hover {
-    background-color: #a0927e;
+    background-color: #e2d6c2;
 }
 
 .toggle-canvas-btn:active {
@@ -437,6 +500,11 @@ mjx-container[display="true"] {
         0 0 0 1px #3e2723;
 }
 
+/* 캔버스 양옆 이전/다음 버튼 — 모바일에서만 노출 */
+.canvas-nav-btn {
+    display: none;
+}
+
 .canvas-container canvas {
     width: 100% !important;
     height: 100% !important;
@@ -446,10 +514,21 @@ mjx-container[display="true"] {
 }
 
 /* Controls - Base */
+/* 컨트롤 UI 전용 폰트 — 본문 명조와 구분되는 둥근 서체 */
+.controls,
+.controls button,
+.controls-onboarding,
+.canvas-onboarding {
+    font-family: 'Jua', 'Noto Sans KR', sans-serif;
+    /* Jua 는 단일 굵기 — 가짜 볼드가 생기지 않도록 400 고정 */
+    font-weight: 400;
+    letter-spacing: 0.2px;
+}
+
 .controls {
-    position: absolute;
+    position: fixed;
     background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 6px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -473,9 +552,15 @@ mjx-container[display="true"] {
     padding-bottom: 0;
 }
 
+/* 접힌 상태 — 모서리만 살짝 깎은 사각형 */
 .controls.collapsed {
     min-width: auto;
     width: auto;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
 }
 
 .controls-header {
@@ -484,6 +569,13 @@ mjx-container[display="true"] {
     align-items: center;
     border-bottom: 1px solid var(--border-light);
     cursor: move;
+}
+
+/* 접힌 상태에서는 구분선 불필요 */
+.controls.collapsed .controls-header {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 .controls-title {
@@ -515,14 +607,23 @@ mjx-container[display="true"] {
     display: block;
 }
 
+/* 드래그 핸들 — 그립 점 6개 */
 .drag-handle-icon {
     cursor: move;
-    color: #9a9488;
-    padding: 1px 2px;
+    color: #b0a89a;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
     user-select: none;
-    letter-spacing: -3px;
     touch-action: none;
     position: relative;
+}
+
+.drag-handle-icon svg {
+    width: 8px;
+    height: 14px;
+    pointer-events: none;
 }
 
 /* 시각적 크기는 유지하고 터치 영역만 확장 */
@@ -535,26 +636,66 @@ mjx-container[display="true"] {
     bottom: -10px;
 }
 
-.mode-shortcut-btn {
-    background-color: #f0ece6;
-    border: 1px solid var(--border-medium);
-    border-radius: 4px;
+/* 네온사인 톤 — 색 있는 바탕 위 발광 글자, 글자가 버튼을 꽉 채우도록 여백 최소화 */
+.mode-shortcut-btn,
+.mode-btn {
+    background-color: #2e2a33;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 5px;
     cursor: pointer;
     font-family: inherit;
-    color: var(--text-secondary);
+    line-height: 1;
     transition: all 0.2s;
     white-space: nowrap;
 }
 
-.mode-shortcut-btn:hover {
-    background-color: var(--border-light);
-    border-color: var(--text-muted);
+/* '문제' — 짙은 자주 바탕 + 노랑·녹색 중간색 글자 (보색 대비로 네온이 살아난다) */
+#btn-shortcut-problem,
+#btn-mode-problem {
+    color: #dcee4a;
+    background-color: #3a2247;
+    border-color: rgba(255, 255, 255, 0.22);
+    text-shadow: 0 0 3px rgba(220, 238, 74, 0.5);
 }
 
-.mode-shortcut-btn:disabled {
-    opacity: 0.5;
+/* '풀이' — 짙은 청람 바탕 + 하늘색 글자 */
+#btn-shortcut-solution,
+#btn-mode-solution {
+    color: #86e6ff;
+    background-color: #14364a;
+    border-color: rgba(255, 255, 255, 0.22);
+    text-shadow: 0 0 3px rgba(134, 230, 255, 0.5);
+}
+
+#btn-shortcut-problem:hover,
+#btn-mode-problem:hover,
+#btn-mode-problem.active {
+    background-color: #4c2e5d;
+    border-color: rgba(220, 238, 74, 0.5);
+}
+
+#btn-shortcut-solution:hover,
+#btn-mode-solution:hover,
+#btn-mode-solution.active {
+    background-color: #1d4a63;
+    border-color: rgba(134, 230, 255, 0.5);
+}
+
+/* 펼친 상태 모드 버튼 — 칸을 채우고 글자도 크게.
+   Jua 는 ascent 13 / descent 4 로 비대칭이라 글자가 위로 붙는다 → 위 패딩을 1px 더 준다. */
+.mode-toggle .mode-btn {
+    padding: 7px 4px 5px;
+    font-size: 16px;
+}
+
+/* 네온은 꺼진 상태 = 어둡고 흐리게 */
+.mode-shortcut-btn:disabled,
+.mode-btn:disabled {
+    opacity: 0.35;
     cursor: not-allowed;
-    background-color: #f0ece6;
+    background-color: #2e2a33;
+    text-shadow: none;
+    box-shadow: none;
 }
 
 .controls-collapse-btn {
@@ -568,6 +709,71 @@ mjx-container[display="true"] {
 
 .controls.collapsed .controls-body {
     display: none;
+}
+
+/* 드래그 안내 말풍선 (최초 1회) */
+.controls-onboarding {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(45, 42, 38, 0.92);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1;
+    padding: 7px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    animation: onboardingBob 1.6s ease-in-out infinite;
+}
+
+/* 말풍선 꼬리 */
+.controls-onboarding::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-bottom-color: rgba(45, 42, 38, 0.92);
+}
+
+.controls-onboarding.hiding {
+    opacity: 0;
+}
+
+/* 캔버스 탭 안내 배너 (최초 1회) */
+.canvas-onboarding {
+    position: absolute;
+    left: 50%;
+    bottom: 12%;
+    transform: translateX(-50%);
+    background-color: rgba(45, 42, 38, 0.85);
+    color: #fff;
+    font-size: 12px;
+    line-height: 1;
+    padding: 9px 14px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 200;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.canvas-onboarding.hiding {
+    opacity: 0;
+}
+
+@keyframes onboardingBob {
+    0%, 100% { transform: translate(-50%, 0); }
+    50%      { transform: translate(-50%, 3px); }
 }
 
 /* Phase Block */
@@ -630,10 +836,29 @@ button.active:hover {
     background-color: #a0927e;
 }
 
+/* Phase 행 — All + 단계 버튼을 한 줄에, 남는 폭을 나눠 채운다 */
+.phase-row {
+    display: flex;
+    align-items: stretch;
+    gap: 4px;
+}
+
+.phase-row #btn-all {
+    flex: 0 0 auto;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .phase-buttons {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 2px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    flex: 1;
+}
+
+.phase-buttons button {
+    flex: 1 1 0;
+    min-width: 24px;
 }
 
 .control-label {
@@ -657,37 +882,7 @@ button.active:hover {
     gap: 3px;
 }
 
-.mode-btn {
-    font-weight: 500;
-}
-
-.mode-btn.active {
-    background-color: var(--text-muted);
-    color: #fff;
-    border-color: var(--text-muted);
-}
-
-.mode-btn.active:hover {
-    background-color: #a0927e;
-}
-
-/* Play/Pause Button */
-.play-pause-btn {
-    width: 32px;
-    height: 24px;
-    font-size: 12px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mode-btn:disabled {
-    background-color: #3a3a3a;
-    color: #666;
-    cursor: not-allowed;
-    opacity: 0.5;
-}
+/* 모드 버튼 색·상태는 위쪽 네온 규칙에서 처리 */
 
 /* KaTeX Overlay */
 .math-overlay {
@@ -702,8 +897,17 @@ button.active:hover {
     font-size: 1em;
 }
 
-/* 문제 출처 표기 — 굵은 고딕 */
+/* 문제 출처 표기 — 파스텔 박스 (루트 카드 톤). 앞의 레벨·Contest 배지와 크기·정렬 통일 */
 .problem-source {
-    font-weight: 700;
+    display: inline-block;
+    font-weight: 600;
     font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    background-color: #f3ecff;
+    color: #6d28d9;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-right: 4px;
+    vertical-align: middle;
 }

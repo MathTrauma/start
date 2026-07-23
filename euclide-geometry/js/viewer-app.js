@@ -9,7 +9,7 @@ import { LIB_BASE } from './env.js';
 
 const [
     { sketchContext },
-    { CONFIG, THEMES, DEFAULT_THEME },
+    { CONFIG, THEMES, DEFAULT_THEME, resolveProblem },
     { applyTheme }
 ] = await Promise.all([
     import(LIB_BASE + 'sketch-context.js'),
@@ -116,7 +116,10 @@ class EuclideApp {
 
             // HTML 렌더링
             const problemHtml = await this.dataLoader.loadProblemHtml(id);
-            this.ui.renderProblemContent(problemHtml, this.config.level, this.isContestMode);
+            // 폴더 유래 레벨 코드(mid2·mid3 등)를 우선 사용 — 없으면 config.level 폴백
+            const resolved = resolveProblem(id);
+            const displayLevel = resolved.levelCode ?? this.config.level;
+            this.ui.renderProblemContent(problemHtml, displayLevel, this.isContestMode);
 
             // Contest 모드: 스크립트 로드 지연 (버튼 클릭 시 로드)
             if (!this.isContestMode) {
@@ -397,6 +400,16 @@ class EuclideApp {
     }
 
     async saveProblemView() {
+        // 로컬 개발 환경 — Supabase 로그인 없이 시청 표시를 테스트할 수 있도록 localStorage 에도 기록
+        if (['localhost', '127.0.0.1'].includes(location.hostname)) {
+            try {
+                const key = 'euclide-dev-viewed';
+                const ids = new Set(JSON.parse(localStorage.getItem(key) || '[]'));
+                ids.add(String(this.problemId));
+                localStorage.setItem(key, JSON.stringify([...ids]));
+            } catch { /* 무시 */ }
+        }
+
         // 로그인 상태 확인
         if (typeof window.supabaseClient === 'undefined') return;
 

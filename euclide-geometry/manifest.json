@@ -1,0 +1,19 @@
+{
+  "name": "Euclid Geometry",
+  "short_name": "Euclid",
+  "description": "유클리드 기하 문제 단계별 애니메이션",
+  "start_url": "/euclide-geometry/",
+  "scope": "/euclide-geometry/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f1e8",
+  "theme_color": "#2F4F4F",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -3,9 +3,17 @@
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7662489362586460" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Euclidean Geometry Problems</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- PWA (홈 화면에 추가 시 주소창 없이 전체 화면) -->
+    <link rel="manifest" href="/euclide-geometry/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Euclid">
+    <meta name="theme-color" content="#2F4F4F">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
@@ -45,12 +53,13 @@
         <div class="filters">
             <select id="level-filter">
                 <option value="">모든 레벨</option>
+                <option value="mid2">중2</option>
+                <option value="mid3">중3</option>
+                <option value="contest1-1">경시 1차-1</option>
+                <option value="contest1-2">경시 1차-2</option>
+                <option value="contest2">경시2차</option>
+                <option value="gifted">영재고</option>
                 <option value="0">기본정리</option>
-                <option value="1">Level 1</option>
-                <option value="2">Level 2</option>
-                <option value="3">Level 3</option>
-                <option value="4">Level 4</option>
-                <option value="9">영재고</option>
             </select>
         
             <select id="category-filter">

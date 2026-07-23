@@ -45,11 +45,12 @@ export class UIController {
     renderProblemContent(html, level, isContest) {
         if (!this.elements['problem-container']) return;
 
-        const levelLabel = level == 9 ? '영재고' : level == 0 ? '기본정리' : `L${level}`;
+        const LEVEL_LABELS = { mid2: '중2', mid3: '중3', 'contest1-1': '경시 1차-1', 'contest1-2': '경시 1차-2', contest2: '경시2차', gifted: '영재고', 0: '기본정리' };
+        const levelLabel = LEVEL_LABELS[level] ?? `L${level}`;
         this.elements['problem-container'].className = 'problem-container';
         this.elements['problem-container'].innerHTML = `
             <div class="problem-content">
-                <span class="problem-tag level">${levelLabel}</span>
+                <span class="problem-tag level level-${level}">${levelLabel}</span>
                 ${isContest ? '<span class="problem-tag contest">Contest</span>' : ''}
                 <span id="problem-text">${html}</span>
                 ${isContest ? ' <button id="toggle-canvas-btn" class="toggle-canvas-btn">▼ 그림 보기</button>' : ''}
@@ -109,7 +110,8 @@ export class UIController {
     // --- Controls UI ---
     renderControls(config) {
         const hasSolution = config.solutionPhases && config.solutionPhases.length > 0;
-        const parent = this.elements['canvas-wrapper'];
+        // 화면 전체를 자유롭게 이동할 수 있도록 body 에 부착 (position: fixed)
+        const parent = document.body;
         if (!parent) return;
 
         // Remove existing controls
@@ -124,9 +126,15 @@ export class UIController {
             <div class="controls collapsed" id="draggable-controls">
                 <div class="controls-header" id="controls-drag-handle">
                     <div class="collapsed-view">
-                        <span class="drag-handle-icon">⋮⋮</span>
-                        <button class="mode-shortcut-btn" id="btn-shortcut-problem">Prob</button>
-                        <button class="mode-shortcut-btn" id="btn-shortcut-solution" ${!hasSolution ? 'disabled' : ''}>Sol</button>
+                        <span class="drag-handle-icon" aria-hidden="true">
+                            <svg viewBox="0 0 8 14" fill="currentColor">
+                                <circle cx="2" cy="2" r="1.3"/><circle cx="6" cy="2" r="1.3"/>
+                                <circle cx="2" cy="7" r="1.3"/><circle cx="6" cy="7" r="1.3"/>
+                                <circle cx="2" cy="12" r="1.3"/><circle cx="6" cy="12" r="1.3"/>
+                            </svg>
+                        </span>
+                        <button class="mode-shortcut-btn" id="btn-shortcut-problem">문제</button>
+                        <button class="mode-shortcut-btn" id="btn-shortcut-solution" ${!hasSolution ? 'disabled' : ''}>풀이</button>
                     </div>
                     <span class="controls-title expanded-view">Controls</span>
                     <button class="controls-collapse-btn" id="btn-collapse">+</button>
@@ -134,17 +142,16 @@ export class UIController {
                 <div class="controls-body">
                     <div class="control-section mode-section">
                         <div class="button-group mode-toggle">
-                            <button id="btn-mode-problem" class="active mode-btn">Prob</button>
-                            <button id="btn-mode-solution" class="mode-btn" ${!hasSolution ? 'disabled' : ''}>Sol</button>
+                            <button id="btn-mode-problem" class="active mode-btn">문제</button>
+                            <button id="btn-mode-solution" class="mode-btn" ${!hasSolution ? 'disabled' : ''}>풀이</button>
                         </div>
                     </div>
                     <div class="control-section">
                         <div class="control-label">Phase</div>
-                        <div class="button-group" style="margin-bottom: 4px; justify-content: space-between;">
+                        <div class="phase-row">
                             <button id="btn-all" class="active">All</button>
-                            <button id="btn-play-pause" class="play-pause-btn" title="Pause">❚❚</button>
+                            <div class="phase-buttons" id="phase-buttons-container"></div>
                         </div>
-                        <div class="phase-buttons" id="phase-buttons-container"></div>
                     </div>
                 </div>
             </div>
@@ -152,6 +159,101 @@ export class UIController {
 
         this._setupDraggable();
         this._bindControlEvents();
+        this._setupCanvasPlayPause();
+        this._placeAtCanvasBoundary();
+        this._showOnboarding();
+    }
+
+    // 캔버스 클릭/탭 → 정지·재생 토글 (별도 버튼 대체)
+    _setupCanvasPlayPause() {
+        if (this._canvasToggleBound) return;
+
+        const wrapper = document.getElementById('canvas-wrapper');
+        if (!wrapper) return;
+
+        wrapper.addEventListener('click', () => {
+            if (this.callbacks.onPlayPause) this.callbacks.onPlayPause();
+        });
+        wrapper.style.cursor = 'pointer';
+        this._canvasToggleBound = true;
+    }
+
+    // 1단 레이아웃(모바일·태블릿)에서 초기 위치를 문제/캔버스 경계에 둔다
+    _placeAtCanvasBoundary() {
+        if (window.matchMedia('(min-width: 1025px)').matches) return;
+
+        const controls = document.getElementById('draggable-controls');
+        const canvasSection = document.querySelector('.canvas-section');
+        if (!controls || !canvasSection) return;
+
+        requestAnimationFrame(() => {
+            const rect = canvasSection.getBoundingClientRect();
+            const w = controls.offsetWidth;
+            const h = controls.offsetHeight;
+            const padding = 5;
+
+            const left = Math.max(padding, Math.min((window.innerWidth - w) / 2, window.innerWidth - w - padding));
+            const top = Math.max(padding, Math.min(rect.top - h / 2, window.innerHeight - h - padding));
+
+            controls.style.left = `${left}px`;
+            controls.style.top = `${top}px`;
+            controls.style.right = 'auto';
+        });
+    }
+
+    // 최초 1회 — ① 드래그로 이동 ② 캔버스 탭으로 정지·재생 안내
+    _showOnboarding() {
+        const KEY = 'euclide-controls-onboarded';
+        try {
+            if (localStorage.getItem(KEY)) return;
+        } catch {
+            return;
+        }
+
+        const controls = document.getElementById('draggable-controls');
+        const canvasSection = document.querySelector('.canvas-section');
+        if (!controls) return;
+
+        const fadeOut = (el, done) => {
+            el.classList.add('hiding');
+            setTimeout(() => {
+                el.remove();
+                if (done) done();
+            }, 300);
+        };
+
+        const finish = () => {
+            try { localStorage.setItem(KEY, '1'); } catch { /* 무시 */ }
+        };
+
+        // ① 드래그 안내 — 컨트롤 아래 말풍선
+        const dragTip = document.createElement('div');
+        dragTip.className = 'controls-onboarding';
+        dragTip.textContent = '드래그해서 원하는 위치로 옮기세요';
+        controls.appendChild(dragTip);
+
+        // ② 캔버스 탭 안내 — 캔버스 위 배너
+        const showCanvasTip = () => {
+            if (!canvasSection) return finish();
+
+            const canvasTip = document.createElement('div');
+            canvasTip.className = 'canvas-onboarding';
+            canvasTip.textContent = '그림을 탭하면 정지 / 재생';
+            canvasSection.appendChild(canvasTip);
+
+            setTimeout(() => fadeOut(canvasTip, finish), 4000);
+        };
+
+        let dragTipDone = false;
+        const closeDragTip = () => {
+            if (dragTipDone) return;
+            dragTipDone = true;
+            fadeOut(dragTip, showCanvasTip);
+        };
+
+        setTimeout(closeDragTip, 4000);
+        document.getElementById('controls-drag-handle')
+            ?.addEventListener('pointerdown', closeDragTip, { once: true });
     }
 
     renderPhaseButtons(count) {
@@ -189,13 +291,8 @@ export class UIController {
         if (solBtn) solBtn.classList.toggle('active', mode === 'solution');
     }
 
-    setPlayPauseState(isPlaying) {
-        const btn = document.getElementById('btn-play-pause');
-        if (btn) {
-            btn.textContent = isPlaying ? '❚❚' : '▶';
-            btn.title = isPlaying ? 'Pause' : 'Play';
-        }
-    }
+    // 정지·재생 버튼은 캔버스 탭으로 대체됨 — 호출부 호환을 위해 시그니처만 유지
+    setPlayPauseState() {}
 
     // --- Internal Helpers ---
 
@@ -211,10 +308,6 @@ export class UIController {
         document.getElementById('btn-all')?.addEventListener('click', () => {
             if (this.callbacks.onPhaseChange) this.callbacks.onPhaseChange('all');
             this.setActivePhaseButton('all');
-        });
-
-        document.getElementById('btn-play-pause')?.addEventListener('click', () => {
-            if (this.callbacks.onPlayPause) this.callbacks.onPlayPause();
         });
 
         // Collapse/Expand shortcuts
@@ -270,17 +363,14 @@ export class UIController {
         const isCollapsed = controls.classList.toggle('collapsed');
         collapseBtn.textContent = isCollapsed ? '+' : '−';
 
-        // 펼쳤을 때 위치 보정 (화면 밖으로 나가지 않도록)
+        // 펼쳤을 때 위치 보정 (뷰포트 밖으로 나가지 않도록)
         if (!isCollapsed) {
-            const canvasWrapper = document.getElementById('canvas-wrapper');
-            if (canvasWrapper) {
-                const currentLeft = controls.offsetLeft;
-                const currentTop = controls.offsetTop;
-                const maxLeft = canvasWrapper.clientWidth - controls.offsetWidth - 10;
-                const maxTop = canvasWrapper.clientHeight - controls.offsetHeight - 10;
-                if (currentLeft > maxLeft) controls.style.left = Math.max(0, maxLeft) + 'px';
-                if (currentTop > maxTop) controls.style.top = Math.max(0, maxTop) + 'px';
-            }
+            const currentLeft = controls.offsetLeft;
+            const currentTop = controls.offsetTop;
+            const maxLeft = window.innerWidth - controls.offsetWidth - 10;
+            const maxTop = window.innerHeight - controls.offsetHeight - 10;
+            if (currentLeft > maxLeft) controls.style.left = Math.max(0, maxLeft) + 'px';
+            if (currentTop > maxTop) controls.style.top = Math.max(0, maxTop) + 'px';
         }
     }
 
@@ -312,17 +402,16 @@ export class UIController {
             const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
             const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
 
-            const canvasWrapper = document.getElementById('canvas-wrapper');
             const dx = clientX - startX;
             const dy = clientY - startY;
 
             let newLeft = initialLeft + dx;
             let newTop = initialTop + dy;
 
-            // 경계 검사
+            // 경계 검사 — 화면(뷰포트) 전체 기준, 완전히 벗어나지 않도록만 제한
             const padding = 5;
-            const maxLeft = canvasWrapper.clientWidth - controls.offsetWidth - padding;
-            const maxTop = canvasWrapper.clientHeight - controls.offsetHeight - padding;
+            const maxLeft = window.innerWidth - controls.offsetWidth - padding;
+            const maxTop = window.innerHeight - controls.offsetHeight - padding;
             newLeft = Math.max(padding, Math.min(newLeft, maxLeft));
             newTop = Math.max(padding, Math.min(newTop, maxTop));
 

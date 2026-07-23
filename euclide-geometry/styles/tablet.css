@@ -64,8 +64,8 @@
 }
 
 .mode-shortcut-btn {
-    padding: 3px 8px;
-    font-size: 10px;
+    padding: 5px 8px 3px;
+    font-size: 14px;
 }
 
 .control-label {
@@ -89,9 +89,8 @@ button {
 }
 
 .phase-buttons button {
-    font-size: 9px;
-    padding: 3px 0;
-    min-width: 0;
+    font-size: 12px;
+    padding: 4px 0;
 }
 
 /* 스크롤바 위치 보정 */

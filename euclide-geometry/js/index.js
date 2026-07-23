@@ -109,6 +109,37 @@ async function loadViewedProblems(userId) {
     }
 }
 
+// === 로컬 개발용 시청 기록 ===
+// Supabase 로그인이 어려운 로컬 환경에서 '시청 완료' 체크 표시를 테스트하기 위한 임시 저장소.
+// localhost/127.0.0.1 에서만 동작하며, 뷰어(viewer-app.js)가 문제를 열 때 함께 기록한다.
+const IS_LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
+const DEV_VIEWED_KEY = 'euclide-dev-viewed';
+
+function mergeDevViewedProblems() {
+    if (!IS_LOCAL) return;
+    try {
+        const ids = JSON.parse(localStorage.getItem(DEV_VIEWED_KEY) || '[]');
+        ids.forEach(id => viewedProblems.add(String(id).padStart(3, '0')));
+    } catch { /* 무시 */ }
+}
+
+if (IS_LOCAL) {
+    // 콘솔에서 직접 조작: devMarkViewed('365', '370') / devClearViewed()
+    window.devMarkViewed = (...ids) => {
+        const flat = ids.flat().map(String);
+        const saved = new Set(JSON.parse(localStorage.getItem(DEV_VIEWED_KEY) || '[]'));
+        flat.forEach(id => saved.add(id));
+        localStorage.setItem(DEV_VIEWED_KEY, JSON.stringify([...saved]));
+        if (filteredProblems.length > 0) renderProblemList(filteredProblems);
+        return [...saved];
+    };
+    window.devClearViewed = () => {
+        localStorage.removeItem(DEV_VIEWED_KEY);
+        viewedProblems.clear();
+        if (filteredProblems.length > 0) renderProblemList(filteredProblems);
+    };
+}
+
 // 북마크된 문제 조회
 async function loadBookmarks(userId) {
     try {
@@ -187,12 +218,24 @@ let filteredProblems = [];
 let currentPage = 1;
 let itemsPerPage = 9;
 
-// URL에서 상태 읽기
+// 레벨 기억/온보딩 설정
+const LEVEL_STORAGE_KEY = 'euclide-level';           // 'all' = 모든 레벨
+const LEVEL_ONBOARDING_KEY = 'euclide-level-onboarding-done-v2'; // v2: 레벨 체계 개편 안내로 갱신
+const DEFAULT_LEVEL = 'contest1-1';
+
+// 저장된 레벨 읽기 (없으면 null)
+function getSavedLevel() {
+    const saved = localStorage.getItem(LEVEL_STORAGE_KEY);
+    if (saved === null) return null;
+    return saved === 'all' ? '' : saved;
+}
+
+// URL에서 상태 읽기 (level: null이면 URL에 레벨 파라미터 없음)
 function getStateFromURL() {
     const params = new URLSearchParams(window.location.search);
     return {
         page: parseInt(params.get('page')) || 1,
-        level: params.get('level') || '',
+        level: params.get('level'),
         category: params.get('category') || ''
     };
 }
@@ -242,22 +285,27 @@ const indexJsonUrl = `./problems/index.json?_t=${Date.now()}`;
 fetch(indexJsonUrl)
     .then(res => res.json())
     .then(data => {
-        // level 0은 마지막으로 정렬 (기본정리)
+        // 드롭다운 순서와 동일한 정렬. mid2 → Level1~4 → 영재고(9) → 기본정리(0, 마지막)
+        const LEVEL_ORDER = { mid2: 10, mid3: 20, 'contest1-1': 30, 'contest1-2': 40, contest2: 50, gifted: 60, 0: 99 };
         allProblems = data.problems.sort((a, b) => {
-            const levelA = a.level === 0 ? 999 : a.level;
-            const levelB = b.level === 0 ? 999 : b.level;
-            if (levelA !== levelB) return levelA - levelB;
-            return parseInt(a.id) - parseInt(b.id);
+            const oa = LEVEL_ORDER[a.level] ?? 999;
+            const ob = LEVEL_ORDER[b.level] ?? 999;
+            if (oa !== ob) return oa - ob;
+            return String(a.id).localeCompare(String(b.id));
         });
         renderCategories(data.categories);
         setupFilters();
 
-        // URL에서 상태 복원
+        // URL에서 상태 복원 (레벨 우선순위: URL > 저장된 레벨 > 기본 Level 2)
         const state = getStateFromURL();
         const levelFilter = document.getElementById('level-filter');
         const categoryFilter = document.getElementById('category-filter');
 
-        if (state.level) levelFilter.value = state.level;
+        if (state.level === null) {
+            state.level = getSavedLevel() ?? DEFAULT_LEVEL;
+        }
+
+        levelFilter.value = state.level;
         if (state.category) categoryFilter.value = state.category;
 
         // 필터 적용 (페이지는 아래서 설정)
@@ -353,9 +401,12 @@ function renderProblemList(problems) {
     const endIndex = startIndex + itemsPerPage;
     const pageProblems = problems.slice(startIndex, endIndex);
 
+    mergeDevViewedProblems();  // 로컬 개발용 시청 기록 반영 (배포 환경에서는 no-op)
+
     // 먼저 skeleton 카드 렌더링
     grid.innerHTML = pageProblems.map(problem => {
-        const levelLabel = problem.level == 9 ? '영재고' : problem.level == 0 ? '기본정리' : `Level ${problem.level}`;
+        const LEVEL_LABELS = { mid2: '중2', mid3: '중3', 'contest1-1': '경시 1차-1', 'contest1-2': '경시 1차-2', contest2: '경시2차', gifted: '영재고', 0: '기본정리' };
+        const levelLabel = LEVEL_LABELS[problem.level] ?? `Level ${problem.level}`;
         const isLocked = !canAccessProblem(problem);
         const isViewed = viewedProblems.has(problem.id);
         const cardClasses = ['problem-card'];
@@ -371,9 +422,19 @@ function renderProblemList(problems) {
                 </div>
             </div>
         ` : '';
+        // 시청 완료 표시 — 우측 상단 원형 체크
+        const viewedCheck = isViewed ? `
+            <div class="viewed-check" title="시청 완료" aria-label="시청 완료">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="m8 12 3 3 5-6"/>
+                </svg>
+            </div>
+        ` : '';
         return `
             <a href="${isLocked ? '#' : problem.url}" class="${cardClasses.join(' ')}" data-problem-id="${problem.id}" ${isLocked ? 'onclick="event.preventDefault(); handleLockedProblemClick();"' : ''}>
                 ${lockIcon}
+                ${viewedCheck}
                 <div class="problem-description">
                     <span class="problem-tag level level-${problem.level}">${levelLabel}</span>
                     <span class="problem-text skeleton">로딩 중...</span>
@@ -384,8 +445,8 @@ function renderProblemList(problems) {
 
     // 각 카드의 problem.html을 비동기로 로드
     pageProblems.forEach(problem => {
-        const paddedId = problem.id.padStart(3, '0');
-        const problemHtmlUrl = `./problems/${paddedId}/problem.html`;
+        // index.json이 폴더별 정확한 경로를 채워줌 (레거시·mid2 모두)
+        const problemHtmlUrl = problem.htmlUrl || `./problems/${problem.id.padStart(3, '0')}/problem.html`;
         fetch(problemHtmlUrl, { redirect: 'error' })
             .then(res => res.ok ? res.text() : Promise.reject('Not found'))
             .then(html => {
@@ -498,12 +559,64 @@ function setupFilters() {
         }
     }
 
-    levelFilter.addEventListener('change', () => applyFilters(true));
+    levelFilter.addEventListener('change', () => {
+        // 선택 레벨 기억 ('' = 모든 레벨은 'all'로 저장)
+        localStorage.setItem(LEVEL_STORAGE_KEY, levelFilter.value || 'all');
+        applyFilters(true);
+    });
     categoryFilter.addEventListener('change', () => applyFilters(true));
 
     // 외부에서 호출할 수 있도록 window에 등록
     window.applyFiltersFromState = applyFilters;
 }
+
+// 최초 진입 시 레벨 안내 코치마크 (레벨 선택창 클릭/변경 또는 X 버튼으로 영구 종료)
+function setupLevelOnboarding() {
+    if (localStorage.getItem(LEVEL_ONBOARDING_KEY)) return;
+
+    const levelFilter = document.getElementById('level-filter');
+    if (!levelFilter) return;
+
+    levelFilter.classList.add('level-pulse');
+
+    const popup = document.createElement('div');
+    popup.className = 'level-onboarding';
+    popup.innerHTML = `
+        <button class="level-onboarding-close" aria-label="안내 닫기">&times;</button>
+        <p>
+            내신(학교 시험) 대비라면 학년에 맞는 <strong>중2 · 중3</strong> 레벨을 선택해 보세요.
+        </p>
+    `;
+    document.body.appendChild(popup);
+
+    // 팝업을 레벨 선택창 바로 아래에 배치, 화살표가 선택창 중앙을 가리키도록
+    function position() {
+        const rect = levelFilter.getBoundingClientRect();
+        const width = popup.offsetWidth;
+        let left = rect.left + rect.width / 2 - width / 2;
+        left = Math.max(10, Math.min(left, window.innerWidth - width - 10));
+        popup.style.top = `${rect.bottom + 14}px`;
+        popup.style.left = `${left}px`;
+        popup.style.setProperty('--arrow-left', `${rect.left + rect.width / 2 - left}px`);
+    }
+    position();
+    window.addEventListener('resize', position);
+
+    function dismiss() {
+        localStorage.setItem(LEVEL_ONBOARDING_KEY, '1');
+        levelFilter.classList.remove('level-pulse');
+        levelFilter.removeEventListener('pointerdown', dismiss);
+        levelFilter.removeEventListener('change', dismiss);
+        window.removeEventListener('resize', position);
+        popup.remove();
+    }
+
+    popup.querySelector('.level-onboarding-close').addEventListener('click', dismiss);
+    levelFilter.addEventListener('pointerdown', dismiss);
+    levelFilter.addEventListener('change', dismiss);
+}
+
+setupLevelOnboarding();
 
 // 페이지네이션 이벤트 리스너 초기화
 setupPaginationListeners();
