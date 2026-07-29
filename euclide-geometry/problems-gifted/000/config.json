@@ -1,0 +1,54 @@
+{
+  "id": "9000",
+  "title": "회전과 자취",
+  "level": 9,
+  "tags": [
+    "원",
+    "회전",
+    "자취"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "원과 고정점 A, B 그리기"
+    },
+    {
+      "id": 2,
+      "description": "움직이는 점 P, 선분 AP, BP, 회전하여 Q 표시"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "P가 A에서 B로 이동할 때 Q의 자취"
+    },
+    {
+      "id": 2,
+      "description": "AB, NS 점선, 직각, 원 O₁, 연결선"
+    },
+    {
+      "id": 3,
+      "description": "BQ, PM, 각 표시, 동일 길이 마커"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "O": {
+        "x": 0,
+        "y": 0
+      },
+      "A": {
+        "x": -3.63,
+        "y": -1.69
+      },
+      "B": {
+        "x": 3.63,
+        "y": -1.69
+      }
+    },
+    "circle": {
+      "center": "O",
+      "radius": 4
+    }
+  }
+}

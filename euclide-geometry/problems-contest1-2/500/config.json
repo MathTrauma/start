@@ -1,0 +1,54 @@
+{
+  "id": "3500",
+  "title": "내심과 공원점",
+  "level": 3,
+  "contest": true,
+  "tags": [
+    "각이등분선",
+    "공원점",
+    "concyclic"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC, 내접원, 접점 D, E"
+    },
+    {
+      "id": 2,
+      "description": "선분 AP, DP, IE와 직각 CEI"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "각 BDE, DEB, PEC 분석"
+    },
+    {
+      "id": 2,
+      "description": "내심 I와 삼각형 IAC의 각도 관계"
+    },
+    {
+      "id": 3,
+      "description": "IEC 외접원과 직각 CPI 증명"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "A": {
+        "x": -1,
+        "y": 3
+      },
+      "B": {
+        "x": -2,
+        "y": 0
+      },
+      "C": {
+        "x": 2,
+        "y": 0
+      }
+    }
+  },
+  "categories": [
+    "공원점"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "3060",
+  "title": "맨션정리",
+  "level": 3,
+  "contest": true,
+  "tags": [
+    "각이등분선",
+    "맨션정리"
+  ],
+  "categories": [
+    "맨션정리"
+  ],
+  "problemPhaseCount": 2,
+  "solutionPhaseCount": 3,
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형, AU, BV, I/U/V"
+    },
+    {
+      "id": 2,
+      "description": "접점 D/E, 치수선, 닮음 삼각형"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "외접원, O₁, O₂, A 이동"
+    },
+    {
+      "id": 2,
+      "description": "선분 UV, 교점 X, Y, 선분 IX, IY"
+    },
+    {
+      "id": 3,
+      "description": "마름모 IXCY 마커, A 원위치 복귀"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "0200",
+  "title": "외심 - 이등변삼각형",
+  "level": 1,
+  "tags": [
+    "외심",
+    "이등변삼각형",
+    "중심각"
+  ],
+  "contest": false,
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC, 외심 O, 반지름 OA/OB/OC"
+    },
+    {
+      "id": 2,
+      "description": "각 BAO=22°, ACO=33°, BOC=x°"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "이등변삼각형 OAB → 외각 BOD=44°"
+    },
+    {
+      "id": 2,
+      "description": "이등변삼각형 OAC → DOC=66°, x=110"
+    }
+  ],
+  "resources": {
+    "problem": "problem.html",
+    "solution": "solution.html",
+    "sketch": "sketch.js"
+  }
+}

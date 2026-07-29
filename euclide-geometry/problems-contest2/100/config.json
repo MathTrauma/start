@@ -1,0 +1,136 @@
+{
+  "id": "4100",
+  "title": "Mansion's Theorem",
+  "level": 4,
+  "contest": true,
+  "tags": [
+    "내심",
+    "외접원",
+    "각의 이등분선"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC와 외접원 그리기"
+    },
+    {
+      "id": 2,
+      "description": "내심 I, 직선 AI와 BI의 연장선, 점 D와 E"
+    },
+    {
+      "id": 3,
+      "description": "직선 DE와 AC의 교점 K, 선분 IK = 30"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 BAD, BED와 AIE의 외접원"
+    },
+    {
+      "id": 2,
+      "description": "삼각형 AEB, ACB의 관계, 각 AKI"
+    },
+    {
+      "id": 3,
+      "description": "BF:FC = 2:3, AI:IF = 2:1"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "B": {
+        "x": -2.5,
+        "y": 0
+      },
+      "C": {
+        "x": 2.5,
+        "y": 0
+      }
+    },
+    "computedPoints": {
+      "A": {
+        "type": "distance-constraint",
+        "constraints": [
+          {
+            "from": "B",
+            "distance": 4
+          },
+          {
+            "from": "C",
+            "distance": 6
+          }
+        ],
+        "description": "dist(A,B)=4, dist(A,C)=6인 점"
+      },
+      "I": {
+        "type": "incenter",
+        "triangle": [
+          "A",
+          "B",
+          "C"
+        ],
+        "description": "삼각형 ABC의 내심"
+      },
+      "O": {
+        "type": "circumcenter",
+        "triangle": [
+          "A",
+          "B",
+          "C"
+        ],
+        "description": "삼각형 ABC의 외심"
+      },
+      "D": {
+        "type": "circle-line-intersection",
+        "circle": "circumcircle",
+        "line": [
+          "A",
+          "I"
+        ],
+        "exclude": "A",
+        "description": "직선 AI와 외접원의 교점 (A 제외)"
+      },
+      "E": {
+        "type": "circle-line-intersection",
+        "circle": "circumcircle",
+        "line": [
+          "B",
+          "I"
+        ],
+        "exclude": "B",
+        "description": "직선 BI와 외접원의 교점 (B 제외)"
+      },
+      "F": {
+        "type": "intersection",
+        "lines": [
+          [
+            "A",
+            "I"
+          ],
+          [
+            "B",
+            "C"
+          ]
+        ],
+        "description": "직선 AI와 BC의 교점"
+      },
+      "K": {
+        "type": "intersection",
+        "lines": [
+          [
+            "D",
+            "E"
+          ],
+          [
+            "A",
+            "C"
+          ]
+        ],
+        "description": "직선 DE와 AC의 교점"
+      }
+    }
+  },
+  "categories": [
+    "공원점"
+  ]
+}

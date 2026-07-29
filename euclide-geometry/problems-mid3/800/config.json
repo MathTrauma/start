@@ -1,0 +1,30 @@
+{
+  "id": "1800",
+  "level": 1,
+  "contest": true,
+  "category": "외접하는 원들",
+  "tags": [
+    "접원",
+    "특수각"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC"
+    },
+    {
+      "id": 2,
+      "description": "원 O₁ (반지름 1)"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "원 O₂"
+    },
+    {
+      "id": 2,
+      "description": "두 원 중심 연결"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "060",
+  "title": "각이등분선이 한 점에서 만나는가?",
+  "level": 0,
+  "tags": [
+    "원에 외접하는 다각형",
+    "합동"
+  ],
+  "problemPhases": [
+    "problem1"
+  ],
+  "solutionPhases": [
+    "solution1",
+    "solution2"
+  ]
+}

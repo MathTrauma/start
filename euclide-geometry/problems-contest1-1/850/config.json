@@ -1,0 +1,79 @@
+{
+  "id": "2850",
+  "title": "각이등분선",
+  "level": 2,
+  "contest": true,
+  "tags": [
+    "접현각",
+    "이등변삼각형",
+    "각이등분선"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC와 변의 길이"
+    },
+    {
+      "id": 2,
+      "description": "외접원과 내접원 Ω"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "접선과 이등변삼각형 PAD"
+    },
+    {
+      "id": 2,
+      "description": "접현각과 각 표시"
+    },
+    {
+      "id": 3,
+      "description": "각이등분선 증명"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "A": {
+        "x": 5.038,
+        "y": 3.346
+      },
+      "B": {
+        "x": -5.71,
+        "y": -1.992
+      },
+      "C": {
+        "x": 3.95,
+        "y": -4.58
+      }
+    },
+    "computedPoints": {
+      "O": {
+        "type": "circumcenter",
+        "triangle": [
+          "A",
+          "B",
+          "C"
+        ],
+        "description": "외접원의 중심"
+      },
+      "D": {
+        "type": "divides",
+        "segment": [
+          "B",
+          "C"
+        ],
+        "ratio": "3:2",
+        "description": "BC를 3:2로 내분하는 점"
+      },
+      "P": {
+        "type": "intersection",
+        "description": "A에서의 외접원 접선과 직선 BC의 교점"
+      },
+      "Y": {
+        "type": "onRay",
+        "description": "ray PA에서 A 너머, YA=2"
+      }
+    }
+  }
+}

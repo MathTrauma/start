@@ -1,0 +1,21 @@
+{
+  "id": "2900",
+  "title": "접현각",
+  "level": 2,
+  "tags": [
+    "접현각",
+    "원의 접선"
+  ],
+  "categories": [
+    "접현각"
+  ],
+  "contest": false,
+  "problemPhases": [
+    "problem1",
+    "problem2"
+  ],
+  "solutionPhases": [
+    "solution1",
+    "solution2"
+  ]
+}

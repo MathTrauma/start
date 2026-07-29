@@ -1,0 +1,34 @@
+{
+  "id": "1710",
+  "level": 1,
+  "contest": true,
+  "category": "방멱",
+  "tags": [
+    "접현각",
+    "방멱"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "사각형 ABCD + 두 외접원"
+    },
+    {
+      "id": 2,
+      "description": "접선과 교점 P, 치수선"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "PA = PC"
+    },
+    {
+      "id": 2,
+      "description": "원 O₁에 대한 방멱"
+    },
+    {
+      "id": 3,
+      "description": "원 O₂에 대한 방멱"
+    }
+  ]
+}

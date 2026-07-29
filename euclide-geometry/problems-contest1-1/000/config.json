@@ -1,0 +1,78 @@
+{
+  "id": "2000",
+  "title": "이등변삼각형과 수선",
+  "level": 2,
+  "tags": [
+    "이등변삼각형",
+    "수선",
+    "중점"
+  ],
+  "contest": false,
+  "resources": {
+    "problem": "problem.html",
+    "solution": "solution.html",
+    "sketch": "sketch.js"
+  },
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC, 점 D, 선분 BD, 수선 AH"
+    },
+    {
+      "id": 2,
+      "description": "D에서 BC로의 수선 DE, BC의 중점 M"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "각의 관계 표시 및 수식"
+    },
+    {
+      "id": 2,
+      "description": "DC의 중점 N, 선분 EN/MN"
+    },
+    {
+      "id": 3,
+      "description": "삼각형 CMN, CBD 비교"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "B": {
+        "x": 0,
+        "y": 0
+      },
+      "C": {
+        "x": 6,
+        "y": 0
+      }
+    },
+    "computedPoints": {
+      "A": {
+        "type": "intersection",
+        "description": "B에서 120도 방향과 C에서 156도 방향 직선의 교점"
+      },
+      "D": {
+        "type": "intersection",
+        "description": "AC와 원 A(반지름 AB)의 교점"
+      },
+      "M": {
+        "type": "midpoint",
+        "points": [
+          "B",
+          "C"
+        ],
+        "description": "BC의 중점"
+      },
+      "H": {
+        "type": "projection",
+        "description": "A를 BD에 정사영"
+      },
+      "E": {
+        "type": "projection",
+        "description": "D를 BC에 정사영"
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "id": "9600",
+  "title": "접선과 접현각",
+  "level": 9,
+  "contest": "세종영재고 2026학년도",
+  "tags": [
+    "접현각"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "원 O, 삼각형 ABC, 접선 l, 선분 CD, 등길이 표시, 각도 표시"
+    },
+    {
+      "id": 2,
+      "description": ""
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "접현각 x°, DB 보조선, DB=DC 표시"
+    },
+    {
+      "id": 2,
+      "description": "내접 사각형 ABDC 대각합으로 x=40 유도"
+    },
+    {
+      "id": 3,
+      "description": "외접원 O_, 직선 AD와 교점 G"
+    }
+  ],
+  "resources": {
+    "problem": "problem.html",
+    "solution": "solution.html",
+    "sketch": "sketch.js"
+  },
+  "categories": [
+    "접현각"
+  ]
+}

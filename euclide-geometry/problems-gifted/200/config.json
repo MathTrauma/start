@@ -1,0 +1,88 @@
+{
+  "id": "9200",
+  "title": "꺾인현 정리",
+  "level": 9,
+  "tags": [
+    "꺾인현",
+    "각이등분선",
+    "원주각"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "직각삼각형 ABC 그리기"
+    },
+    {
+      "id": 2,
+      "description": "하반원, 점 D·E, 선분 DE, 치수선 표시"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "선분 AE, 각 DEA = 45° 표시"
+    },
+    {
+      "id": 2,
+      "description": "상반원, 점 N, 보조선 DN·NA·NB, 각 NBA = 45°"
+    },
+    {
+      "id": 3,
+      "description": "꺾인현 정리 적용: y = 3x, 피타고라스 계산"
+    }
+  ],
+  "solutions": [
+    {
+      "id": 1,
+      "title": "꺾인현 정리",
+      "solutionPhases": [
+        {
+          "id": 1,
+          "description": "선분 AE, 각 DEA = 45° 표시"
+        },
+        {
+          "id": 2,
+          "description": "상반원, 점 N, 보조선 DN·NA·NB, 각 NBA = 45°"
+        },
+        {
+          "id": 3,
+          "description": "꺾인현 정리 적용: y = 3x, 피타고라스 계산"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "피타고라스 연립",
+      "solutionPhases": [
+        {
+          "id": 1,
+          "description": "직각삼각형 ABC 강조, 피타고라스 정리"
+        },
+        {
+          "id": 2,
+          "description": "수선의 발 F, 삼각형 BFE·AEB, 연립방정식"
+        }
+      ]
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "O": {
+        "x": 0,
+        "y": 0
+      },
+      "A": {
+        "x": -13,
+        "y": 0
+      },
+      "B": {
+        "x": 13,
+        "y": 0
+      }
+    },
+    "circle": {
+      "center": "O",
+      "radius": 13
+    }
+  }
+}

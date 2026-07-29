@@ -1,0 +1,22 @@
+{
+  "id": "3600",
+  "title": "각의 이등분선과 방심",
+  "level": 3,
+  "contest": true,
+  "tags": [
+    "각이등분선",
+    "멘션정리"
+  ],
+  "categories": [
+    "내심과방심"
+  ],
+  "problemPhases": [
+    "problem1",
+    "problem2"
+  ],
+  "solutionPhases": [
+    "solution1",
+    "solution2",
+    "solution3"
+  ]
+}

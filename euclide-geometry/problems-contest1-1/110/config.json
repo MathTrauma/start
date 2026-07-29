@@ -1,0 +1,22 @@
+{
+  "id": "2110",
+  "title": "평행선과 외접원",
+  "level": 2,
+  "tags": [
+    "평행선",
+    "외접원",
+    "빗변의중점"
+  ],
+  "categories": [
+    "빗변의중점"
+  ],
+  "problemPhases": [
+    "problem1",
+    "problem2"
+  ],
+  "solutionPhases": [
+    "solution1",
+    "solution2",
+    "solution3"
+  ]
+}

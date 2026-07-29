@@ -1,0 +1,21 @@
+{
+  "id": "050",
+  "title": "우산정리I",
+  "level": 0,
+  "tags": [
+    "각이등분선",
+    "외접원"
+  ],
+  "categories": [
+    "우산정리I"
+  ],
+  "problemPhases": [
+    "problem1",
+    "problem2"
+  ],
+  "solutionPhases": [
+    "solution1",
+    "solution2",
+    "solution3"
+  ]
+}

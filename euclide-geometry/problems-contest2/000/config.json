@@ -1,0 +1,77 @@
+{
+  "id": "4000",
+  "title": "각이등분선",
+  "level": 4,
+  "contest": true,
+  "tags": [
+    "각이등분선",
+    "접현각",
+    "외각보기"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "이등변삼각형 ABC, 선분 BD"
+    },
+    {
+      "id": 2,
+      "description": "원 O (BD, AC에 접함), 선분 AF"
+    },
+    {
+      "id": 3,
+      "description": "삼각형 ABF의 외접원, 점 G"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "AC² = AE·AF = AB²"
+    },
+    {
+      "id": 2,
+      "description": "선분 BG, FG와 각도 관계"
+    },
+    {
+      "id": 3,
+      "description": "D, E, F, G 공원점"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "A": {
+        "x": 0,
+        "y": 3
+      },
+      "B": {
+        "x": -2.3,
+        "y": -1.9
+      },
+      "C": {
+        "x": 2.3,
+        "y": -1.9
+      }
+    },
+    "computedPoints": {
+      "D": {
+        "type": "division",
+        "points": [
+          "A",
+          "C"
+        ],
+        "ratio": "2:3"
+      },
+      "E": {
+        "type": "tangentPoint",
+        "description": "원 O와 BD의 접점"
+      },
+      "F": {
+        "type": "intersection",
+        "description": "직선 AE와 원 O의 교점"
+      },
+      "G": {
+        "type": "intersection",
+        "description": "직선 AC와 외접원 ABF의 교점"
+      }
+    }
+  }
+}

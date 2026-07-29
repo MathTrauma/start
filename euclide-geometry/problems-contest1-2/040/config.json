@@ -1,0 +1,77 @@
+{
+  "id": "3040",
+  "title": "닮음",
+  "level": 3,
+  "contest": true,
+  "tags": [
+    "반원",
+    "닮음",
+    "교점"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC, 반원, 점 D"
+    },
+    {
+      "id": 2,
+      "description": "선분 BF, CE, EF"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "체바정리 설명"
+    },
+    {
+      "id": 2,
+      "description": "닮음 I - 삼각형 DBC, DFE"
+    },
+    {
+      "id": 3,
+      "description": "닮음 II - 삼각형 AEF, ABC"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "B": {
+        "x": -15,
+        "y": 0
+      },
+      "C": {
+        "x": 15,
+        "y": 0
+      }
+    },
+    "computedPoints": {
+      "M": {
+        "type": "midpoint",
+        "points": [
+          "B",
+          "C"
+        ],
+        "description": "BC의 중점"
+      },
+      "A": {
+        "type": "computed",
+        "description": "AB=27, AC=39를 만족하는 점"
+      },
+      "D": {
+        "type": "circle_line_intersection",
+        "description": "BC를 지름으로 하는 원과 AB의 교점"
+      },
+      "E": {
+        "type": "intersection",
+        "description": "직선 CD와 AB의 교점"
+      },
+      "F": {
+        "type": "intersection",
+        "description": "직선 BD와 AC의 교점"
+      },
+      "G": {
+        "type": "intersection",
+        "description": "직선 AD와 EF의 교점"
+      }
+    }
+  }
+}

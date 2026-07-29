@@ -1,0 +1,78 @@
+{
+  "id": "1580",
+  "title": "수심과 각 추적",
+  "level": 1,
+  "tags": [
+    "각추적",
+    "수심관련각"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC 그리기"
+    },
+    {
+      "id": 2,
+      "description": "수선 AE, BF와 수심 H, 각도 표시"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 AGC, AFB를 통한 각도 분석"
+    },
+    {
+      "id": 2,
+      "description": "삼각형 CGB, CEH와 ∠CHE = 62° 도출"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "B": {
+        "x": -2,
+        "y": 0
+      },
+      "C": {
+        "x": 2,
+        "y": 0
+      }
+    },
+    "computedPoints": {
+      "F": {
+        "type": "circle-angle",
+        "description": "BC를 지름으로 하는 원 위의 점, ∠CBF = 35°"
+      },
+      "A": {
+        "type": "line-angle",
+        "description": "직선 CF 위의 점, ∠BCA = 62°"
+      },
+      "E": {
+        "type": "foot-of-perpendicular",
+        "from": "A",
+        "to": [
+          "B",
+          "C"
+        ],
+        "description": "A에서 BC에 내린 수선의 발"
+      },
+      "H": {
+        "type": "orthocenter",
+        "triangle": [
+          "A",
+          "B",
+          "C"
+        ],
+        "description": "삼각형 ABC의 수심"
+      },
+      "G": {
+        "type": "foot-of-perpendicular",
+        "from": "C",
+        "to": [
+          "A",
+          "B"
+        ],
+        "description": "C에서 AB에 내린 수선의 발"
+      }
+    }
+  }
+}

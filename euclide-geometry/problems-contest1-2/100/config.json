@@ -1,0 +1,108 @@
+{
+  "id": "3100",
+  "title": "볼록사각형 ABCD — 원과 비례",
+  "level": 3,
+  "contest": true,
+  "tags": [
+    "hard",
+    "concyclic-points",
+    "inscribed-angle",
+    "power-of-point"
+  ],
+  "category": "euclidean-geometry",
+  "version": "1.0.0",
+  "created": "2026-03-03",
+  "updated": "2026-03-03",
+  "author": "mathtrauma",
+  "description": "볼록사각형 ABCD에서 A, B, C, E가 원 O 위에 있음을 이용한 방멱 정리 문제",
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "볼록사각형 ABCD와 BD 치수"
+    },
+    {
+      "id": 2,
+      "description": "60° 각도들과 점 E 추가"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "원 O 등장 — A, B, C, E 공원점 확인"
+    },
+    {
+      "id": 2,
+      "description": "방멱 정리: CD² = BD·ED 적용"
+    }
+  ],
+  "geometry": {
+    "initialPoints": {
+      "O": {
+        "x": 0,
+        "y": 0,
+        "description": "원의 중심"
+      },
+      "A": {
+        "polar": [
+          3,
+          30
+        ],
+        "description": "원 O 위, 30°"
+      },
+      "C": {
+        "polar": [
+          3,
+          -90
+        ],
+        "description": "원 O 위, -90°"
+      },
+      "D": {
+        "x": 6,
+        "y": -3,
+        "description": "원 밖의 점"
+      }
+    },
+    "computedPoints": {
+      "B": {
+        "type": "circle-circle-intersection",
+        "circles": [
+          [
+            "O",
+            3
+          ],
+          [
+            "D",
+            8
+          ]
+        ],
+        "select": "upper",
+        "description": "원 O 위, |BD|=8, ABCD 볼록 조건"
+      },
+      "E": {
+        "type": "circle-line-intersection",
+        "circle": [
+          "O",
+          3
+        ],
+        "line": [
+          "B",
+          "D"
+        ],
+        "select": "not-B",
+        "description": "선분 BD와 원 O의 교점 (B 제외)"
+      }
+    }
+  },
+  "resources": {
+    "problem": "problem.html",
+    "sketch": "sketch.js"
+  },
+  "settings": {
+    "canvasSize": {
+      "width": 600,
+      "height": 600
+    },
+    "scale": 50,
+    "coordinateSystem": "cartesian-y-up"
+  }
+}

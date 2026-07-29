@@ -1,0 +1,23 @@
+{
+  "id": "3700",
+  "title": "방멱과 접현각",
+  "level": 3,
+  "contest": true,
+  "tags": [
+    "접현각",
+    "방멱"
+  ],
+  "categories": [
+    "방멱"
+  ],
+  "problemPhases": [
+    "problem1",
+    "problem2"
+  ],
+  "solutionPhases": [
+    "solution1",
+    "solution2",
+    "solution3",
+    "solution4"
+  ]
+}

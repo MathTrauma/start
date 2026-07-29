@@ -341,6 +341,11 @@ h1 {
 .problem-card .problem-description p {
     margin: 0;
     padding: 0;
+}
+
+/* 첫 문단만 레벨 배지와 같은 줄에 둔다.
+   이후 문단(객관식 선택지 등)은 block 이라 줄이 바뀐다. */
+.problem-card .problem-description .problem-text > p:first-child {
     display: inline;
 }
 

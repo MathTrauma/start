@@ -1,0 +1,23 @@
+{
+  "id": "3610",
+  "title": "삼각형의 중점과 외접원",
+  "level": 3,
+  "contest": true,
+  "tags": [
+    "각이등분선",
+    "멘션정리"
+  ],
+  "categories": [
+    "내심과방심"
+  ],
+  "problemPhases": [
+    "problem1",
+    "problem2"
+  ],
+  "solutionPhases": [
+    "solution1",
+    "solution2",
+    "solution3",
+    "solution4"
+  ]
+}

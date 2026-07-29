@@ -1,0 +1,23 @@
+{
+  "id": "3800",
+  "title": "원과 삼각형의 교점",
+  "level": 3,
+  "tags": [
+    "원",
+    "삼각형",
+    "교점"
+  ],
+  "categories": [
+    "원",
+    "공원점"
+  ],
+  "problemPhases": [
+    "problem1",
+    "problem2"
+  ],
+  "solutionPhases": [
+    "solution0",
+    "solution1",
+    "solution2"
+  ]
+}

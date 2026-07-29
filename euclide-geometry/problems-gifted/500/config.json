@@ -1,0 +1,43 @@
+{
+  "id": "9500",
+  "title": "마름모와 직각이등변삼각형",
+  "level": 9,
+  "contest": false,
+  "tags": [
+    "공원점",
+    "각이등분선",
+    "길이비-넓이비"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "마름모 ABCD, 직각이등변삼각형 AEB 그리기"
+    },
+    {
+      "id": 2,
+      "description": "대각선 교점 F, 선분 ED 위 교점 G, H, 넓이 합 조건"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "원주각-중심각 관계, 공원점 A,E,B,G 확인"
+    },
+    {
+      "id": 2,
+      "description": "닮음 삼각형, 피타고라스, 넓이 관계"
+    },
+    {
+      "id": 3,
+      "description": "중선-넓이 관계로 최종 답 계산"
+    }
+  ],
+  "resources": {
+    "problem": "problem.html",
+    "solution": "solution.html",
+    "sketch": "sketch.js"
+  },
+  "categories": [
+    "공원점"
+  ]
+}

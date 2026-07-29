@@ -1,0 +1,95 @@
+{
+  "id": "2300",
+  "title": "닮음 옮기기",
+  "level": 2,
+  "contest": true,
+  "tags": [
+    "닮음",
+    "평행사변형"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "평행사변형 ABCD와 대각선 BD"
+    },
+    {
+      "id": 2,
+      "description": "점 F와 직선, 교점 E, G"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 EAB와 CFE의 닮음 관계"
+    },
+    {
+      "id": 2,
+      "description": "삼각형 EDA와 EBG의 닮음 관계"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "A": {
+        "x": 0,
+        "y": 0
+      },
+      "B": {
+        "x": 3,
+        "y": 0
+      },
+      "C": {
+        "x": 4,
+        "y": 1.5
+      },
+      "D": {
+        "x": 1,
+        "y": 1.5
+      }
+    },
+    "computedPoints": {
+      "F": {
+        "type": "dividing-point",
+        "points": [
+          "D",
+          "C"
+        ],
+        "ratio": [
+          2,
+          1
+        ],
+        "description": "CD를 2:1로 내분 (DF:FC = 2:1)"
+      },
+      "E": {
+        "type": "intersection",
+        "lines": [
+          [
+            "B",
+            "D"
+          ],
+          [
+            "A",
+            "F"
+          ]
+        ],
+        "description": "BD와 AF의 교점"
+      },
+      "G": {
+        "type": "intersection",
+        "lines": [
+          [
+            "B",
+            "C"
+          ],
+          [
+            "A",
+            "F"
+          ]
+        ],
+        "description": "BC 연장선과 AF의 교점"
+      }
+    }
+  },
+  "categories": [
+    "닮음"
+  ]
+}

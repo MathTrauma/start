@@ -1,0 +1,28 @@
+{
+  "id": "2910",
+  "title": "접현각",
+  "level": 2,
+  "tags": [
+    "접현각",
+    "원의 접선",
+    "닮음",
+    "피타고라스 정리"
+  ],
+  "contest": false,
+  "problemPhases": [
+    "problem1",
+    "problem2"
+  ],
+  "solutionPhases": [
+    "solution1",
+    "solution2",
+    "solution3"
+  ],
+  "resources": {
+    "problem": "problem.html",
+    "sketch": "sketch.js"
+  },
+  "categories": [
+    "닮음"
+  ]
+}

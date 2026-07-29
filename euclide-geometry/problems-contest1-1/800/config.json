@@ -1,0 +1,23 @@
+{
+  "id": "2800",
+  "title": "각이등분선",
+  "level": 2,
+  "tags": [
+    "이등변삼각형",
+    "각이등분선",
+    "방심"
+  ],
+  "contest": true,
+  "problemPhases": [
+    "problem1",
+    "problem2"
+  ],
+  "solutionPhases": [
+    "solution1",
+    "solution2"
+  ],
+  "resources": {
+    "problem": "problem.html",
+    "sketch": "sketch.js"
+  }
+}

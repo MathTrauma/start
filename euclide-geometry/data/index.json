@@ -1,0 +1,1528 @@
+{
+  "version": "2",
+  "updated": "2026-07-29T00:27:47.661Z",
+  "problems": [
+    {
+      "id": "0000",
+      "title": "이등변삼각형일 (필요충분)조건",
+      "level": "mid2",
+      "tags": [
+        "이등변삼각형",
+        "합동"
+      ],
+      "categories": [],
+      "folder": "problems-mid2",
+      "local": "000",
+      "htmlUrl": "./problems-mid2/000/problem.html",
+      "url": "viewer.html?problem=0000",
+      "legacy": false,
+      "free": true
+    },
+    {
+      "id": "0050",
+      "title": "이등변삼각형과 합동",
+      "level": "mid2",
+      "tags": [
+        "이등변삼각형",
+        "합동"
+      ],
+      "categories": [],
+      "folder": "problems-mid2",
+      "local": "050",
+      "htmlUrl": "./problems-mid2/050/problem.html",
+      "url": "viewer.html?problem=0050",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "0060",
+      "title": "이등변삼각형과 각의 관계",
+      "level": "mid2",
+      "tags": [
+        "닮음비",
+        "이등변삼각형-공유각"
+      ],
+      "categories": [],
+      "folder": "problems-mid2",
+      "local": "060",
+      "htmlUrl": "./problems-mid2/060/problem.html",
+      "url": "viewer.html?problem=0060",
+      "legacy": false,
+      "free": true
+    },
+    {
+      "id": "0090",
+      "title": "이등변삼각형 밑변 위의 점",
+      "level": "mid2",
+      "tags": [
+        "이등변삼각형",
+        "삼각형분할"
+      ],
+      "categories": [
+        "이등변삼각형"
+      ],
+      "folder": "problems-mid2",
+      "local": "090",
+      "htmlUrl": "./problems-mid2/090/problem.html",
+      "url": "viewer.html?problem=0090",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "0100",
+      "title": "직각삼각형의 합동 (RHS)",
+      "level": "mid2",
+      "tags": [
+        "합동",
+        "직각삼각형",
+        "RHS"
+      ],
+      "categories": [],
+      "folder": "problems-mid2",
+      "local": "100",
+      "htmlUrl": "./problems-mid2/100/problem.html",
+      "url": "viewer.html?problem=0100",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "0120",
+      "title": "이등변삼각형과 외각의 이등분",
+      "level": "mid2",
+      "tags": [
+        "이등변삼각형",
+        "외각",
+        "각의이등분"
+      ],
+      "categories": [],
+      "folder": "problems-mid2",
+      "local": "120",
+      "htmlUrl": "./problems-mid2/120/problem.html",
+      "url": "viewer.html?problem=0120",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "0150",
+      "title": "정사각형과 직선까지의 거리",
+      "level": "mid2",
+      "tags": [
+        "합동",
+        "직각삼각형"
+      ],
+      "categories": [
+        "합동-직각삼각형"
+      ],
+      "folder": "problems-mid2",
+      "local": "150",
+      "htmlUrl": "./problems-mid2/150/problem.html",
+      "url": "viewer.html?problem=0150",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "0170",
+      "title": "내심과 외접원의 교점",
+      "level": "mid2",
+      "tags": [
+        "원주각",
+        "이등변삼각형",
+        "내심"
+      ],
+      "categories": [],
+      "folder": "problems-mid2",
+      "local": "170",
+      "htmlUrl": "./problems-mid2/170/problem.html",
+      "url": "viewer.html?problem=0170",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "0200",
+      "title": "외심 - 이등변삼각형",
+      "level": "mid2",
+      "tags": [
+        "외심",
+        "이등변삼각형",
+        "중심각"
+      ],
+      "categories": [],
+      "folder": "problems-mid2",
+      "local": "200",
+      "htmlUrl": "./problems-mid2/200/problem.html",
+      "url": "viewer.html?problem=0200",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "0270",
+      "title": "넓이 기본",
+      "level": "mid2",
+      "tags": [
+        "넓이"
+      ],
+      "categories": [
+        "삼각형넓이"
+      ],
+      "folder": "problems-mid2",
+      "local": "270",
+      "htmlUrl": "./problems-mid2/270/problem.html",
+      "url": "viewer.html?problem=0270",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "0275",
+      "title": "내접원과 삼각형의 넓이",
+      "level": "mid2",
+      "tags": [
+        "넓이",
+        "내심",
+        "내접원반지름"
+      ],
+      "categories": [
+        "삼각형넓이"
+      ],
+      "folder": "problems-mid2",
+      "local": "275",
+      "htmlUrl": "./problems-mid2/275/problem.html",
+      "url": "viewer.html?problem=0275",
+      "legacy": false,
+      "free": true
+    },
+    {
+      "id": "0290",
+      "title": "내심과 외각",
+      "level": "mid2",
+      "tags": [
+        "각도"
+      ],
+      "categories": [
+        "내심관련"
+      ],
+      "folder": "problems-mid2",
+      "local": "290",
+      "htmlUrl": "./problems-mid2/290/problem.html",
+      "url": "viewer.html?problem=0290",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "0293",
+      "title": "직각삼각형과 외심",
+      "level": "mid2",
+      "tags": [
+        "직각삼각형",
+        "외심"
+      ],
+      "categories": [
+        "빗변의중점"
+      ],
+      "folder": "problems-mid2",
+      "local": "293",
+      "htmlUrl": "./problems-mid2/293/problem.html",
+      "url": "viewer.html?problem=0293",
+      "legacy": false,
+      "free": true
+    },
+    {
+      "id": "0300",
+      "title": "등적변환과 평행사변형",
+      "level": "mid2",
+      "tags": [
+        "등적변환"
+      ],
+      "categories": [
+        "등적변환"
+      ],
+      "folder": "problems-mid2",
+      "local": "300",
+      "htmlUrl": "./problems-mid2/300/problem.html",
+      "url": "viewer.html?problem=0300",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "0310",
+      "title": "등적변환",
+      "level": "mid2",
+      "tags": [
+        "등적변환",
+        "사각형",
+        "중점"
+      ],
+      "categories": [
+        "등적변환"
+      ],
+      "folder": "problems-mid2",
+      "local": "310",
+      "htmlUrl": "./problems-mid2/310/problem.html",
+      "url": "viewer.html?problem=0310",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "0320",
+      "title": "꺾은선에 의한 넓이 이등분",
+      "level": "mid2",
+      "tags": [
+        "easy",
+        "cyclic-quadrilateral",
+        "perpendicular-diagonals",
+        "area-bisection"
+      ],
+      "categories": [
+        "등적변환"
+      ],
+      "folder": "problems-mid2",
+      "local": "320",
+      "htmlUrl": "./problems-mid2/320/problem.html",
+      "url": "viewer.html?problem=0320",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "0400",
+      "title": "공통각과 닮음",
+      "level": "mid2",
+      "tags": [
+        "닮음"
+      ],
+      "categories": [
+        "닮음"
+      ],
+      "folder": "problems-mid2",
+      "local": "400",
+      "htmlUrl": "./problems-mid2/400/problem.html",
+      "url": "viewer.html?problem=0400",
+      "legacy": false,
+      "free": true
+    },
+    {
+      "id": "1040",
+      "title": "삼각비 기본 — sin으로 cos·tan 구하기",
+      "level": "mid3",
+      "tags": [
+        "삼각비",
+        "직각삼각형",
+        "피타고라스"
+      ],
+      "categories": [
+        "삼각비"
+      ],
+      "folder": "problems-mid3",
+      "local": "040",
+      "htmlUrl": "./problems-mid3/040/problem.html",
+      "url": "viewer.html?problem=1040",
+      "legacy": false,
+      "free": true
+    },
+    {
+      "id": "1050",
+      "title": "직사각형 종이 접기와 삼각비",
+      "level": "mid3",
+      "tags": [
+        "삼각비",
+        "접기",
+        "피타고라스"
+      ],
+      "categories": [
+        "삼각비"
+      ],
+      "folder": "problems-mid3",
+      "local": "050",
+      "htmlUrl": "./problems-mid3/050/problem.html",
+      "url": "viewer.html?problem=1050",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "1080",
+      "title": "직각이등변삼각형과 특수각 — cos 15°",
+      "level": "mid3",
+      "tags": [
+        "삼각비",
+        "특수각",
+        "직각이등변삼각형"
+      ],
+      "categories": [
+        "삼각비"
+      ],
+      "folder": "problems-mid3",
+      "local": "080",
+      "htmlUrl": "./problems-mid3/080/problem.html",
+      "url": "viewer.html?problem=1080",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "1100",
+      "title": "정사각형 안의 사분원에 외접하는 원",
+      "level": "mid3",
+      "tags": [
+        "삼각비",
+        "접선",
+        "피타고라스"
+      ],
+      "categories": [
+        "삼각비"
+      ],
+      "folder": "problems-mid3",
+      "local": "100",
+      "htmlUrl": "./problems-mid3/100/problem.html",
+      "url": "viewer.html?problem=1100",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "1400",
+      "title": "각의 이등분선과 직각삼각형의 합동",
+      "level": "mid3",
+      "tags": [
+        "삼각비",
+        "합동",
+        "닮음"
+      ],
+      "categories": [
+        "삼각비"
+      ],
+      "folder": "problems-mid3",
+      "local": "400",
+      "htmlUrl": "./problems-mid3/400/problem.html",
+      "url": "viewer.html?problem=1400",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "1505",
+      "title": "직각삼각형과 삼각비 — 수선의 발",
+      "level": "mid3",
+      "tags": [
+        "삼각비",
+        "직각삼각형",
+        "닮음"
+      ],
+      "categories": [
+        "삼각비"
+      ],
+      "folder": "problems-mid3",
+      "local": "505",
+      "htmlUrl": "./problems-mid3/505/problem.html",
+      "url": "viewer.html?problem=1505",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "1508",
+      "title": "직각삼각형 빗변의 중점",
+      "level": "mid3",
+      "tags": [
+        "직각삼각형",
+        "닮음비",
+        "외접원"
+      ],
+      "categories": [
+        "닮음"
+      ],
+      "folder": "problems-mid3",
+      "local": "508",
+      "htmlUrl": "./problems-mid3/508/problem.html",
+      "url": "viewer.html?problem=1508",
+      "legacy": false,
+      "free": true
+    },
+    {
+      "id": "1510",
+      "title": "닮음과 넓이",
+      "level": "mid3",
+      "tags": [
+        "닮음",
+        "접현각",
+        "방멱"
+      ],
+      "categories": [
+        "닮음"
+      ],
+      "folder": "problems-mid3",
+      "local": "510",
+      "htmlUrl": "./problems-mid3/510/problem.html",
+      "url": "viewer.html?problem=1510",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "1580",
+      "title": "수심과 각 추적",
+      "level": "mid3",
+      "tags": [
+        "각추적",
+        "수심관련각"
+      ],
+      "categories": [],
+      "folder": "problems-mid3",
+      "local": "580",
+      "htmlUrl": "./problems-mid3/580/problem.html",
+      "url": "viewer.html?problem=1580",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "1600",
+      "title": "원주각",
+      "level": "mid3",
+      "tags": [
+        "원주각",
+        "중심각"
+      ],
+      "categories": [],
+      "folder": "problems-mid3",
+      "local": "600",
+      "htmlUrl": "./problems-mid3/600/problem.html",
+      "url": "viewer.html?problem=1600",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "1700",
+      "title": "",
+      "level": "mid3",
+      "tags": [
+        "접현각",
+        "방멱"
+      ],
+      "categories": [],
+      "folder": "problems-mid3",
+      "local": "700",
+      "htmlUrl": "./problems-mid3/700/problem.html",
+      "url": "viewer.html?problem=1700",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "1710",
+      "title": "",
+      "level": "mid3",
+      "tags": [
+        "접현각",
+        "방멱"
+      ],
+      "categories": [],
+      "folder": "problems-mid3",
+      "local": "710",
+      "htmlUrl": "./problems-mid3/710/problem.html",
+      "url": "viewer.html?problem=1710",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "1800",
+      "title": "",
+      "level": "mid3",
+      "tags": [
+        "접원",
+        "특수각"
+      ],
+      "categories": [],
+      "folder": "problems-mid3",
+      "local": "800",
+      "htmlUrl": "./problems-mid3/800/problem.html",
+      "url": "viewer.html?problem=1800",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "2000",
+      "title": "이등변삼각형과 수선",
+      "level": "contest1-1",
+      "tags": [
+        "이등변삼각형",
+        "수선",
+        "중점"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-1",
+      "local": "000",
+      "htmlUrl": "./problems-contest1-1/000/problem.html",
+      "url": "viewer.html?problem=2000",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "2010",
+      "title": "접선과 각의 이등분",
+      "level": "contest1-1",
+      "tags": [
+        "접선",
+        "외접원",
+        "각의 이등분"
+      ],
+      "categories": [
+        "닮음"
+      ],
+      "folder": "problems-contest1-1",
+      "local": "010",
+      "htmlUrl": "./problems-contest1-1/010/problem.html",
+      "url": "viewer.html?problem=2010",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "2020",
+      "title": "수심과 외심",
+      "level": "contest1-1",
+      "tags": [
+        "수심",
+        "외심",
+        "수심관련각",
+        "외심관련각"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-1",
+      "local": "020",
+      "htmlUrl": "./problems-contest1-1/020/problem.html",
+      "url": "viewer.html?problem=2020",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "2030",
+      "title": "원주각",
+      "level": "contest1-1",
+      "tags": [
+        "원주각",
+        "닮음",
+        "평행보조선"
+      ],
+      "categories": [
+        "닮음"
+      ],
+      "folder": "problems-contest1-1",
+      "local": "030",
+      "htmlUrl": "./problems-contest1-1/030/problem.html",
+      "url": "viewer.html?problem=2030",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "2100",
+      "title": "직각삼각형과 외심",
+      "level": "contest1-1",
+      "tags": [
+        "직각삼각형",
+        "외심"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-1",
+      "local": "100",
+      "htmlUrl": "./problems-contest1-1/100/problem.html",
+      "url": "viewer.html?problem=2100",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "2110",
+      "title": "평행선과 외접원",
+      "level": "contest1-1",
+      "tags": [
+        "평행선",
+        "외접원",
+        "빗변의중점"
+      ],
+      "categories": [
+        "빗변의중점"
+      ],
+      "folder": "problems-contest1-1",
+      "local": "110",
+      "htmlUrl": "./problems-contest1-1/110/problem.html",
+      "url": "viewer.html?problem=2110",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "2150",
+      "title": "이등분선과 수직이등분선",
+      "level": "contest1-1",
+      "tags": [
+        "합동"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-1",
+      "local": "150",
+      "htmlUrl": "./problems-contest1-1/150/problem.html",
+      "url": "viewer.html?problem=2150",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "2300",
+      "title": "닮음 옮기기",
+      "level": "contest1-1",
+      "tags": [
+        "닮음",
+        "평행사변형"
+      ],
+      "categories": [
+        "닮음"
+      ],
+      "folder": "problems-contest1-1",
+      "local": "300",
+      "htmlUrl": "./problems-contest1-1/300/problem.html",
+      "url": "viewer.html?problem=2300",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "2310",
+      "title": "각의 이등분과 비율",
+      "level": "contest1-1",
+      "tags": [
+        "닮음",
+        "정사각형",
+        "각의 이등분"
+      ],
+      "categories": [
+        "닮음"
+      ],
+      "folder": "problems-contest1-1",
+      "local": "310",
+      "htmlUrl": "./problems-contest1-1/310/problem.html",
+      "url": "viewer.html?problem=2310",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "2320",
+      "title": "평행사변형과 넓이비",
+      "level": "contest1-1",
+      "tags": [
+        "닮음비",
+        "넓이비",
+        "평행사변형"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-1",
+      "local": "320",
+      "htmlUrl": "./problems-contest1-1/320/problem.html",
+      "url": "viewer.html?problem=2320",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "2350",
+      "title": "평행사변형과 각의 이등분선",
+      "level": "contest1-1",
+      "tags": [
+        "닮음비",
+        "평행사변형",
+        "각의이등분선"
+      ],
+      "categories": [
+        "닮음비"
+      ],
+      "folder": "problems-contest1-1",
+      "local": "350",
+      "htmlUrl": "./problems-contest1-1/350/problem.html",
+      "url": "viewer.html?problem=2350",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "2500",
+      "title": "방멱",
+      "level": "contest1-1",
+      "tags": [
+        "각이등분선",
+        "접현각",
+        "외각보기"
+      ],
+      "categories": [
+        "방멱"
+      ],
+      "folder": "problems-contest1-1",
+      "local": "500",
+      "htmlUrl": "./problems-contest1-1/500/problem.html",
+      "url": "viewer.html?problem=2500",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "2600",
+      "title": "",
+      "level": "contest1-1",
+      "tags": [],
+      "categories": [],
+      "folder": "problems-contest1-1",
+      "local": "600",
+      "htmlUrl": "./problems-contest1-1/600/problem.html",
+      "url": "viewer.html?problem=2600",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "2650",
+      "title": "이등변삼각형과 외접원",
+      "level": "contest1-1",
+      "tags": [
+        "내심",
+        "외접원",
+        "각이등분선"
+      ],
+      "categories": [
+        "내심"
+      ],
+      "folder": "problems-contest1-1",
+      "local": "650",
+      "htmlUrl": "./problems-contest1-1/650/problem.html",
+      "url": "viewer.html?problem=2650",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "2700",
+      "title": "각이등분선의 길이",
+      "level": "contest1-1",
+      "tags": [
+        "우산정리",
+        "각이등분선",
+        "원에 내접하는 사각형"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-1",
+      "local": "700",
+      "htmlUrl": "./problems-contest1-1/700/problem.html",
+      "url": "viewer.html?problem=2700",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "2740",
+      "title": "내심과 외접원",
+      "level": "contest1-1",
+      "tags": [
+        "내심",
+        "외접원",
+        "각이등분선"
+      ],
+      "categories": [
+        "내심"
+      ],
+      "folder": "problems-contest1-1",
+      "local": "740",
+      "htmlUrl": "./problems-contest1-1/740/problem.html",
+      "url": "viewer.html?problem=2740",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "2750",
+      "title": "내접원 접점과 현의 길이",
+      "level": "contest1-1",
+      "tags": [
+        "내심",
+        "내접원",
+        "각이등분선"
+      ],
+      "categories": [
+        "내심"
+      ],
+      "folder": "problems-contest1-1",
+      "local": "750",
+      "htmlUrl": "./problems-contest1-1/750/problem.html",
+      "url": "viewer.html?problem=2750",
+      "legacy": false,
+      "free": true
+    },
+    {
+      "id": "2800",
+      "title": "각이등분선",
+      "level": "contest1-1",
+      "tags": [
+        "이등변삼각형",
+        "각이등분선",
+        "방심"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-1",
+      "local": "800",
+      "htmlUrl": "./problems-contest1-1/800/problem.html",
+      "url": "viewer.html?problem=2800",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "2850",
+      "title": "각이등분선",
+      "level": "contest1-1",
+      "tags": [
+        "접현각",
+        "이등변삼각형",
+        "각이등분선"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-1",
+      "local": "850",
+      "htmlUrl": "./problems-contest1-1/850/problem.html",
+      "url": "viewer.html?problem=2850",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "2900",
+      "title": "접현각",
+      "level": "contest1-1",
+      "tags": [
+        "접현각",
+        "원의 접선"
+      ],
+      "categories": [
+        "접현각"
+      ],
+      "folder": "problems-contest1-1",
+      "local": "900",
+      "htmlUrl": "./problems-contest1-1/900/problem.html",
+      "url": "viewer.html?problem=2900",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "2910",
+      "title": "접현각",
+      "level": "contest1-1",
+      "tags": [
+        "접현각",
+        "원의 접선",
+        "닮음",
+        "피타고라스 정리"
+      ],
+      "categories": [
+        "닮음"
+      ],
+      "folder": "problems-contest1-1",
+      "local": "910",
+      "htmlUrl": "./problems-contest1-1/910/problem.html",
+      "url": "viewer.html?problem=2910",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "3000",
+      "title": "공원점 찾기 - 2",
+      "level": "contest1-2",
+      "tags": [
+        "medium",
+        "right-angles",
+        "concyclic-points",
+        "perpendicular"
+      ],
+      "categories": [
+        "닮음"
+      ],
+      "folder": "problems-contest1-2",
+      "local": "000",
+      "htmlUrl": "./problems-contest1-2/000/problem.html",
+      "url": "viewer.html?problem=3000",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "3010",
+      "title": "공원점",
+      "level": "contest1-2",
+      "tags": [
+        "공원점",
+        "정사각형",
+        "수선의 발",
+        "외접원"
+      ],
+      "categories": [
+        "공원점"
+      ],
+      "folder": "problems-contest1-2",
+      "local": "010",
+      "htmlUrl": "./problems-contest1-2/010/problem.html",
+      "url": "viewer.html?problem=3010",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "3020",
+      "title": "내심과 외접원",
+      "level": "contest1-2",
+      "tags": [
+        "내심",
+        "외접원",
+        "원의 접선"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-2",
+      "local": "020",
+      "htmlUrl": "./problems-contest1-2/020/problem.html",
+      "url": "viewer.html?problem=3020",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "3030",
+      "title": "수심의 성질",
+      "level": "contest1-2",
+      "tags": [
+        "수심",
+        "외접원",
+        "원의 교점",
+        "원주각"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-2",
+      "local": "030",
+      "htmlUrl": "./problems-contest1-2/030/problem.html",
+      "url": "viewer.html?problem=3030",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "3040",
+      "title": "닮음",
+      "level": "contest1-2",
+      "tags": [
+        "반원",
+        "닮음",
+        "교점"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-2",
+      "local": "040",
+      "htmlUrl": "./problems-contest1-2/040/problem.html",
+      "url": "viewer.html?problem=3040",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "3050",
+      "title": "평행보조선, 닮음",
+      "level": "contest1-2",
+      "tags": [
+        "평행선",
+        "닮음",
+        "무게중심",
+        "내분점"
+      ],
+      "categories": [
+        "닮음"
+      ],
+      "folder": "problems-contest1-2",
+      "local": "050",
+      "htmlUrl": "./problems-contest1-2/050/problem.html",
+      "url": "viewer.html?problem=3050",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "3060",
+      "title": "맨션정리",
+      "level": "contest1-2",
+      "tags": [
+        "각이등분선",
+        "맨션정리"
+      ],
+      "categories": [
+        "맨션정리"
+      ],
+      "folder": "problems-contest1-2",
+      "local": "060",
+      "htmlUrl": "./problems-contest1-2/060/problem.html",
+      "url": "viewer.html?problem=3060",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "3100",
+      "title": "볼록사각형 ABCD — 원과 비례",
+      "level": "contest1-2",
+      "tags": [
+        "hard",
+        "concyclic-points",
+        "inscribed-angle",
+        "power-of-point"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-2",
+      "local": "100",
+      "htmlUrl": "./problems-contest1-2/100/problem.html",
+      "url": "viewer.html?problem=3100",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "3300",
+      "title": "수족삼각형과 수선",
+      "level": "contest1-2",
+      "tags": [
+        "내각이등분선",
+        "외각이등분선",
+        "수족삼각형"
+      ],
+      "categories": [
+        "각이등분선"
+      ],
+      "folder": "problems-contest1-2",
+      "local": "300",
+      "htmlUrl": "./problems-contest1-2/300/problem.html",
+      "url": "viewer.html?problem=3300",
+      "legacy": false,
+      "free": true
+    },
+    {
+      "id": "3500",
+      "title": "내심과 공원점",
+      "level": "contest1-2",
+      "tags": [
+        "각이등분선",
+        "공원점",
+        "concyclic"
+      ],
+      "categories": [
+        "공원점"
+      ],
+      "folder": "problems-contest1-2",
+      "local": "500",
+      "htmlUrl": "./problems-contest1-2/500/problem.html",
+      "url": "viewer.html?problem=3500",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "3600",
+      "title": "각의 이등분선과 방심",
+      "level": "contest1-2",
+      "tags": [
+        "각이등분선",
+        "멘션정리"
+      ],
+      "categories": [
+        "내심과방심"
+      ],
+      "folder": "problems-contest1-2",
+      "local": "600",
+      "htmlUrl": "./problems-contest1-2/600/problem.html",
+      "url": "viewer.html?problem=3600",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "3610",
+      "title": "삼각형의 중점과 외접원",
+      "level": "contest1-2",
+      "tags": [
+        "각이등분선",
+        "멘션정리"
+      ],
+      "categories": [
+        "내심과방심"
+      ],
+      "folder": "problems-contest1-2",
+      "local": "610",
+      "htmlUrl": "./problems-contest1-2/610/problem.html",
+      "url": "viewer.html?problem=3610",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "3650",
+      "title": "닮음비와 넓이비",
+      "level": "contest1-2",
+      "tags": [
+        "닮음비",
+        "비율바꾸기"
+      ],
+      "categories": [
+        "닮음"
+      ],
+      "folder": "problems-contest1-2",
+      "local": "650",
+      "htmlUrl": "./problems-contest1-2/650/problem.html",
+      "url": "viewer.html?problem=3650",
+      "legacy": false,
+      "free": true
+    },
+    {
+      "id": "3700",
+      "title": "방멱과 접현각",
+      "level": "contest1-2",
+      "tags": [
+        "접현각",
+        "방멱"
+      ],
+      "categories": [
+        "방멱"
+      ],
+      "folder": "problems-contest1-2",
+      "local": "700",
+      "htmlUrl": "./problems-contest1-2/700/problem.html",
+      "url": "viewer.html?problem=3700",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "3750",
+      "title": "375",
+      "level": "contest1-2",
+      "tags": [
+        "원주각",
+        "방멱",
+        "외각보기"
+      ],
+      "categories": [],
+      "folder": "problems-contest1-2",
+      "local": "750",
+      "htmlUrl": "./problems-contest1-2/750/problem.html",
+      "url": "viewer.html?problem=3750",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "3800",
+      "title": "원과 삼각형의 교점",
+      "level": "contest1-2",
+      "tags": [
+        "원",
+        "삼각형",
+        "교점"
+      ],
+      "categories": [
+        "원",
+        "공원점"
+      ],
+      "folder": "problems-contest1-2",
+      "local": "800",
+      "htmlUrl": "./problems-contest1-2/800/problem.html",
+      "url": "viewer.html?problem=3800",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "4000",
+      "title": "각이등분선",
+      "level": "contest2",
+      "tags": [
+        "각이등분선",
+        "접현각",
+        "외각보기"
+      ],
+      "categories": [],
+      "folder": "problems-contest2",
+      "local": "000",
+      "htmlUrl": "./problems-contest2/000/problem.html",
+      "url": "viewer.html?problem=4000",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "4100",
+      "title": "Mansion's Theorem",
+      "level": "contest2",
+      "tags": [
+        "내심",
+        "외접원",
+        "각의 이등분선"
+      ],
+      "categories": [
+        "공원점"
+      ],
+      "folder": "problems-contest2",
+      "local": "100",
+      "htmlUrl": "./problems-contest2/100/problem.html",
+      "url": "viewer.html?problem=4100",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "4500",
+      "title": "각의 3등분선?",
+      "level": "contest2",
+      "tags": [
+        "원주각",
+        "직각삼각형",
+        "외접원"
+      ],
+      "categories": [
+        "원주각"
+      ],
+      "folder": "problems-contest2",
+      "local": "500",
+      "htmlUrl": "./problems-contest2/500/problem.html",
+      "url": "viewer.html?problem=4500",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "4600",
+      "title": "방멱과 수직이등분선",
+      "level": "contest2",
+      "tags": [
+        "방멱",
+        "중위선"
+      ],
+      "categories": [
+        "방멱",
+        "중위선"
+      ],
+      "folder": "problems-contest2",
+      "local": "600",
+      "htmlUrl": "./problems-contest2/600/problem.html",
+      "url": "viewer.html?problem=4600",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "9000",
+      "title": "회전과 자취",
+      "level": "gifted",
+      "tags": [
+        "원",
+        "회전",
+        "자취"
+      ],
+      "categories": [],
+      "folder": "problems-gifted",
+      "local": "000",
+      "htmlUrl": "./problems-gifted/000/problem.html",
+      "url": "viewer.html?problem=9000",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "9100",
+      "title": "사다리꼴 접기",
+      "level": "gifted",
+      "tags": [
+        "접기",
+        "닮음",
+        "사다리꼴"
+      ],
+      "categories": [
+        "접기"
+      ],
+      "folder": "problems-gifted",
+      "local": "100",
+      "htmlUrl": "./problems-gifted/100/problem.html",
+      "url": "viewer.html?problem=9100",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "9200",
+      "title": "꺾인현 정리",
+      "level": "gifted",
+      "tags": [
+        "꺾인현",
+        "각이등분선",
+        "원주각"
+      ],
+      "categories": [],
+      "folder": "problems-gifted",
+      "local": "200",
+      "htmlUrl": "./problems-gifted/200/problem.html",
+      "url": "viewer.html?problem=9200",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "9500",
+      "title": "마름모와 직각이등변삼각형",
+      "level": "gifted",
+      "tags": [
+        "공원점",
+        "각이등분선",
+        "길이비-넓이비"
+      ],
+      "categories": [
+        "공원점"
+      ],
+      "folder": "problems-gifted",
+      "local": "500",
+      "htmlUrl": "./problems-gifted/500/problem.html",
+      "url": "viewer.html?problem=9500",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "9600",
+      "title": "접선과 접현각",
+      "level": "gifted",
+      "tags": [
+        "접현각"
+      ],
+      "categories": [
+        "접현각"
+      ],
+      "folder": "problems-gifted",
+      "local": "600",
+      "htmlUrl": "./problems-gifted/600/problem.html",
+      "url": "viewer.html?problem=9600",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "9610",
+      "title": "무게중심의 궤적",
+      "level": "gifted",
+      "tags": [
+        "중선"
+      ],
+      "categories": [
+        "원"
+      ],
+      "folder": "problems-gifted",
+      "local": "610",
+      "htmlUrl": "./problems-gifted/610/problem.html",
+      "url": "viewer.html?problem=9610",
+      "legacy": false,
+      "free": false
+    },
+    {
+      "id": "010",
+      "title": "아르키메데스 Proposition 1",
+      "level": 0,
+      "tags": [
+        "각이등분선",
+        "접현각",
+        "외각보기"
+      ],
+      "categories": [],
+      "folder": "problems-theorem",
+      "local": "010",
+      "htmlUrl": "./problems-theorem/010/problem.html",
+      "url": "viewer.html?problem=010",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "020",
+      "title": "메넬라우스 정리",
+      "level": 0,
+      "tags": [
+        "메넬라우스",
+        "삼각형",
+        "공선점",
+        "닮음"
+      ],
+      "categories": [
+        "메넬라우스"
+      ],
+      "folder": "problems-theorem",
+      "local": "020",
+      "htmlUrl": "./problems-theorem/020/problem.html",
+      "url": "viewer.html?problem=020",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "030",
+      "title": "맨션 정리",
+      "level": 0,
+      "tags": [
+        "맨션정리",
+        "내심",
+        "외접원",
+        "원주각"
+      ],
+      "categories": [
+        "맨션정리",
+        "내심과방심"
+      ],
+      "folder": "problems-theorem",
+      "local": "030",
+      "htmlUrl": "./problems-theorem/030/problem.html",
+      "url": "viewer.html?problem=030",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "050",
+      "title": "우산정리I",
+      "level": 0,
+      "tags": [
+        "각이등분선",
+        "외접원"
+      ],
+      "categories": [
+        "우산정리I"
+      ],
+      "folder": "problems-theorem",
+      "local": "050",
+      "htmlUrl": "./problems-theorem/050/problem.html",
+      "url": "viewer.html?problem=050",
+      "legacy": true,
+      "free": false
+    },
+    {
+      "id": "060",
+      "title": "각이등분선이 한 점에서 만나는가?",
+      "level": 0,
+      "tags": [
+        "원에 외접하는 다각형",
+        "합동"
+      ],
+      "categories": [],
+      "folder": "problems-theorem",
+      "local": "060",
+      "htmlUrl": "./problems-theorem/060/problem.html",
+      "url": "viewer.html?problem=060",
+      "legacy": true,
+      "free": true
+    },
+    {
+      "id": "080",
+      "title": "꺾인현 정리",
+      "level": 0,
+      "tags": [
+        "꺾인현",
+        "외각이등분선",
+        "북극점"
+      ],
+      "categories": [],
+      "folder": "problems-theorem",
+      "local": "080",
+      "htmlUrl": "./problems-theorem/080/problem.html",
+      "url": "viewer.html?problem=080",
+      "legacy": true,
+      "free": false
+    }
+  ],
+  "categories": [
+    "각이등분선",
+    "공원점",
+    "내심",
+    "내심과방심",
+    "내심관련",
+    "닮음",
+    "닮음비",
+    "등적변환",
+    "맨션정리",
+    "메넬라우스",
+    "방멱",
+    "빗변의중점",
+    "삼각비",
+    "삼각형넓이",
+    "우산정리I",
+    "원",
+    "원주각",
+    "이등변삼각형",
+    "접기",
+    "접현각",
+    "중위선",
+    "합동-직각삼각형"
+  ],
+  "stats": {
+    "total": 83,
+    "byLevel": {
+      "0": 6,
+      "mid2": 17,
+      "mid3": 13,
+      "contest1-1": 21,
+      "contest1-2": 16,
+      "contest2": 4,
+      "gifted": 6
+    }
+  }
+}

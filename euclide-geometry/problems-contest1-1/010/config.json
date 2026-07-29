@@ -1,0 +1,73 @@
+{
+  "id": "2010",
+  "title": "접선과 각의 이등분",
+  "level": 2,
+  "contest": true,
+  "tags": [
+    "접선",
+    "외접원",
+    "각의 이등분"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "이등변삼각형 ABC와 외접원"
+    },
+    {
+      "id": 2,
+      "description": "B에서의 접선, 교점 D"
+    },
+    {
+      "id": 3,
+      "description": "∠DBC = ∠CBE를 만족하는 점 E"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "접현각 표시와 같은 각 표시"
+    },
+    {
+      "id": 2,
+      "description": "닮음 삼각형과 비례식"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "B": {
+        "angle": -128,
+        "radius": 3
+      },
+      "C": {
+        "angle": -52,
+        "radius": 3
+      },
+      "A": {
+        "angle": 90,
+        "radius": 3
+      }
+    },
+    "computedPoints": {
+      "O": {
+        "type": "circumcenter",
+        "triangle": [
+          "A",
+          "B",
+          "C"
+        ],
+        "description": "삼각형 ABC의 외심"
+      },
+      "D": {
+        "type": "intersection",
+        "description": "B에서의 접선과 직선 AC의 교점"
+      },
+      "E": {
+        "type": "intersection",
+        "description": "∠DBC = ∠CBE를 만족하는 AC 위의 점"
+      }
+    }
+  },
+  "categories": [
+    "닮음"
+  ]
+}

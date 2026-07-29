@@ -1,0 +1,82 @@
+{
+  "id": "3020",
+  "title": "내심과 외접원",
+  "level": 3,
+  "contest": true,
+  "tags": [
+    "내심",
+    "외접원",
+    "원의 접선"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC, 내심 I, 직선 CI"
+    },
+    {
+      "id": 2,
+      "description": "점 D, 삼각형 ADI의 외접원"
+    },
+    {
+      "id": 3,
+      "description": "점 E, F와 중심 I인 원"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "내심의 성질을 이용한 각도 분석"
+    },
+    {
+      "id": 2,
+      "description": "삼각형 ADI의 외접원과 접선 CI의 관계"
+    },
+    {
+      "id": 3,
+      "description": "삼각형 AFI와 IEC의 닮음"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "B": {
+        "x": 0,
+        "y": 0
+      },
+      "C": {
+        "x": 8,
+        "y": 0
+      },
+      "A": {
+        "x": 2,
+        "y": 5
+      }
+    },
+    "computedPoints": {
+      "I": {
+        "type": "incenter",
+        "triangle": [
+          "A",
+          "B",
+          "C"
+        ],
+        "description": "삼각형 ABC의 내심"
+      },
+      "O": {
+        "type": "circumcenter",
+        "description": "삼각형 ADI의 외접원의 중심"
+      },
+      "D": {
+        "type": "intersection",
+        "description": "직선 AB와 원 O의 교점"
+      },
+      "E": {
+        "type": "intersection",
+        "description": "직선 AC와 원 O의 교점 (A가 아닌 점)"
+      },
+      "F": {
+        "type": "intersection",
+        "description": "직선 AC와 원 I의 교점 (E가 아닌 점)"
+      }
+    }
+  }
+}

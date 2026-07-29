@@ -1,0 +1,156 @@
+{
+  "id": "3000",
+  "title": "공원점 찾기 - 2",
+  "level": 3,
+  "tags": [
+    "medium",
+    "right-angles",
+    "concyclic-points",
+    "perpendicular"
+  ],
+  "category": "euclidean-geometry",
+  "version": "1.0.0",
+  "created": "2025-01-15",
+  "updated": "2025-01-15",
+  "author": "mathtrauma",
+  "description": "이등변삼각형에서 수선의 발과 중점을 이용한 직교성 증명 문제",
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "이등변삼각형 ABC 그리기"
+    },
+    {
+      "id": 2,
+      "description": "BC의 중점 D와 중선 AD"
+    },
+    {
+      "id": 3,
+      "description": "D에서 AB로의 투영점"
+    },
+    {
+      "id": 4,
+      "description": "DE의 중점과 보조선들"
+    },
+    {
+      "id": 5,
+      "description": "AM과 EC의 교점"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 BDF와 BCE의 닮음 관계 찾기"
+    },
+    {
+      "id": 2,
+      "description": "삼각형 BDE-BCE, BDF-DAM의 닮음 관계"
+    },
+    {
+      "id": 3,
+      "description": "A, C, D의 외접원과 직교성 증명"
+    }
+  ],
+  "geometry": {
+    "initialPoints": {
+      "B": {
+        "x": -3,
+        "y": -3,
+        "description": "밑변 왼쪽 끝"
+      },
+      "C": {
+        "x": 3,
+        "y": -3,
+        "description": "밑변 오른쪽 끝"
+      }
+    },
+    "computedPoints": {
+      "A": {
+        "type": "isosceles-apex",
+        "base": [
+          "B",
+          "C"
+        ],
+        "angle": 55,
+        "description": "이등변삼각형의 꼭짓점"
+      },
+      "D": {
+        "type": "midpoint",
+        "points": [
+          "B",
+          "C"
+        ],
+        "description": "BC의 중점"
+      },
+      "E": {
+        "type": "projection",
+        "point": "D",
+        "line": [
+          "A",
+          "B"
+        ],
+        "description": "D의 AB 투영"
+      },
+      "F": {
+        "type": "midpoint",
+        "points": [
+          "B",
+          "E"
+        ],
+        "description": "B와 E의 중점"
+      },
+      "M": {
+        "type": "midpoint",
+        "points": [
+          "D",
+          "E"
+        ],
+        "description": "DE의 중점"
+      },
+      "X": {
+        "type": "intersection",
+        "lines": [
+          [
+            "C",
+            "E"
+          ],
+          [
+            "A",
+            "M"
+          ]
+        ],
+        "description": "CE와 AM의 교점"
+      },
+      "O": {
+        "type": "circumcenter",
+        "points": [
+          "A",
+          "D",
+          "E"
+        ],
+        "description": "삼각형 ADE의 외접원 중심"
+      }
+    }
+  },
+  "dependencies": {
+    "geometry": "1.0.0",
+    "draw-utils": "1.0.0",
+    "viewer-core": "1.0.0"
+  },
+  "contest": false,
+  "resources": {
+    "problem": "problem.html",
+    "sketch": "sketch.js",
+    "thumbnail": "thumbnail.png"
+  },
+  "settings": {
+    "canvasSize": {
+      "width": 800,
+      "height": 600
+    },
+    "scale": 50,
+    "coordinateSystem": "cartesian-y-up"
+  },
+  "categories": [
+    "닮음"
+  ]
+}

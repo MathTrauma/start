@@ -10,6 +10,9 @@ window.addEventListener('pageshow', (event) => {
 // Lucide 초기화
 lucide.createIcons();
 
+// 카테고리 필터 노출 여부 — 당분간 숨김. 되살리려면 true 로 바꾸면 된다.
+const SHOW_CATEGORIES = false;
+
 // 유료 사용자 여부
 let isPaidUser = false;
 let currentUserId = null;
@@ -271,7 +274,7 @@ window.addEventListener('resize', () => {
     }
 });
 
-const indexJsonUrl = `./problems/index.json?_t=${Date.now()}`;
+const indexJsonUrl = `./data/index.json?_t=${Date.now()}`;
 fetch(indexJsonUrl)
     .then(res => res.json())
     .then(data => {
@@ -288,6 +291,11 @@ fetch(indexJsonUrl)
 
         // URL에서 상태 복원 (레벨 우선순위: URL > 저장된 레벨 > 기본 Level 2)
         const state = getStateFromURL();
+        // 카테고리를 감춘 동안에는 URL 의 category 파라미터도 무시한다.
+        // (셀렉트에 없는 값이 걸리면 UI 로 해제할 방법이 없어진다. 다시보기는 예외)
+        if (!SHOW_CATEGORIES && state.category && state.category !== 'bookmark') {
+            state.category = '';
+        }
         const levelFilter = document.getElementById('level-filter');
         const categoryFilter = document.getElementById('category-filter');
 
@@ -357,13 +365,19 @@ function renderStats(stats) {
 
 function renderCategories(categories) {
     const select = document.getElementById('category-filter');
-    // categories는 이제 { "닮음": ["001", "005", "006"], ... } 형태
-    Object.keys(categories).forEach(catName => {
-        const option = document.createElement('option');
-        option.value = catName;
-        option.textContent = `${catName} (${categories[catName].length})`;
-        select.appendChild(option);
-    });
+    if (SHOW_CATEGORIES) {
+        // categories는 이제 { "닮음": ["001", "005", "006"], ... } 형태
+        Object.keys(categories).forEach(catName => {
+            const option = document.createElement('option');
+            option.value = catName;
+            option.textContent = `${catName} (${categories[catName].length})`;
+            select.appendChild(option);
+        });
+    } else {
+        // 카테고리 항목만 감추고 셀렉트는 '다시보기' 용으로 남긴다
+        const placeholder = select.querySelector('option[value=""]');
+        if (placeholder) placeholder.textContent = '전체';
+    }
 
     // 마지막에 '다시보기' 옵션 추가
     const bookmarkOption = document.createElement('option');
@@ -436,7 +450,7 @@ function renderProblemList(problems) {
     // 각 카드의 problem.html을 비동기로 로드
     pageProblems.forEach(problem => {
         // index.json이 폴더별 정확한 경로를 채워줌 (레거시·mid2 모두)
-        const problemHtmlUrl = problem.htmlUrl || `./problems/${problem.id.padStart(3, '0')}/problem.html`;
+        const problemHtmlUrl = problem.htmlUrl || `./problems-theorem/${problem.id.padStart(3, '0')}/problem.html`;
         fetch(problemHtmlUrl, { redirect: 'error' })
             .then(res => res.ok ? res.text() : Promise.reject('Not found'))
             .then(html => {
@@ -614,6 +628,9 @@ setupPaginationListeners();
 // 브라우저 뒤로가기/앞으로가기 처리
 window.addEventListener('popstate', (event) => {
     const state = event.state || getStateFromURL();
+    if (!SHOW_CATEGORIES && state.category && state.category !== 'bookmark') {
+        state.category = '';
+    }
     const levelFilter = document.getElementById('level-filter');
     const categoryFilter = document.getElementById('category-filter');
 

@@ -1,0 +1,27 @@
+{
+  "id": "0100",
+  "title": "직각삼각형의 합동 (RHS)",
+  "level": 1,
+  "contest": false,
+  "tags": [
+    "합동",
+    "직각삼각형",
+    "RHS"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "두 직각삼각형 ABC, DEF"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "DEF를 플립하여 이등변삼각형 형성"
+    },
+    {
+      "id": 2,
+      "description": "대응하는 변과 각 표시"
+    }
+  ]
+}

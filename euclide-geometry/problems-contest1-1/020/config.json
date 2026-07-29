@@ -1,0 +1,119 @@
+{
+  "id": "2020",
+  "title": "수심과 외심",
+  "level": 2,
+  "contest": true,
+  "tags": [
+    "수심",
+    "외심",
+    "수심관련각",
+    "외심관련각"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC, 수선과 수심 H"
+    },
+    {
+      "id": 2,
+      "description": "외심 O와 직선 AO, 교점 P, Q"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "외접원과 중심각 정리"
+    },
+    {
+      "id": 2,
+      "description": "OM 수직이등분선과 동치각"
+    },
+    {
+      "id": 3,
+      "description": "수심관련각 증명"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "B": {
+        "x": -4,
+        "y": 0
+      },
+      "C": {
+        "x": 4,
+        "y": 0
+      },
+      "A": {
+        "type": "computed",
+        "description": "AB=10, CA=7 만족하는 점"
+      }
+    },
+    "computedPoints": {
+      "M": {
+        "type": "midpoint",
+        "of": [
+          "A",
+          "B"
+        ],
+        "description": "AB의 중점"
+      },
+      "O": {
+        "type": "circumcenter",
+        "triangle": [
+          "A",
+          "B",
+          "C"
+        ],
+        "description": "삼각형 ABC의 외심"
+      },
+      "H": {
+        "type": "orthocenter",
+        "triangle": [
+          "A",
+          "B",
+          "C"
+        ],
+        "description": "삼각형 ABC의 수심"
+      },
+      "D": {
+        "type": "foot",
+        "from": "A",
+        "to": [
+          "B",
+          "C"
+        ],
+        "description": "A에서 BC에 내린 수선의 발"
+      },
+      "E": {
+        "type": "foot",
+        "from": "B",
+        "to": [
+          "A",
+          "C"
+        ],
+        "description": "B에서 AC에 내린 수선의 발"
+      },
+      "F": {
+        "type": "foot",
+        "from": "C",
+        "to": [
+          "A",
+          "B"
+        ],
+        "description": "C에서 AB에 내린 수선의 발"
+      },
+      "G": {
+        "type": "intersection",
+        "description": "직선 AO와 BC의 교점"
+      },
+      "P": {
+        "type": "intersection",
+        "description": "직선 AO와 BE(BH)의 교점"
+      },
+      "Q": {
+        "type": "intersection",
+        "description": "직선 AO와 CF(CH)의 교점"
+      }
+    }
+  }
+}

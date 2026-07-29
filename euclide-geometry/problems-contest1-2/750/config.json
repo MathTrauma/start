@@ -1,0 +1,44 @@
+{
+  "id": "3750",
+  "title": "375",
+  "level": 3,
+  "tags": [
+    "원주각",
+    "방멱",
+    "외각보기"
+  ],
+  "contest": true,
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC, 선분 AP, 점 D·P, 각 CDA=120°"
+    },
+    {
+      "id": 2,
+      "description": "선분 DQ, 직각 조건, CP=CQ, BD=4"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "같은 현 → 같은 원주각, 각의 이등분선"
+    },
+    {
+      "id": 2,
+      "description": "삼각형 ACD 각도, 내접사각형 APCQ"
+    },
+    {
+      "id": 3,
+      "description": "정삼각형 CDP와 ABD"
+    },
+    {
+      "id": 4,
+      "description": "직각삼각형 ABQ, 피타고라스 정리"
+    }
+  ],
+  "resources": {
+    "problem": "problem.html",
+    "solution": "solution.html",
+    "sketch": "sketch.js"
+  }
+}

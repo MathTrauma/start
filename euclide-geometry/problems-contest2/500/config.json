@@ -1,0 +1,27 @@
+{
+  "id": "4500",
+  "title": "각의 3등분선?",
+  "level": 4,
+  "contest": true,
+  "tags": [
+    "원주각",
+    "직각삼각형",
+    "외접원"
+  ],
+  "categories": [
+    "원주각"
+  ],
+  "problemPhases": [
+    "problem1",
+    "problem2"
+  ],
+  "solutionPhases": [
+    "solution1",
+    "solution2",
+    "solution3"
+  ],
+  "resources": {
+    "problem": "problem.html",
+    "sketch": "sketch.js"
+  }
+}

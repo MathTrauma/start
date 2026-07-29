@@ -1,0 +1,38 @@
+{
+  "id": "2150",
+  "title": "이등분선과 수직이등분선",
+  "level": 2,
+  "contest": false,
+  "tags": [
+    "합동"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC, 이등분선 AD, 수직이등분선 MD"
+    },
+    {
+      "id": 2,
+      "description": "DB, DC, 수선 DE, DF, 치수선"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "DMB, DMC 합동 → DB=DC"
+    },
+    {
+      "id": 2,
+      "description": "ADE, ADF 합동 → DE=DF"
+    },
+    {
+      "id": 3,
+      "description": "DEB, DFC 합동(RHS) → CF=4, DF=12"
+    }
+  ],
+  "resources": {
+    "problem": "problem.html",
+    "solution": "solution.html",
+    "sketch": "sketch.js"
+  }
+}

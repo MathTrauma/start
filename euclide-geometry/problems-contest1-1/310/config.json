@@ -1,0 +1,94 @@
+{
+  "id": "2310",
+  "title": "각의 이등분과 비율",
+  "level": 2,
+  "contest": true,
+  "tags": [
+    "닮음",
+    "정사각형",
+    "각의 이등분"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "정사각형 ABCD 그리기"
+    },
+    {
+      "id": 2,
+      "description": "CD의 중점 M, AD 위의 점 E, 선분 BE와 EM"
+    },
+    {
+      "id": 3,
+      "description": "선분 AM, 교점 P, 각 표시"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "점 F, 선분 CF/MF, 삼각형 BEF"
+    },
+    {
+      "id": 2,
+      "description": "선분 BM, 직각 EMB"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "A": {
+        "x": -2,
+        "y": 2
+      },
+      "B": {
+        "x": -2,
+        "y": -2
+      },
+      "C": {
+        "x": 2,
+        "y": -2
+      },
+      "D": {
+        "x": 2,
+        "y": 2
+      }
+    },
+    "computedPoints": {
+      "M": {
+        "type": "midpoint",
+        "points": [
+          "C",
+          "D"
+        ],
+        "description": "CD의 중점"
+      },
+      "E": {
+        "type": "dividing-point",
+        "points": [
+          "A",
+          "D"
+        ],
+        "ratio": [
+          1,
+          3
+        ],
+        "description": "AD를 3:1로 내분하는 점 (D쪽이 3)"
+      },
+      "P": {
+        "type": "intersection",
+        "lines": [
+          [
+            "A",
+            "M"
+          ],
+          [
+            "B",
+            "E"
+          ]
+        ],
+        "description": "AM과 BE의 교점"
+      }
+    }
+  },
+  "categories": [
+    "닮음"
+  ]
+}

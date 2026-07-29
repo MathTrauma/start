@@ -1,0 +1,20 @@
+{
+  "id": "1600",
+  "title": "원주각",
+  "level": 1,
+  "tags": [
+    "원주각",
+    "중심각"
+  ],
+  "contest": false,
+  "problemPhases": [
+    "problem1"
+  ],
+  "solutionPhases": [
+    "solution1"
+  ],
+  "resources": {
+    "problem": "problem.html",
+    "sketch": "sketch.js"
+  }
+}

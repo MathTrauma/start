@@ -1,0 +1,106 @@
+{
+  "id": "2030",
+  "title": "원주각",
+  "level": 2,
+  "contest": true,
+  "contestName": "제30회(2016) KMO 중등부 1차",
+  "contestProblem": "4번",
+  "tags": [
+    "원주각",
+    "닮음",
+    "평행보조선"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "원 O와 내접하는 사각형 ABCD 그리기"
+    },
+    {
+      "id": 2,
+      "description": "대각선 BD, AC와 수선 AE"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "각 BCD=120°, 각 BAD=60°, BC=CD 확인"
+    },
+    {
+      "id": 2,
+      "description": "중심각 BOC=60°로 정삼각형 형성"
+    },
+    {
+      "id": 3,
+      "description": "동일한 원주각들 확인"
+    },
+    {
+      "id": 4,
+      "description": "삼각형 BCX, ABC, AXD의 닮음 관계"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "O": {
+        "x": 0,
+        "y": 0,
+        "description": "원의 중심"
+      },
+      "A": {
+        "polar": {
+          "r": 12,
+          "theta": 0
+        },
+        "description": "원 위의 점 (0°)"
+      },
+      "B": {
+        "polar": {
+          "r": 12,
+          "theta": 150
+        },
+        "description": "원 위의 점 (150°)"
+      },
+      "C": {
+        "polar": {
+          "r": 12,
+          "theta": 210
+        },
+        "description": "원 위의 점 (210°)"
+      },
+      "D": {
+        "polar": {
+          "r": 12,
+          "theta": 270
+        },
+        "description": "원 위의 점 (270°)"
+      }
+    },
+    "computedPoints": {
+      "E": {
+        "type": "projection",
+        "from": "A",
+        "onto": [
+          "B",
+          "D"
+        ],
+        "description": "A에서 BD로의 수선의 발"
+      },
+      "X": {
+        "type": "intersection",
+        "lines": [
+          [
+            "A",
+            "C"
+          ],
+          [
+            "B",
+            "D"
+          ]
+        ],
+        "description": "AC와 BD의 교점"
+      }
+    }
+  },
+  "categories": [
+    "닮음"
+  ]
+}

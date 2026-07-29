@@ -1,0 +1,37 @@
+{
+  "id": "2600",
+  "level": 2,
+  "contest": true,
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC와 각이등분선 CD, AD=4, DB=6 표시",
+      "startTime": 0,
+      "duration": 8.0,
+      "endTime": 8.0
+    },
+    {
+      "id": 2,
+      "description": "점 E와 BE∥CD 조건, BE=15 표시",
+      "startTime": 0,
+      "duration": 6.3,
+      "endTime": 6.3
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "ACD∼AEB 닮음으로 CD=6 도출, BD=CD=6 확인",
+      "startTime": 0,
+      "duration": 11.5,
+      "endTime": 11.5
+    },
+    {
+      "id": 2,
+      "description": "CDB 외접원의 AC 접선 성질로 AC²=AD·AB 적용",
+      "startTime": 0,
+      "duration": 7.7,
+      "endTime": 7.7
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "id": "1510",
+  "title": "닮음과 넓이",
+  "level": 1,
+  "contest": false,
+  "tags": [
+    "닮음",
+    "접현각",
+    "방멱"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC와 변의 길이"
+    },
+    {
+      "id": 2,
+      "description": "점 D와 각도 조건"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "닮음 삼각형 비교"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "B": {
+        "x": -5.196,
+        "y": 0
+      },
+      "C": {
+        "x": 5.196,
+        "y": 0
+      }
+    },
+    "computedPoints": {
+      "A": {
+        "type": "computed",
+        "description": "∠ABC=30°, AB=8"
+      },
+      "D": {
+        "type": "onSegment",
+        "segment": [
+          "A",
+          "B"
+        ],
+        "description": "AB 위의 점, ∠ACD=30°"
+      }
+    }
+  },
+  "categories": [
+    "닮음"
+  ]
+}

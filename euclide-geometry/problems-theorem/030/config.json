@@ -1,0 +1,24 @@
+{
+  "id": "030",
+  "title": "맨션 정리",
+  "level": 0,
+  "tags": [
+    "맨션정리",
+    "내심",
+    "외접원",
+    "원주각"
+  ],
+  "categories": [
+    "맨션정리",
+    "내심과방심"
+  ],
+  "problemPhases": [
+    "problem1",
+    "problem2"
+  ],
+  "solutionPhases": [
+    "solution1",
+    "solution2",
+    "solution3"
+  ]
+}

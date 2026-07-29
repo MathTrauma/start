@@ -754,6 +754,64 @@ mjx-container[display="true"] {
     opacity: 0;
 }
 
+/* 캔버스 위 HTML 팝업 (animation.md 의 popup text) — 툴팁과 달리 클릭 가능.
+   캔버스는 overflow:hidden 이라 body 에 붙이고 fixed 로 얹는다. 위치는 XPopup 이 계산. */
+.canvas-popup {
+    position: fixed;
+    /* 짙은 회색 + feTurbulence 노이즈 (외부 이미지 없이 인라인 SVG) */
+    background-color: #2c2c2e;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+    color: #ffd94a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.4;
+    padding: 9px 14px;
+    border-radius: 6px;
+    z-index: 1000;
+    pointer-events: auto;
+    cursor: move;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: opacity 0.25s ease;
+}
+
+.canvas-popup.dragging {
+    cursor: grabbing;
+}
+
+/* 스크롤 대신 폰트를 줄여 항상 한 줄에 담는다 (XPopup._fit) */
+.canvas-popup-body {
+    white-space: nowrap;
+}
+
+/* KaTeX 는 부모 색을 따르지만 명시해둔다 */
+.canvas-popup-body .katex {
+    color: inherit;
+}
+
+/* 우상단 바깥 오른쪽 — 팝업 오른쪽 변에 붙이고 상단은 윗변에 맞춘다 */
+.canvas-popup-close {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 19px;
+    height: 19px;
+    padding: 0;
+    background-color: #1c1c1c;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.canvas-popup-close:hover {
+    color: #fff;
+    background-color: #333;
+}
+
 /* Phase Block */
 .phase-block {
     padding: 10px 0;

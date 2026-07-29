@@ -1,0 +1,96 @@
+{
+  "id": "0320",
+  "title": "꺾은선에 의한 넓이 이등분",
+  "level": 1,
+  "tags": [
+    "easy",
+    "cyclic-quadrilateral",
+    "perpendicular-diagonals",
+    "area-bisection"
+  ],
+  "category": "euclidean-geometry",
+  "version": "1.0.0",
+  "created": "2025-01-15",
+  "updated": "2025-01-15",
+  "author": "mathtrauma",
+  "description": "원에 내접하는 사각형에서 직교하는 대각선과 꺾은선에 의한 넓이 이등분 증명",
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "원에 내접하는 사각형 ABCD 그리기"
+    },
+    {
+      "id": 2,
+      "description": "대각선과 중심에서 각 꼭짓점으로 선분"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "사각형 ABCO를 ABCM으로 등적변환"
+    },
+    {
+      "id": 2,
+      "description": "꺾은선 AMC가 사각형을 이등분함을 보임"
+    }
+  ],
+  "geometry": {
+    "circle": {
+      "center": "O",
+      "radius": 2
+    },
+    "initialPoints": {
+      "O": {
+        "x": 0,
+        "y": 0,
+        "description": "원의 중심"
+      }
+    },
+    "computedPoints": {
+      "A": {
+        "type": "polar",
+        "angle": 110,
+        "radius": 2,
+        "description": "원 위의 점 A"
+      },
+      "B": {
+        "type": "polar",
+        "angle": 160,
+        "radius": 2,
+        "description": "원 위의 점 B"
+      },
+      "C": {
+        "type": "polar",
+        "angle": -110,
+        "radius": 2,
+        "description": "원 위의 점 C"
+      },
+      "D": {
+        "type": "polar",
+        "angle": 20,
+        "radius": 2,
+        "description": "원 위의 점 D"
+      }
+    }
+  },
+  "dependencies": {
+    "geometry": "1.0.0",
+    "draw-utils": "1.0.0",
+    "viewer-core": "1.0.0"
+  },
+  "resources": {
+    "problem": "problem.tex",
+    "sketch": "sketch.js"
+  },
+  "settings": {
+    "canvasSize": {
+      "width": 600,
+      "height": 600
+    },
+    "scale": 100,
+    "coordinateSystem": "cartesian-y-up"
+  },
+  "categories": [
+    "등적변환"
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "id": "3050",
+  "title": "평행보조선, 닮음",
+  "level": 3,
+  "contest": true,
+  "tags": [
+    "평행선",
+    "닮음",
+    "무게중심",
+    "내분점"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "삼각형 ABC, 중점 M, 중선 AM"
+    },
+    {
+      "id": 2,
+      "description": "무게중심 G, 점 P, 직선 PR"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "BC에 평행한 선분 PY, 비율 표시"
+    },
+    {
+      "id": 2,
+      "description": "중선 분할 비율 표시"
+    },
+    {
+      "id": 3,
+      "description": "선분 XY와 BQ 비율"
+    },
+    {
+      "id": 4,
+      "description": "닮음 삼각형 강조"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "A": {
+        "x": -1,
+        "y": 7
+      },
+      "B": {
+        "x": -3.5,
+        "y": 0
+      },
+      "C": {
+        "x": 3.5,
+        "y": 0
+      }
+    },
+    "computedPoints": {
+      "G": {
+        "type": "centroid",
+        "triangle": [
+          "A",
+          "B",
+          "C"
+        ],
+        "description": "삼각형의 무게중심"
+      },
+      "M": {
+        "type": "midpoint",
+        "points": [
+          "B",
+          "C"
+        ],
+        "description": "BC의 중점"
+      },
+      "P": {
+        "type": "divisionPoint",
+        "line": [
+          "A",
+          "C"
+        ],
+        "ratio": "7:11",
+        "description": "AC를 7:11로 내분"
+      },
+      "Q": {
+        "type": "intersection",
+        "description": "PG와 BC의 교점"
+      },
+      "R": {
+        "type": "intersection",
+        "description": "PG와 AB의 교점"
+      }
+    }
+  },
+  "categories": [
+    "닮음"
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "id": "9100",
+  "title": "사다리꼴 접기",
+  "level": 9,
+  "tags": [
+    "접기",
+    "닮음",
+    "사다리꼴"
+  ],
+  "categories": [
+    "접기"
+  ],
+  "problemPhases": [
+    {
+      "id": 1,
+      "description": "사다리꼴 ABCD 그리기, 직각 C, D 표시, 변 길이 AD=6, CD=5, BC=7"
+    },
+    {
+      "id": 2,
+      "description": "MN을 접는 선으로 접은 후 겹쳐진 부분 M-N-E-A 표시"
+    }
+  ],
+  "solutionPhases": [
+    {
+      "id": 1,
+      "description": "A에서 BC에 내린 수선의 발 H, AH=5, AB=√26, BH=1"
+    },
+    {
+      "id": 2,
+      "description": "삼각형 BAH ~ BPM 닮음, BM=½√26, BP=13"
+    },
+    {
+      "id": 3,
+      "description": "BM 치수를 왼쪽으로 슬라이드"
+    }
+  ],
+  "geometry": {
+    "basePoints": {
+      "A": {
+        "x": 0,
+        "y": 5
+      },
+      "B": {
+        "x": -1,
+        "y": 0
+      },
+      "C": {
+        "x": 6,
+        "y": 0
+      },
+      "D": {
+        "x": 6,
+        "y": 5
+      }
+    },
+    "computedPoints": {
+      "M": {
+        "type": "midpoint",
+        "points": [
+          "A",
+          "B"
+        ]
+      },
+      "N": {
+        "type": "intersection",
+        "line1": {
+          "type": "perpendicular",
+          "point": "M",
+          "line": [
+            "A",
+            "B"
+          ]
+        },
+        "line2": [
+          "C",
+          "D"
+        ]
+      },
+      "C'": {
+        "type": "reflection",
+        "point": "C",
+        "line": [
+          "M",
+          "N"
+        ]
+      },
+      "E": {
+        "type": "intersection",
+        "lines": [
+          [
+            "A",
+            "C'"
+          ],
+          [
+            "C",
+            "D"
+          ]
+        ]
+      },
+      "H": {
+        "type": "projection",
+        "point": "A",
+        "line": [
+          "B",
+          "C"
+        ]
+      },
+      "P": {
+        "type": "onLine",
+        "line": [
+          "B",
+          "C"
+        ],
+        "distance": 13,
+        "from": "B"
+      }
+    }
+  }
+}
