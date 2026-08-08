@@ -1,0 +1,28 @@
+# 루트 랜딩페이지 — Cloudflare Workers Static Assets
+#
+# 코드 없는 정적 서빙 전용 워커다. main 을 절대 추가하지 말 것 —
+# main 이나 run_worker_first 가 붙으면 모든 요청이 Worker 호출로 과금되고
+# 무료 플랜의 하루 10만 요청 상한에 걸린다. 지금 상태는 요청이 무료·무제한이다.
+#
+# 배포: 저장소 루트에서 npx wrangler deploy
+#       (git push 로는 반영되지 않는다. 서브 프로젝트 6개와 같은 방식)
+
+name = "root-worker"
+compatibility_date = "2026-08-08"
+
+# workers.dev 주소는 닫아둔다. 열어두면 사이트가 두 주소에 중복으로 존재한다.
+workers_dev = false
+
+# 서브 프로젝트 6개 라우트가 더 구체적이라 항상 우선한다.
+# www 는 일부러 잡지 않는다 — 대시보드의 www→apex 301 규칙에 맡긴다.
+routes = [
+  { pattern = "mathtrauma.com/*", zone_name = "mathtrauma.com" }
+]
+
+[assets]
+directory = "./public"
+html_handling = "auto-trailing-slash"   # Vercel 의 cleanUrls 와 같은 동작
+not_found_handling = "404-page"         # public/404.html
+
+[observability]
+enabled = true

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>페이지를 찾을 수 없습니다 — Math More</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.min.css">
+
+    <style>
+        .notfound {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .notfound-code {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--slate-300);
+            line-height: 1;
+        }
+        .notfound-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+        .notfound-desc {
+            font-size: 0.95rem;
+            color: var(--slate-500);
+        }
+        .notfound-home {
+            display: inline-block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--white);
+            background: var(--primary-500);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+        }
+        .notfound-home:hover {
+            background: var(--primary-600);
+        }
+    </style>
+</head>
+
+<body>
+    <main class="notfound">
+        <p class="notfound-code">404</p>
+        <h1 class="notfound-title">페이지를 찾을 수 없습니다</h1>
+        <p class="notfound-desc">주소가 바뀌었거나 삭제된 페이지입니다.</p>
+        <a class="notfound-home" href="/">첫 화면으로</a>
+    </main>
+</body>
+
+</html>

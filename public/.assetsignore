@@ -1,0 +1,4 @@
+# wrangler 가 public/ 안을 통째로 올리므로, 올리면 안 되는 것을 여기에 적는다.
+# .gitignore 와 같은 문법.
+.DS_Store
+Thumbs.db

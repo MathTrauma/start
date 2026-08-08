@@ -8,8 +8,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 6rem 2rem 4rem;
+    /* 카드 묶음을 화면 하단에 붙인다 */
+    justify-content: flex-end;
+    padding: 6rem 2rem 2rem;
 }
 
 .landing-hero-text {
@@ -44,8 +45,8 @@
 .landing-card {
     position: relative;
     border-radius: 1.25rem;
-    padding: 2.5rem 2rem;
-    min-height: 280px;
+    padding: 1.5rem;
+    min-height: 170px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -76,22 +77,30 @@
     background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
 }
 
+/* Card Head — 아이콘과 제목을 한 줄에 */
+.landing-card__head {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.5rem;
+}
+
 /* Card Icon */
 .landing-card__icon {
-    width: 64px;
-    height: 64px;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(8px);
-    border-radius: 1rem;
+    border-radius: 0.7rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.5rem;
 }
 
 .landing-card__icon svg {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
     stroke: var(--white);
     fill: none;
     stroke-width: 2;
@@ -104,7 +113,6 @@
     font-family: 'LINE Seed Sans KR', 'Pretendard', sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
     /* 글씨 뒤 음영 — 밝은 배경에서도 대비 확보 */
     text-shadow:
         0 0 4px rgba(0, 0, 0, 0.45),
@@ -115,7 +123,7 @@
     font-size: 0.95rem;
     opacity: 0.92;
     line-height: 1.5;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.9rem;
     /* 글씨 뒤 음영 */
     text-shadow:
         0 0 3px rgba(0, 0, 0, 0.4),
@@ -241,8 +249,8 @@
     }
 
     .landing-card {
-        min-height: 220px;
-        padding: 2rem 1.5rem;
+        min-height: 150px;
+        padding: 1.25rem;
     }
 
     .landing-cards--small {
